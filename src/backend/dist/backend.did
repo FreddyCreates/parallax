@@ -1,0 +1,1001 @@
+type WyomingState = 
+ record {
+   charterGenesisHash: text;
+   facility: Facility;
+   frntDemo: FrntDemo;
+   grants: vec GrantRecord;
+   lastUpdatedMs: int;
+   legislative: LegislativeTimeline;
+   nodeProvider: NodeProvider;
+   partnerships: vec Partnership;
+ };
+type WithdrawalLogEntry = 
+ record {
+   amount: float64;
+   blockIndex: opt nat;
+   error: opt text;
+   success: bool;
+   timestamp: int;
+   toPrincipal: text;
+ };
+type UserProfile = 
+ record {
+   name: text;
+   "principal": text;
+ };
+type TxMonitoringState = 
+ record {
+   businessThreshold: float64;
+   flaggedCount: nat;
+   institutionalThreshold: float64;
+   lastFlaggedAt: nat;
+   personalThreshold: float64;
+   totalMonitored: nat;
+ };
+type TreasuryState = 
+ record {
+   btcBalance: float64;
+   btcHardFloor: float64;
+   btcMempoolFeeRate: float64;
+   btcNetworkCongestion: float64;
+   btcPrice: float64;
+   clearanceReserves: vec float64;
+   creatorBtcReserve: float64;
+   creatorEthReserve: float64;
+   creatorIcpReserve: float64;
+   creatorMtcReserve: float64;
+   creatorTotalUsdEquiv: float64;
+   creatorWithdrawableIcp: float64;
+   ethBalance: float64;
+   ethLidoRate: float64;
+   ethPrice: float64;
+   ethRocketPoolRate: float64;
+   ethYieldRate: float64;
+   icpAccruedYield: float64;
+   icpBalance: float64;
+   icpPrice: float64;
+   icpStaked: float64;
+   icpYieldRate: float64;
+   mtcBurned: float64;
+   mtcCirculating: float64;
+   mtcGenesisSupply: float64;
+   mtcPrice: float64;
+   tokenBalances: vec float64;
+   totalWithdrawn: float64;
+ };
+type TokenEntry = 
+ record {
+   burnTrigger: text;
+   circulatingSupply: float64;
+   creatorReserveBalance: float64;
+   homeCanister: text;
+   managingAgi: text;
+   mintTrigger: text;
+   name: text;
+   priceIcp: float64;
+   symbol: text;
+   totalSupply: float64;
+ };
+type TeksStandard = 
+ record {
+   code: text;
+   description: text;
+   grade: text;
+   lessonTools: vec LessonTool;
+   subject: text;
+   title: text;
+ };
+type TargetType = 
+ variant {
+   agent;
+   canister;
+   entity;
+   protocol;
+   queryTarget;
+ };
+type SubOrganismRecord = 
+ record {
+   active: bool;
+   canisterId: text;
+   parentId: text;
+   royaltyRate: float64;
+   tier: nat;
+ };
+type SovereignModel = 
+ record {
+   beatActivationCount: nat;
+   computation: text;
+   executionBinding: text;
+   id: text;
+   inputTypes: vec text;
+   lastBeatActivated: int;
+   latinName: text;
+   layer: text;
+   maxMicroTokenOutput: nat;
+   meaning: text;
+   microTokenId: nat32;
+   subIntelligence: text;
+ };
+type SignalState = 
+ record {
+   cortisol: float64;
+   crowSignal: float64;
+   dolphinSignal: float64;
+   eagleSignal: float64;
+   elephantSignal: float64;
+   heartRate: float64;
+   hiveSignal: float64;
+   octopusSignal: float64;
+   orcaSignal: float64;
+   respirationRate: float64;
+   sharkSignal: float64;
+   thyroidT3: float64;
+   thyroidT4: float64;
+   wolfSignal: float64;
+ };
+type ShellState = 
+ record {
+   activations: vec float64;
+   rValues: vec float64;
+   shell3BeeGate: vec float64;
+   shell3Coherence: float64;
+ };
+type SchoolTier = 
+ variant {
+   Bronze;
+   Gold;
+   Silver;
+ };
+type SchoolRegistry = 
+ record {
+   grants: vec GrantRecord_School;
+   lastUpdatedMs: int;
+   schools: vec SchoolRecord;
+   teksStandards: vec TeksStandard;
+   totalDeployed: nat;
+ };
+type SchoolRecord = 
+ record {
+   canisterId: opt text;
+   contactEmail: text;
+   deployed: bool;
+   district: text;
+   grantStatus: text;
+   id: text;
+   name: text;
+   teksStandardsCodes: vec text;
+   tier: SchoolTier;
+ };
+type RegistryState = 
+ record {
+   entries: vec record {
+                  text;
+                  RegistryEntry;
+                };
+   lastUpdated: int;
+ };
+type RegistryEntry = 
+ record {
+   canisterId: text;
+   cycles: nat;
+   deployed: int;
+   errors: nat;
+   healthScore: float64;
+   lastHeartbeat: int;
+   latencyMs: int;
+   messages: nat;
+   organType: text;
+   principalId: opt principal;
+   status: variant {
+             active;
+             degraded;
+             unreachable;
+           };
+ };
+type ProtocolResult = 
+ variant {
+   failed;
+   passed;
+   skipped;
+ };
+type ProtocolRegistry = 
+ record {
+   lastScanBeat: int;
+   protocols: vec record {
+                    text;
+                    ProtocolRecord;
+                  };
+   totalExecutions: nat;
+ };
+type ProtocolRecordPublic = 
+ record {
+   category: text;
+   equation: text;
+   executionCount: nat;
+   id: text;
+   lastFiredBeat: int;
+   lastResult: text;
+   name: text;
+   precedence: nat;
+   principle: text;
+ };
+type ProtocolRecord = 
+ record {
+   category: ProtocolCategory;
+   equation: text;
+   executionCount: nat;
+   id: text;
+   lastFiredBeat: int;
+   lastResult: ProtocolResult;
+   name: text;
+   precedence: nat;
+   principle: text;
+ };
+type ProtocolCategory = 
+ variant {
+   Behavior;
+   Law;
+   Model;
+   Organ;
+   Reasoning;
+ };
+type ProfitState = 
+ record {
+   streams: vec float64;
+   totalAllStreams: float64;
+ };
+type Partnership = 
+ record {
+   contact: text;
+   name: text;
+   notes: text;
+   partnerType: text;
+   status: text;
+ };
+type OrganismState = 
+ record {
+   activeCount: nat;
+   championPool: float64;
+   franchiseCount: nat;
+   franchiseCutRate: float64;
+   organisms: vec OrganismRecord;
+   subOrganisms: vec SubOrganismRecord;
+   totalOrganismEarnings: float64;
+ };
+type OrganismRecord = 
+ record {
+   active: bool;
+   beat: nat;
+   canisterId: text;
+   coherence: float64;
+   earnings: float64;
+   fieldType: nat;
+   name: text;
+   proofDepth: nat;
+ };
+type NovaRuntimeState = 
+ record {
+   languages: vec NovaCognitiveLanguage;
+   lastBeatExecuted: int;
+   novaVersion: text;
+   runtimePhase: text;
+   totalExecutionCount: nat;
+ };
+type NovaCognitiveLanguage = 
+ record {
+   coherenceGateScore: float64;
+   englishDomain: text;
+   executionBinding: text;
+   executionCount: nat;
+   id: text;
+   lastBeatExecuted: int;
+   latinName: text;
+   primaryObjects: vec text;
+   runtimePhase: text;
+   stack: text;
+ };
+type NodeProvider = 
+ record {
+   bslWhitelisted: bool;
+   cheyenneNodes: nat;
+   entity: text;
+   gen3Ready: bool;
+   lincolnNodes: nat;
+   status: text;
+   targetRegion: text;
+ };
+type NodeInput = 
+ record {
+   labelText: text;
+   nodeType: text;
+ };
+type Node = 
+ record {
+   beat: nat;
+   id: text;
+   labelText: text;
+   nodeType: text;
+ };
+type NeuronGroup = 
+ record {
+   count: nat;
+   dissolveYears: float64;
+   fibIndex: nat;
+   groupId: text;
+   policy: text;
+   purpose: text;
+   substrate: text;
+ };
+type NeuronFleetState = 
+ record {
+   fieldNodes: nat;
+   groups: vec NeuronGroup;
+   neuronsPerNode: nat;
+   totalNeurons: nat;
+ };
+type ModelRegistryState = 
+ record {
+   lastActivated: text;
+   microTokensConsumedTotal: nat;
+   totalActivations: nat;
+   totalModels: nat;
+ };
+type MilestoneStatus = 
+ variant {
+   Complete;
+   Critical;
+   InProgress;
+   Pending;
+ };
+type Milestone = 
+ record {
+   deadlineMs: int;
+   id: text;
+   notes: text;
+   status: MilestoneStatus;
+   title: text;
+ };
+type LessonTool = 
+ record {
+   description: text;
+   id: text;
+   publicAccess: bool;
+   subject: text;
+   teksCodes: vec text;
+   title: text;
+   toolType: text;
+ };
+type LegislativeTimeline = 
+ record {
+   billReadyMs: int;
+   hardwareDeadlineMs: int;
+   milestones: vec Milestone;
+   unicameralSession: text;
+ };
+type LedgerEntry = 
+ record {
+   beat: nat;
+   category: text;
+   payload: text;
+   phiDepth: nat;
+   proofHash: text;
+   timestamp: int;
+ };
+type KycRecord = 
+ record {
+   accountId: text;
+   apiResponse: text;
+   lastChecked: nat;
+   retryCount: nat;
+   status: variant {
+             notStarted;
+             pending;
+             rejected;
+             verified;
+           };
+ };
+type JacobsLadderState = 
+ record {
+   currentRung: nat;
+   rungs: vec JacobRung;
+   saceciTarget: float64;
+   velocity: float64;
+ };
+type JacobRung = 
+ record {
+   isCurrent: bool;
+   labelText: text;
+   multiplier: float64;
+   rungNumber: nat;
+ };
+type HealthReport = 
+ record {
+   cycles: nat;
+   errors: nat;
+   healthScore: float64;
+   latencyMs: int;
+   messages: nat;
+   organType: text;
+   timestamp: int;
+ };
+type GrantRecord_School = 
+ record {
+   amountUsd: nat;
+   deadlineMs: int;
+   name: text;
+   notes: text;
+   program: text;
+   status: text;
+ };
+type GrantRecord = 
+ record {
+   amountUsd: nat;
+   deadlineMs: int;
+   grantType: text;
+   name: text;
+   notes: text;
+   status: text;
+ };
+type GenesisState = 
+ record {
+   alfredoLawActive: bool;
+   alfredoLawHash: text;
+   beatCount: nat;
+   creatorJurisdiction: text;
+   creatorName: text;
+   creatorTitle: text;
+   creatorYear: nat;
+   doctrineHash: text;
+   genesisLocked: bool;
+   genesisTimestamp: int;
+   sl1Score: float64;
+   sl2Resonance: float64;
+   sl3Coherence: float64;
+   sl4Depth: float64;
+   sl5Amplitude: float64;
+   sl6Emission: float64;
+   sl7Depth: float64;
+ };
+type FullWalletSnapshot = 
+ record {
+   beatCount: nat;
+   btcBalance: float64;
+   creatorBtc: float64;
+   creatorEth: float64;
+   creatorIcp: float64;
+   creatorMtc: float64;
+   ethBalance: float64;
+   icpBalance: float64;
+   mtcCirculating: float64;
+   neuronCount: nat;
+   tokenCount: nat;
+   totalUsdEquiv: float64;
+   totalWithdrawn: float64;
+   withdrawableIcp: float64;
+ };
+type FullPxState = 
+ record {
+   aresArmed: bool;
+   beat: nat;
+   coherence: float64;
+   dominantDrive: text;
+   formaCapital: float64;
+   genesisActivated: bool;
+   gtkBalance: float64;
+   jacobRung: nat;
+   lawScore: float64;
+   miningOutput: float64;
+   mrcBalance: float64;
+   mthBalance: float64;
+   novaHealth: float64;
+   novelty: float64;
+   patentCount: nat;
+   regime: text;
+   sacesiTarget: float64;
+ };
+type FrntDemo = 
+ record {
+   demoActive: bool;
+   lastRunMs: int;
+   phantomFeeBps: nat;
+   phantomSettlementMs: nat;
+   visaBottleneckSolved: bool;
+   visaFeeBps: nat;
+   visaSettlementMs: nat;
+ };
+type FormaState = 
+ record {
+   beatCount: nat;
+   capital: float64;
+   compoundRatePerBeat: float64;
+   projectionPlus1000: text;
+   projectionPlus10000: text;
+   spectralCoherence: float64;
+   vonNeumannEntropy: float64;
+ };
+type Facility = 
+ record {
+   address: text;
+   city: text;
+   internetBackbone: bool;
+   powerCostRank: text;
+   publicPower: bool;
+   stateCode: text;
+   vaultGrade: bool;
+ };
+type EntityType = 
+ variant {
+   external;
+   internal;
+ };
+type EntityState = 
+ variant {
+   active;
+   awakening;
+   dormant;
+   transcended;
+ };
+type EngineState = 
+ record {
+   anointedStateActive: bool;
+   axisCanisterId: text;
+   axisEagleAccel: float64;
+   axisEagleCurvature: float64;
+   axisEagleElevation: float64;
+   axisElephantDist: float64;
+   axisElephantRecall: float64;
+   firePillarActive: bool;
+   firePillarCount: nat;
+   fluxCanisterId: text;
+   jubileeCount: nat;
+   jubileeLastBeat: nat;
+   kalmanConfidence: float64;
+   prophetConvergenceCount: nat;
+   prophetFunctionArmed: bool;
+   qbShell3Discharge: float64;
+   qbSuperchargeRate: float64;
+   qbSuperradiance: float64;
+   qmemCanisterId: text;
+   resonexCanisterId: text;
+   sevenSpiritsScore: float64;
+   shemaIntegrityScore: float64;
+   shemaLastCheckBeat: nat;
+ };
+type EdgeInput = 
+ record {
+   fromId: text;
+   relation: text;
+   toId: text;
+ };
+type Edge = 
+ record {
+   beat: nat;
+   fromId: text;
+   id: text;
+   relation: text;
+   toId: text;
+ };
+type DriveState = 
+ record {
+   consecutiveDriveBeats: nat;
+   dominantDriveId: nat;
+   px_driveStrengths: vec float64;
+ };
+type DirectiveStatus = 
+ variant {
+   building;
+   complete;
+   failed;
+   parsed;
+ };
+type CreatorReserveState = 
+ record {
+   btcReserve: float64;
+   ethReserve: float64;
+   founderAccountId: text;
+   founderName: text;
+   icpReserve: float64;
+   mtcReserve: float64;
+   totalUsdEquiv: float64;
+   totalWithdrawn: float64;
+   withdrawableIcp: float64;
+ };
+type ContextSlice = 
+ record {
+   beatTimestamp: int;
+   microTokenBudget: nat;
+   microTokensUsed: nat;
+   resonanceScore: float64;
+   selectedModelIds: vec text;
+ };
+type ContextRouterState = 
+ record {
+   avgResonanceScore: float64;
+   microTokenBudgetPerBeat: nat;
+   totalBeatRoutes: nat;
+ };
+type CodexEntry = 
+ record {
+   ancientSource: text;
+   category: text;
+   computation: text;
+   enforcementAgi: text;
+   formula: text;
+   id: text;
+   meaning: text;
+   name: text;
+   numericalValue: float64;
+   principleOneLine: text;
+ };
+type CardiacState = 
+ record {
+   coherenceDirection: int;
+   coherenceTarget: float64;
+   deoxygenationAlarms: nat;
+   entanglaCarrier: float64;
+   globalCoherence: float64;
+   heartRate: float64;
+   heartbeatActive: bool;
+   hrvBound: float64;
+   kuramotoR: float64;
+   lastBeatTime: int;
+   lastOmnisFireBeat: nat;
+   neurochemicalLevels: vec float64;
+   omnisFiredCount: nat;
+   oxygenationScore: float64;
+   strokeVolume: float64;
+ };
+type BuilderState = 
+ record {
+   directives: vec record {
+                     text;
+                     BuilderDirective;
+                   };
+   totalBuilt: nat;
+   totalFailed: nat;
+ };
+type BuilderDirective = 
+ record {
+   id: text;
+   outputId: opt text;
+   parameters: vec record {
+                     text;
+                     text;
+                   };
+   parsedIntent: text;
+   rawText: text;
+   status: DirectiveStatus;
+   targetType: TargetType;
+   timestamp: int;
+ };
+type BirthEntity = 
+ record {
+   activation: float64;
+   birthBeat: int;
+   birthTimestamp: int;
+   directive: text;
+   entityState: EntityState;
+   entityType: EntityType;
+   goalStack: vec text;
+   id: text;
+   messageLog: vec text;
+   name: text;
+   organType: text;
+ };
+type BirthAiState = 
+ record {
+   entities: vec record {
+                   text;
+                   BirthEntity;
+                 };
+   lastBirthBeat: int;
+   totalBorn: nat;
+   totalTranscended: nat;
+ };
+type BankTxEntry = 
+ record {
+   amount: float64;
+   asset: text;
+   direction: variant {
+                in;
+                out;
+              };
+   flagged: bool;
+   note: text;
+   timestamp: nat;
+   txId: text;
+ };
+type BankAccountEntry = 
+ record {
+   accountId: text;
+   ckBtcBalance: float64;
+   ckEthBalance: float64;
+   createdAt: nat;
+   delegatedSigning: bool;
+   icpBalance: float64;
+   kycStatus: variant {
+                notStarted;
+                pending;
+                rejected;
+                verified;
+              };
+   kycTimestamp: nat;
+   ownerName: text;
+   role: variant {
+           business;
+           institutional;
+           personal;
+         };
+   thresholdLimit: float64;
+   txHistory: vec BankTxEntry;
+ };
+service : {
+  /// activateGenesis — inscribe the founding word permanently
+  /// Calls genesis_activation.activateGenesis(), persists result in genesisInternalState.
+  /// Also sets genesisLocked in SovereignDB so the activation flag mirrors in main db.
+  activateGenesis: (foundingWord: text) -> (text);
+  addEdge: (input: EdgeInput) -> (Edge);
+  /// addGrant — creator-only
+  /// Appends a new grant record to the Wyoming charter
+  addGrant: (grant: GrantRecord) -> ();
+  addLessonTool: (teksCode: text, tool: LessonTool) -> ();
+  addMessage: ("text": text) -> (LedgerEntry);
+  addNode: (input: NodeInput) -> (Node);
+  addSchool: (school: SchoolRecord) -> ();
+  addTeksStandard: (std: TeksStandard) -> ();
+  /// birthAI — create a sovereign entity or external agent
+  /// entityType: "internal" (born into organism) | "external" (operates outside)
+  /// directive: plain natural language — organ type auto-classified from keywords
+  /// Returns the new entityId
+  birthAI: (name: text, directive: text, entityType: text) -> (text);
+  createBankAccount: (accountId: text, ownerName: text, role: text) -> (text);
+  deploySchoolCanister: (schoolId: text, canisterId: text) -> ();
+  /// entityLearn — increase entity activation by phi^-1 per call; caps at 1.0
+  /// PHI LAW: activation compounds at the golden ratio inverse — phi-derived growth
+  entityLearn: (entityId: text, content: text) -> ();
+  /// entityRecall — search entity message log for past messages matching query
+  entityRecall: (entityId: text, "query": text) -> (vec text) query;
+  /// entitySetGoal — push a goal onto the entity's goal stack (max 10)
+  entitySetGoal: (entityId: text, goal: text) -> ();
+  /// entitySpeak — send a message to a sovereign entity, receive its response
+  entitySpeak: (entityId: text, message: text) -> (text);
+  /// executeBuilderDirective — execute a previously parsed directive
+  /// If targetType is entity/agent → calls birthAI internally
+  /// Returns execution result string
+  executeBuilderDirective: (directiveId: text) -> (text);
+  /// executeNovaEngine — dispatch a specific cognitive language engine by ID
+  /// Returns execution result. Coherence gate enforced: R >= 0.618 required.
+  executeNovaEngine: (engineId: text, input: text) -> (text);
+  exportFinCEN: (format: text) -> (text) query;
+  getAgiStatus: () ->
+   (record {
+      computator:
+       record {
+         fibonacciSeries: vec nat;
+         goldenAngle: float64;
+         phi: float64;
+         schumannHz: float64;
+       };
+      custoditor: record {reroutedNodes: vec text;};
+      dispensator: record {totalDisbursed: float64;};
+      explorator: record {topNodes: vec text;};
+      gubernator:
+       record {
+         neuronGroups: vec record {
+                             text;
+                             nat;
+                           };
+         voteCount: nat;
+       };
+      liberator:
+       record {
+         lastBlockIndex: opt nat;
+         ready: bool;
+         totalWithdrawals: nat;
+       };
+      memoria: record {
+                 doctrineVerified: bool;
+                 lex: text;
+               };
+    }) query;
+  /// getAllModels — return all 300 sovereign models
+  getAllModels: () -> (vec SovereignModel) query;
+  /// getAllProtocols — all 89+ protocol records as public-safe array
+  getAllProtocols: () -> (vec ProtocolRecordPublic) query;
+  getAuditCount: () -> (nat) query;
+  getBankAccount: (accountId: text) -> (opt BankAccountEntry) query;
+  getBankingSsuState: () ->
+   (record {
+      aegisStatus: text;
+      beatCount: nat;
+      genesisHash: text;
+      kuramotoR: float64;
+    }) query;
+  getBankingYield: () ->
+   (record {
+      dailyMaturityEst: float64;
+      neuronGroupStatus: text;
+      weeklyEst: float64;
+    }) query;
+  getBeatCount: () -> (nat) query;
+  /// getBirthAiState — full BirthAI domain snapshot
+  getBirthAiState: () -> (BirthAiState) query;
+  getBtcBalance: () -> (float64) query;
+  /// getBuilderState — full Builder SDK domain snapshot
+  getBuilderState: () -> (BuilderState) query;
+  getCardiacState: () -> (CardiacState) query;
+  getCodexById: (id: text) -> (opt CodexEntry) query;
+  getCodexMathematicus: () -> (vec CodexEntry) query;
+  /// getContextRouterState — aggregate context router stats
+  getContextRouterState: () -> (ContextRouterState) query;
+  getCreatorPrincipalLocked: () -> (bool) query;
+  getCreatorReserve: () -> (CreatorReserveState) query;
+  getCreatorWithdrawableIcp: () -> (float64) query;
+  getDomLibStatus: () ->
+   (record {
+      auditorCount: nat;
+      confirmatorCount: nat;
+      protectorBlocks: nat;
+      verificatorChecks: nat;
+    }) query;
+  getDriveState: () -> (DriveState) query;
+  getEdges: () -> (vec Edge) query;
+  getEngineState: () -> (EngineState) query;
+  getEthBalance: () -> (float64) query;
+  getFlaggedTransactions: () -> (vec BankTxEntry) query;
+  getFormaState: () -> (FormaState) query;
+  /// getFounderAccountId — returns the canonical sovereign ICP account ID permanently wired
+  /// Address: 8c047c715f630bb8824c4831a1b95ad181a4b9264c528131fd5eccc2e4c6b879
+  /// All D_LIQUID disbursements and LIBERATOR withdrawals route to this address by default.
+  getFounderAccountId: () -> (text) query;
+  getFullWalletSnapshot: () -> (FullWalletSnapshot) query;
+  getGenesisState: () -> (GenesisState) query;
+  getGrantsByStatus: (status: text) -> (vec GrantRecord_School) query;
+  getIcpBalance: () -> (float64) query;
+  getJacobsLadder: () -> (JacobsLadderState) query;
+  getKuramotoR: () -> (float64) query;
+  getKycEndpoint: () -> (text) query;
+  getKycStatus: (accountId: text) -> (opt KycRecord) query;
+  getLessonToolsByGrade: (grade: text) -> (vec LessonTool) query;
+  getLessonToolsBySubject: (subject: text) -> (vec LessonTool) query;
+  getMemoriaNns: () -> (record {
+                          lex: text;
+                          verified: bool;
+                        }) query;
+  getMessages: (limit: nat) -> (vec LedgerEntry) query;
+  /// getMicroTokenBudget — returns the per-beat micro-token budget (200_000)
+  getMicroTokenBudget: () -> (nat) query;
+  /// getModel — retrieve a sovereign model by ID (e.g., "M-001")
+  getModel: (id: text) -> (opt SovereignModel) query;
+  /// getModelCount — always returns 300
+  getModelCount: () -> (nat) query;
+  /// getModelRegistryState — aggregate model registry stats
+  getModelRegistryState: () -> (ModelRegistryState) query;
+  getMtcCirculating: () -> (float64) query;
+  getNeuronFleet: () -> (NeuronFleetState) query;
+  getNodes: () -> (vec Node) query;
+  /// getNovaActiveLanguages — engines currently in active or transcended phase
+  getNovaActiveLanguages: () -> (vec NovaCognitiveLanguage) query;
+  /// getNovaLanguageById — retrieve one engine record by ID
+  getNovaLanguageById: (id: text) -> (opt NovaCognitiveLanguage) query;
+  /// getNovaLanguageRegistry — all 40 cognitive language engine records
+  getNovaLanguageRegistry: () -> (vec NovaCognitiveLanguage) query;
+  /// getNovaLanguagesByStack — retrieve all engines in a named stack
+  getNovaLanguagesByStack: (stack: text) -> (vec NovaCognitiveLanguage) query;
+  /// getNovaRuntimeState — full NOVA runtime state snapshot
+  getNovaRuntimeState: () -> (NovaRuntimeState) query;
+  /// getOrganHealth — health record for a specific organ type
+  getOrganHealth: (organType: text) -> (opt RegistryEntry) query;
+  getOrganismState: () -> (OrganismState) query;
+  getProfitState: () -> (ProfitState) query;
+  /// getProtocolById — lookup one protocol record by ID (e.g., "L01", "M05", "B03")
+  getProtocolById: (id: text) -> (opt ProtocolRecordPublic) query;
+  /// getProtocolLog — all protocols sorted by lastFiredBeat descending
+  getProtocolLog: () -> (vec ProtocolRecordPublic) query;
+  /// getProtocolRegistry — full protocol execution registry snapshot
+  getProtocolRegistry: () -> (ProtocolRegistry) query;
+  /// getProtocolsByCategory — all protocols of a given category
+  /// category: "Law" | "Model" | "Behavior" | "Reasoning" | "Organ"
+  getProtocolsByCategory: (category: text) ->
+   (vec ProtocolRecordPublic) query;
+  getPublicCurriculum: () -> (vec TeksStandard) query;
+  getRecentAudit: (n: nat) -> (vec LedgerEntry) query;
+  getRecentSettle: (n: nat) -> (vec LedgerEntry) query;
+  /// getRegistryCoherence — mean healthScore across all registered organs
+  getRegistryCoherence: () -> (float64) query;
+  /// getRegistryEntries — all registered organ entries as a flat array
+  getRegistryEntries: () -> (vec RegistryEntry) query;
+  /// getRegistryState — full canister registry snapshot (all 9 organs)
+  getRegistryState: () -> (RegistryState) query;
+  getSchoolByDistrict: (district: text) -> (vec SchoolRecord) query;
+  getSchoolRegistry: () -> (SchoolRegistry) query;
+  getShellState: () -> (ShellState) query;
+  getSignalState: () -> (SignalState) query;
+  getTeksStandard: (code: text) -> (opt TeksStandard) query;
+  getTokenBySymbol: (symbol: text) -> (opt TokenEntry) query;
+  getTokenRegistry: () -> (vec TokenEntry) query;
+  getTotalProfit: () -> (float64) query;
+  getTotalWithdrawn: () -> (float64) query;
+  getTreasuryState: () -> (TreasuryState) query;
+  getTxMonitoringState: () -> (TxMonitoringState) query;
+  getUserProfile: (who: principal) -> (opt UserProfile) query;
+  getWithdrawalLog: () -> (vec WithdrawalLogEntry) query;
+  /// getWyomingCharter — public query, no auth required
+  /// Returns the full sovereign Wyoming charter state
+  getWyomingCharter: () -> (WyomingState) query;
+  initiateKyc: (accountId: text) -> (text);
+  listBankAccounts: () -> (vec BankAccountEntry) query;
+  /// listBuilderDirectives — return all submitted directives
+  listBuilderDirectives: () -> (vec BuilderDirective) query;
+  /// listEntities — return all sovereign entities (internal + external)
+  listEntities: () -> (vec BirthEntity) query;
+  /// listModelsByLayer — return all models in a given layer ("MICRO" | "MESO" | "MACRO")
+  listModelsByLayer: (layer: text) -> (vec SovereignModel) query;
+  /// markOrganDegraded — creator-only: force organ status to #degraded
+  markOrganDegraded: (organType: text) -> ();
+  /// markOrganUnreachable — creator-only: force organ status to #unreachable
+  markOrganUnreachable: (organType: text) -> ();
+  /// px_getFullState — single-call sovereign organism snapshot
+  /// Wired to real SovereignDB domain state — no hardcoded numbers
+  px_getFullState: () -> (FullPxState) query;
+  /// px_getNeurochemicals — returns the 18 neurochemical Float levels from CardiacState
+  /// Pads with 0.0 if fewer than 18 values exist
+  px_getNeurochemicals: () -> (vec float64) query;
+  /// px_isGenesisActivated — returns true when the founding word has been inscribed
+  /// Reads GenesisInternalState (activation record) and falls back to genesisLocked flag
+  px_isGenesisActivated: () -> (bool) query;
+  recordBankTx: (accountId: text, amount: float64, asset: text, direction:
+   text, note: text) -> (text);
+  /// registerOrgan — creator-only: wire a deployed organ canister ID
+  registerOrgan: (organType: text, canisterId: text) -> ();
+  /// routeBeat — route a beat signal text to top-K resonant models
+  routeBeat: (signal: text, k: nat) -> (ContextSlice) query;
+  /// runFrntDemo — Ω_GATE: Kuramoto R must be >= 0.618 (phi^-1)
+  /// Executes the FRNT settlement demo, records the run timestamp
+  /// Proves: 0.3s (Phantom) vs 900s (Visa), 0% vs 4% fee
+  runFrntDemo: () -> (FrntDemo);
+  setBtcBalance: (v: float64) -> ();
+  setBtcPrice: (v: float64) -> ();
+  setCreatorPrincipal: () -> (bool);
+  setEthBalance: (v: float64) -> ();
+  setEthPrice: (v: float64) -> ();
+  setGenesisLocked: (v: bool) -> ();
+  setIcpBalance: (v: float64) -> ();
+  setIcpPrice: (v: float64) -> ();
+  setKuramotoR: (v: float64) -> ();
+  setKycEndpoint: (url: text) -> ();
+  setUserProfile: (profile: UserProfile) -> ();
+  /// submitBuilderDirective — submit a natural language directive for parsing
+  /// Returns directiveId for subsequent execution
+  submitBuilderDirective: (rawText: text) -> (text);
+  tickBeatManual: () -> (nat);
+  /// tickBeatManual with protocol gate — creator-only manual beat + gate check
+  tickBeatManualGated: () -> (record {
+                                beat: nat;
+                                gateOpen: bool;
+                              });
+  toggleDelegatedSigning: (accountId: text) -> (bool);
+  updateBankAccountRole: (accountId: text, role: text) -> (bool);
+  updateGrantStatus: (grantName: text, status: text) -> ();
+  /// updateMilestone — creator-only
+  /// Updates milestone status and notes by milestone id
+  updateMilestone: (id: text, status: MilestoneStatus, notes: text) -> ();
+  /// updateNodeProvider — creator-only
+  /// Updates Bad Marine LLC node provider positioning
+  updateNodeProvider: (np: NodeProvider) -> ();
+  /// updateOrganHealth — called by organ canisters on their own heartbeat
+  /// Any external canister implementing reportHealth() submits here.
+  updateOrganHealth: (report: HealthReport) -> ();
+  /// Withdraw ICP from Creator Reserve — creator only
+  withdrawCreatorIcp: (amount: float64) -> (bool);
+  /// withdrawToExternalWallet — LIBERATOR real ICRC-1 transfer
+  /// Called by all three withdrawal UIs. Creator-only. Executes real transfer.
+  /// If toPrincipal is "" (empty), defaults to the founder's canonical account ID:
+  ///   8c047c715f630bb8824c4831a1b95ad181a4b9264c528131fd5eccc2e4c6b879
+  withdrawToExternalWallet: (amount: float64, toPrincipal: text) ->
+   (record {
+      blockIndex: opt nat;
+      error: opt text;
+      success: bool;
+    });
+}

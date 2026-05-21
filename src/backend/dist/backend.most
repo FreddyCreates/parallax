@@ -1,0 +1,709 @@
+// Version: 1.0.0
+type BankAccountEntry__872846954 =
+  {
+    accountId : Text;
+    ckBtcBalance : Float;
+    ckEthBalance : Float;
+    createdAt : Nat;
+    delegatedSigning : Bool;
+    icpBalance : Float;
+    kycStatus : {#notStarted; #pending; #rejected; #verified};
+    kycTimestamp : Nat;
+    ownerName : Text;
+    role : {#business; #institutional; #personal};
+    thresholdLimit : Float;
+    txHistory : [BankTxEntry__60453078]
+  };
+type BankTxEntry__60453078 =
+  {
+    amount : Float;
+    asset : Text;
+    direction : {#in_; #out_};
+    flagged : Bool;
+    note : Text;
+    timestamp : Nat;
+    txId : Text
+  };
+type BankingAccountsState__486605313 =
+  {
+    bankingAccounts : [(Text, BankAccountEntry__872846954)];
+    bankingSsuBeatCount : Nat;
+    bankingSsuGenesisHash : Text;
+    kycEndpoint : Text
+  };
+type BirthAiState__516876384 = BirthAiState__786124556;
+type BirthAiState__786124556 =
+  {
+    entities : [(Text, BirthEntity__394924754)];
+    lastBirthBeat : Int;
+    totalBorn : Nat;
+    totalTranscended : Nat
+  };
+type BirthEntity__394924754 =
+  {
+    activation : Float;
+    birthBeat : Int;
+    birthTimestamp : Int;
+    directive : Text;
+    entityState : EntityState__382787898;
+    entityType : EntityType__2470902;
+    goalStack : [Text];
+    id : Text;
+    messageLog : [Text];
+    name : Text;
+    organType : Text
+  };
+type BuilderDirective__551831799 =
+  {
+    id : Text;
+    outputId : ?Text;
+    parameters : [(Text, Text)];
+    parsedIntent : Text;
+    rawText : Text;
+    status : DirectiveStatus__561861733;
+    targetType : TargetType__817343700;
+    timestamp : Int
+  };
+type BuilderState__134163201 = BuilderState__833939059;
+type BuilderState__833939059 =
+  {
+    directives : [(Text, BuilderDirective__551831799)];
+    totalBuilt : Nat;
+    totalFailed : Nat
+  };
+type CardiacState__622650684 =
+  {
+    coherenceDirection : Int;
+    coherenceTarget : Float;
+    deoxygenationAlarms : Nat;
+    entanglaCarrier : Float;
+    globalCoherence : Float;
+    heartRate : Float;
+    heartbeatActive : Bool;
+    hrvBound : Float;
+    kuramotoR : Float;
+    lastBeatTime : Int;
+    lastOmnisFireBeat : Nat;
+    neurochemicalLevels : [Float];
+    omnisFiredCount : Nat;
+    oxygenationScore : Float;
+    strokeVolume : Float
+  };
+type CodexEntry__595955007 =
+  {
+    ancientSource : Text;
+    category : Text;
+    computation : Text;
+    enforcementAgi : Text;
+    formula : Text;
+    id : Text;
+    meaning : Text;
+    name : Text;
+    numericalValue : Float;
+    principleOneLine : Text
+  };
+type CodexMathState__418633771 = {entries : [CodexEntry__595955007]};
+type ComputatorState__223132608 =
+  {
+    fibonacciSeries : [Nat];
+    goldenAngle : Float;
+    lastComputedBeat : Nat;
+    phi : Float;
+    phiPowers : [Float];
+    schumannHz : Float
+  };
+type CreatorReserveState__555206457 =
+  {
+    btcReserve : Float;
+    ethReserve : Float;
+    founderAccountId : Text;
+    founderName : Text;
+    icpReserve : Float;
+    mtcReserve : Float;
+    totalUsdEquiv : Float;
+    totalWithdrawn : Float;
+    withdrawableIcp : Float
+  };
+type CustoditorState__672397831 =
+  {rerouteCount : Nat; reroutedNodes : [Text]};
+type DirectiveStatus__561861733 = {#building; #complete; #failed; #parsed};
+type DispensatorState__566587551 =
+  {disburseCount : Nat; lastDisburseBeat : Nat; totalDisbursed : Float};
+type DriveState__1017566178 =
+  {
+    consecutiveDriveBeats : Nat;
+    dominantDriveId : Nat;
+    px_driveStrengths : [Float]
+  };
+type Edge__525072057 =
+  {beat : Nat; fromId : Text; id : Text; relation : Text; toId : Text};
+type EngineState__249148797 =
+  {
+    anointedStateActive : Bool;
+    axisCanisterId : Text;
+    axisEagleAccel : Float;
+    axisEagleCurvature : Float;
+    axisEagleElevation : Float;
+    axisElephantDist : Float;
+    axisElephantRecall : Float;
+    firePillarActive : Bool;
+    firePillarCount : Nat;
+    fluxCanisterId : Text;
+    jubileeCount : Nat;
+    jubileeLastBeat : Nat;
+    kalmanConfidence : Float;
+    prophetConvergenceCount : Nat;
+    prophetFunctionArmed : Bool;
+    qbShell3Discharge : Float;
+    qbSuperchargeRate : Float;
+    qbSuperradiance : Float;
+    qmemCanisterId : Text;
+    resonexCanisterId : Text;
+    sevenSpiritsScore : Float;
+    shemaIntegrityScore : Float;
+    shemaLastCheckBeat : Nat
+  };
+type EntityState__382787898 = {#active; #awakening; #dormant; #transcended};
+type EntityType__2470902 = {#external; #internal};
+type ExploratorState__145861533 =
+  {
+    governancePriority : [Text];
+    nodes : [FieldNode__903486907];
+    tickCount : Nat
+  };
+type Facility__489356583 =
+  {
+    address : Text;
+    city : Text;
+    internetBackbone : Bool;
+    powerCostRank : Text;
+    publicPower : Bool;
+    stateCode : Text;
+    vaultGrade : Bool
+  };
+type FieldNode__903486907 =
+  {
+    governanceWeight : Float;
+    healthScore : Float;
+    nodeId : Text;
+    substrate : Text
+  };
+type FormaState__361562658 =
+  {
+    beatCount : Nat;
+    capital : Float;
+    compoundRatePerBeat : Float;
+    projectionPlus1000 : Text;
+    projectionPlus10000 : Text;
+    spectralCoherence : Float;
+    vonNeumannEntropy : Float
+  };
+type FrntDemo__984842188 =
+  {
+    demoActive : Bool;
+    lastRunMs : Int;
+    phantomFeeBps : Nat;
+    phantomSettlementMs : Nat;
+    visaBottleneckSolved : Bool;
+    visaFeeBps : Nat;
+    visaSettlementMs : Nat
+  };
+type GenesisCoherenceWindow__482137530 =
+  {
+    alignment_score : Float;
+    cycle_alignment_count : Nat;
+    end_beat : Nat64;
+    start_beat : Nat64
+  };
+type GenesisRecord__9798050 =
+  {
+    beats_since_genesis : Nat64;
+    coherence_window : GenesisCoherenceWindow__482137530;
+    founding_frequency_hz : Float;
+    founding_word : Text;
+    genesis_beat : Nat64;
+    genesis_hash : Text;
+    is_active : Bool
+  };
+type GenesisState__594077643 =
+  {
+    alfredoLawActive : Bool;
+    alfredoLawHash : Text;
+    beatCount : Nat;
+    creatorJurisdiction : Text;
+    creatorName : Text;
+    creatorTitle : Text;
+    creatorYear : Nat;
+    doctrineHash : Text;
+    genesisLocked : Bool;
+    genesisTimestamp : Int;
+    sl1Score : Float;
+    sl2Resonance : Float;
+    sl3Coherence : Float;
+    sl4Depth : Float;
+    sl5Amplitude : Float;
+    sl6Emission : Float;
+    sl7Depth : Float
+  };
+type GrantRecord_School__1010213752 =
+  {
+    amountUsd : Nat;
+    deadlineMs : Int;
+    name : Text;
+    notes : Text;
+    program : Text;
+    status : Text
+  };
+type GrantRecord__541787426 =
+  {
+    amountUsd : Nat;
+    deadlineMs : Int;
+    grantType : Text;
+    name : Text;
+    notes : Text;
+    status : Text
+  };
+type GubernatorState__795687195 =
+  {lastVoteBeat : Nat; neurons : [NeuronEntry__881633929]; voteCount : Nat};
+type JacobRung__10561001 =
+  {isCurrent : Bool; labelText : Text; multiplier : Float; rungNumber : Nat};
+type JacobsLadderState__91372724 =
+  {
+    currentRung : Nat;
+    rungs : [JacobRung__10561001];
+    saceciTarget : Float;
+    velocity : Float
+  };
+type KycRecord__996207634 =
+  {
+    accountId : Text;
+    apiResponse : Text;
+    lastChecked : Nat;
+    retryCount : Nat;
+    status : {#notStarted; #pending; #rejected; #verified}
+  };
+type KycRegistryState__829225055 =
+  {kycRegistry : [(Text, KycRecord__996207634)]};
+type LedgerEntry__925560985 =
+  {
+    beat : Nat;
+    category : Text;
+    payload : Text;
+    phiDepth : Nat;
+    proofHash : Text;
+    timestamp : Int
+  };
+type LedgerState__438166380 =
+  {
+    auditCount : Nat;
+    auditHead : Nat;
+    auditLog : [LedgerEntry__925560985];
+    patentCount : Nat;
+    patentHead : Nat;
+    patentLog : [LedgerEntry__925560985];
+    settleCount : Nat;
+    settleHead : Nat;
+    settleLedger : [LedgerEntry__925560985];
+    thoughtCount : Nat;
+    thoughtHead : Nat;
+    thoughtLog : [LedgerEntry__925560985];
+    transferCount : Nat;
+    transferHead : Nat;
+    transferLog : [LedgerEntry__925560985]
+  };
+type LegacyIndexEntry__859017791 =
+  {
+    artifact_id : Text;
+    creation_beat : Nat64;
+    distance_from_genesis : Float;
+    doctrine_alignment : Float
+  };
+type LegislativeTimeline__586520444 =
+  {
+    billReadyMs : Int;
+    hardwareDeadlineMs : Int;
+    milestones : [Milestone__839427233];
+    unicameralSession : Text
+  };
+type LessonTool__399792306 =
+  {
+    description : Text;
+    id : Text;
+    publicAccess : Bool;
+    subject : Text;
+    teksCodes : [Text];
+    title : Text;
+    toolType : Text
+  };
+type LiberatorState__385835903 =
+  {
+    auditorLog : [Text];
+    confirmatorReceipts : [Text];
+    lastBlockIndex : ?Nat;
+    protectorBlocks : Nat;
+    totalWithdrawals : Nat;
+    verificatorChecks : Nat;
+    withdrawalCount : Nat;
+    withdrawalHead : Nat;
+    withdrawalLog : [WithdrawalLogEntry__637778749]
+  };
+type MilestoneStatus__882046494 =
+  {#Complete; #Critical; #InProgress; #Pending};
+type Milestone__839427233 =
+  {
+    deadlineMs : Int;
+    id : Text;
+    notes : Text;
+    status : MilestoneStatus__882046494;
+    title : Text
+  };
+type NeuronEntry__881633929 = {group : Text; neuronId : Text};
+type NeuronFleetState__423435982 =
+  {
+    fieldNodes : Nat;
+    groups : [NeuronGroup__925332543];
+    neuronsPerNode : Nat;
+    totalNeurons : Nat
+  };
+type NeuronGroup__925332543 =
+  {
+    count : Nat;
+    dissolveYears : Float;
+    fibIndex : Nat;
+    groupId : Text;
+    policy : Text;
+    purpose : Text;
+    substrate : Text
+  };
+type NodeProvider__545138151 =
+  {
+    bslWhitelisted : Bool;
+    cheyenneNodes : Nat;
+    entity : Text;
+    gen3Ready : Bool;
+    lincolnNodes : Nat;
+    status : Text;
+    targetRegion : Text
+  };
+type Node__500653604 =
+  {beat : Nat; id : Text; labelText : Text; nodeType : Text};
+type NodusRecord__654716726 =
+  {
+    activatedAt : Int;
+    assignedToCompany : ?Text;
+    beatCount : Nat;
+    compoundRate : Float;
+    healthScore : Float;
+    id : Text;
+    isSovereignPart : Bool;
+    name : Text;
+    rewardsIcp : Float;
+    ssuState : SsuState__383849027;
+    substrate : SubstrateType__196257492
+  };
+type NovaCognitiveLanguage__676563423 =
+  {
+    coherenceGateScore : Float;
+    englishDomain : Text;
+    executionBinding : Text;
+    executionCount : Nat;
+    id : Text;
+    lastBeatExecuted : Int;
+    latinName : Text;
+    primaryObjects : [Text];
+    runtimePhase : Text;
+    stack : Text
+  };
+type OrganismRecord__578141423 =
+  {
+    active : Bool;
+    beat : Nat;
+    canisterId : Text;
+    coherence : Float;
+    earnings : Float;
+    fieldType : Nat;
+    name : Text;
+    proofDepth : Nat
+  };
+type OrganismState__971550067 =
+  {
+    activeCount : Nat;
+    championPool : Float;
+    franchiseCount : Nat;
+    franchiseCutRate : Float;
+    organisms : [OrganismRecord__578141423];
+    subOrganisms : [SubOrganismRecord__432697219];
+    totalOrganismEarnings : Float
+  };
+type Partnership__941141331 =
+  {
+    contact : Text;
+    name : Text;
+    notes : Text;
+    partnerType : Text;
+    status : Text
+  };
+type ProfitState__215713413 = {streams : [Float]; totalAllStreams : Float};
+type ProtocolCategory__78720216 =
+  {#Behavior; #Law; #Model; #Organ; #Reasoning};
+type ProtocolRecord__146042146 =
+  {
+    category : ProtocolCategory__78720216;
+    equation : Text;
+    executionCount : Nat;
+    id : Text;
+    lastFiredBeat : Int;
+    lastResult : ProtocolResult__128737460;
+    name : Text;
+    precedence : Nat;
+    principle : Text
+  };
+type ProtocolRegistry__987589700 =
+  {
+    lastScanBeat : Int;
+    protocols : [(Text, ProtocolRecord__146042146)];
+    totalExecutions : Nat
+  };
+type ProtocolResult__128737460 = {#failed; #passed; #skipped};
+type RegistryEntry__817518516 =
+  {
+    canisterId : Text;
+    cycles : Nat;
+    deployed : Int;
+    errors : Nat;
+    healthScore : Float;
+    lastHeartbeat : Int;
+    latencyMs : Int;
+    messages : Nat;
+    organType : Text;
+    principalId : ?Principal;
+    status : {#active; #degraded; #unreachable}
+  };
+type RegistryState__46259838 =
+  {entries : [(Text, RegistryEntry__817518516)]; lastUpdated : Int};
+type SchoolRecord__235734641 =
+  {
+    canisterId : ?Text;
+    contactEmail : Text;
+    deployed : Bool;
+    district : Text;
+    grantStatus : Text;
+    id : Text;
+    name : Text;
+    teksStandardsCodes : [Text];
+    tier : SchoolTier__19740692
+  };
+type SchoolTier__19740692 = {#Bronze; #Gold; #Silver};
+type ShellState__730740193 =
+  {
+    activations : [Float];
+    rValues : [Float];
+    shell3BeeGate : [Float];
+    shell3Coherence : Float
+  };
+type SignalState__676769997 =
+  {
+    cortisol : Float;
+    crowSignal : Float;
+    dolphinSignal : Float;
+    eagleSignal : Float;
+    elephantSignal : Float;
+    heartRate : Float;
+    hiveSignal : Float;
+    octopusSignal : Float;
+    orcaSignal : Float;
+    respirationRate : Float;
+    sharkSignal : Float;
+    thyroidT3 : Float;
+    thyroidT4 : Float;
+    wolfSignal : Float
+  };
+type SsuState__383849027 =
+  {
+    aegisOk : Bool;
+    clockMs : Nat;
+    coherenceR : Float;
+    pilCycle : Nat;
+    psiHash : Text
+  };
+type SubOrganismRecord__432697219 =
+  {
+    active : Bool;
+    canisterId : Text;
+    parentId : Text;
+    royaltyRate : Float;
+    tier : Nat
+  };
+type SubstrateType__196257492 = {#ANIMA; #ICP; #WEB};
+type TargetType__817343700 =
+  {#agent; #canister; #entity; #protocol; #queryTarget};
+type TeksStandard__130516272 =
+  {
+    code : Text;
+    description : Text;
+    grade : Text;
+    lessonTools : [LessonTool__399792306];
+    subject : Text;
+    title : Text
+  };
+type TokenEntry__891929275 =
+  {
+    burnTrigger : Text;
+    circulatingSupply : Float;
+    creatorReserveBalance : Float;
+    homeCanister : Text;
+    managingAgi : Text;
+    mintTrigger : Text;
+    name : Text;
+    priceIcp : Float;
+    symbol : Text;
+    totalSupply : Float
+  };
+type TokenRegistryState__166712413 = {tokens : [TokenEntry__891929275]};
+type TreasuryState__803628681 =
+  {
+    btcBalance : Float;
+    btcHardFloor : Float;
+    btcMempoolFeeRate : Float;
+    btcNetworkCongestion : Float;
+    btcPrice : Float;
+    clearanceReserves : [Float];
+    creatorBtcReserve : Float;
+    creatorEthReserve : Float;
+    creatorIcpReserve : Float;
+    creatorMtcReserve : Float;
+    creatorTotalUsdEquiv : Float;
+    creatorWithdrawableIcp : Float;
+    ethBalance : Float;
+    ethLidoRate : Float;
+    ethPrice : Float;
+    ethRocketPoolRate : Float;
+    ethYieldRate : Float;
+    icpAccruedYield : Float;
+    icpBalance : Float;
+    icpPrice : Float;
+    icpStaked : Float;
+    icpYieldRate : Float;
+    mtcBurned : Float;
+    mtcCirculating : Float;
+    mtcGenesisSupply : Float;
+    mtcPrice : Float;
+    tokenBalances : [Float];
+    totalWithdrawn : Float
+  };
+type TxMonitoringState__276723054 =
+  {
+    businessThreshold : Float;
+    flaggedCount : Nat;
+    institutionalThreshold : Float;
+    lastFlaggedAt : Nat;
+    personalThreshold : Float;
+    totalMonitored : Nat
+  };
+type UserProfile__491224006 = {name : Text; principal : Text};
+type WithdrawalLogEntry__637778749 =
+  {
+    amount : Float;
+    blockIndex : ?Nat;
+    error : ?Text;
+    success : Bool;
+    timestamp : Int;
+    toPrincipal : Text
+  };
+type WyomingState__21532234 =
+  {
+    charterGenesisHash : Text;
+    facility : Facility__489356583;
+    frntDemo : FrntDemo__984842188;
+    grants : [GrantRecord__541787426];
+    lastUpdatedMs : Int;
+    legislative : LegislativeTimeline__586520444;
+    nodeProvider : NodeProvider__545138151;
+    partnerships : [Partnership__941141331]
+  };
+type WyomingState__774166812 = WyomingState__21532234;
+actor {
+  stable _heartbeatTimer : Nat;
+  stable var agi :
+    {
+      computator : ComputatorState__223132608;
+      custoditor : CustoditorState__672397831;
+      dispensator : DispensatorState__566587551;
+      explorator : ExploratorState__145861533;
+      gubernator : GubernatorState__795687195;
+      liberator : LiberatorState__385835903
+    };
+  stable var contextRouterState :
+    {
+      avgResonanceScore : Float;
+      microTokenBudgetPerBeat : Nat;
+      totalBeatRoutes : Nat
+    };
+  stable var creatorPrincipal : ?Principal;
+  stable var creatorPrincipalLocked : Bool;
+  stable var db :
+    {
+      bankingAccounts : BankingAccountsState__486605313;
+      birthAi : BirthAiState__516876384;
+      builder : BuilderState__134163201;
+      cardiac : CardiacState__622650684;
+      codexMath : CodexMathState__418633771;
+      creatorReserve : CreatorReserveState__555206457;
+      drive : DriveState__1017566178;
+      engine : EngineState__249148797;
+      forma : FormaState__361562658;
+      genesis : GenesisState__594077643;
+      jacobs : JacobsLadderState__91372724;
+      kycRegistry : KycRegistryState__829225055;
+      ledger : LedgerState__438166380;
+      neuronFleet : NeuronFleetState__423435982;
+      organism : OrganismState__971550067;
+      profit : ProfitState__215713413;
+      protocolRegistry : ProtocolRegistry__987589700;
+      registryState : RegistryState__46259838;
+      shell : ShellState__730740193;
+      signal : SignalState__676769997;
+      tokenRegistry : TokenRegistryState__166712413;
+      treasury : TreasuryState__803628681;
+      txMonitoring : TxMonitoringState__276723054;
+      wyoming : WyomingState__774166812
+    };
+  stable var edges : [Edge__525072057];
+  stable var genesisInternalState :
+    {
+      genesis_record : ?GenesisRecord__9798050;
+      legacy_index : [LegacyIndexEntry__859017791]
+    };
+  stable var modelRegistryState :
+    {
+      lastActivated : Text;
+      microTokensConsumedTotal : Nat;
+      totalActivations : Nat;
+      totalModels : Nat
+    };
+  stable var nodes : [Node__500653604];
+  stable var nodusRegistry :
+    {
+      lastTick : Int;
+      nodes : [(Text, NodusRecord__654716726)];
+      registryGenesisHash : Text;
+      totalRewards : Float
+    };
+  stable var novaRuntimeState :
+    {
+      languages : [NovaCognitiveLanguage__676563423];
+      lastBeatExecuted : Int;
+      novaVersion : Text;
+      runtimePhase : Text;
+      totalExecutionCount : Nat
+    };
+  stable var schoolRegistry :
+    {
+      grants : [GrantRecord_School__1010213752];
+      lastUpdatedMs : Int;
+      schools : [SchoolRecord__235734641];
+      teksStandards : [TeksStandard__130516272];
+      totalDeployed : Nat
+    };
+  stable var userProfiles : [(Principal, UserProfile__491224006)]
+};

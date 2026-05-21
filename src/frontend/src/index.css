@@ -1,0 +1,313 @@
+@font-face {
+  font-family: "Bricolage Grotesque";
+  src: url("/assets/fonts/BricolageGrotesque.woff2") format("woff2");
+  font-weight: 200 800;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Satoshi";
+  src: url("/assets/fonts/Satoshi.woff2") format("woff2");
+  font-weight: 300 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/assets/fonts/JetBrainsMono.woff2") format("woff2");
+  font-weight: 300 700;
+  font-display: swap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --radius: 0;
+
+    /* ── PARALLAX Sovereign Dark Palette ── */
+    --background: 0.08 0.01 240;
+    --foreground: 0.95 0.02 240;
+    --card: 0.12 0.01 240;
+    --card-foreground: 0.95 0.02 240;
+    --popover: 0.14 0.01 240;
+    --popover-foreground: 0.95 0.02 240;
+
+    /* Sovereign gold — primary */
+    --primary: 0.78 0.15 85;
+    --primary-foreground: 0.08 0.01 240;
+
+    /* Signal green — secondary */
+    --secondary: 0.65 0.18 145;
+    --secondary-foreground: 0.08 0.01 240;
+
+    --muted: 0.14 0.01 240;
+    --muted-foreground: 0.55 0.02 240;
+
+    --accent: 0.16 0.02 240;
+    --accent-foreground: 0.95 0.02 240;
+
+    /* Threat red */
+    --destructive: 0.55 0.22 25;
+    --destructive-foreground: 0.98 0 0;
+
+    --success: 0.65 0.18 145;
+    --success-foreground: 0.04 0 0;
+
+    --warning: 0.72 0.16 80;
+    --warning-foreground: 0.04 0 0;
+
+    --border: 0.2 0.02 240;
+    --input: 0.16 0.02 240;
+    --ring: 0.78 0.15 85;
+
+    /* Chart tokens */
+    --chart-1: 0.78 0.15 85;
+    --chart-2: 0.65 0.18 145;
+    --chart-3: 0.55 0.22 25;
+    --chart-4: 0.65 0.2 290;
+    --chart-5: 0.72 0.16 200;
+
+    /* Sidebar */
+    --sidebar: 0.06 0.01 240;
+    --sidebar-foreground: 0.95 0.02 240;
+    --sidebar-primary: 0.78 0.15 85;
+    --sidebar-primary-foreground: 0.08 0.01 240;
+    --sidebar-accent: 0.1 0.01 240;
+    --sidebar-accent-foreground: 0.95 0.02 240;
+    --sidebar-border: 0.2 0.02 240;
+    --sidebar-ring: 0.78 0.15 85;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: "JetBrains Mono", "Satoshi", monospace;
+    background-color: oklch(0.08 0.01 240);
+  }
+
+  ::-webkit-scrollbar {
+    width: 3px;
+    height: 3px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: oklch(var(--border));
+  }
+}
+
+@layer utilities {
+  .font-mono {
+    font-family: "JetBrains Mono", monospace;
+  }
+
+  .font-display {
+    font-family: "Bricolage Grotesque", "Satoshi", sans-serif;
+  }
+
+  .font-body {
+    font-family: "Satoshi", sans-serif;
+  }
+
+  .text-gold {
+    color: oklch(var(--primary));
+  }
+
+  .text-green {
+    color: oklch(var(--secondary));
+  }
+
+  .panel-glass {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+  }
+
+  .glow-gold {
+    box-shadow: 0 0 24px oklch(0.78 0.15 85 / 0.35);
+  }
+
+  .glow-gold-sm {
+    box-shadow: 0 0 10px oklch(0.78 0.15 85 / 0.4);
+  }
+
+  .glow-green {
+    box-shadow: 0 0 14px oklch(0.65 0.18 145 / 0.35);
+  }
+
+  .glow-red {
+    box-shadow: 0 0 20px oklch(0.55 0.22 25 / 0.5);
+  }
+
+  .glow-violet {
+    box-shadow: 0 0 20px oklch(0.65 0.2 290 / 0.3);
+  }
+
+  .border-subtle {
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+}
+
+@keyframes pulse-node {
+  0%,
+  100% {
+    opacity: 0.6;
+    r: 3;
+  }
+  50% {
+    opacity: 1;
+    r: 4.5;
+  }
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 8px oklch(0.78 0.15 85 / 0.2);
+  }
+  50% {
+    box-shadow: 0 0 28px oklch(0.78 0.15 85 / 0.55);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes beat-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+}
+
+@keyframes vertical-line-pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+    height: 30%;
+  }
+  50% {
+    opacity: 1;
+    height: 70%;
+  }
+}
+
+@keyframes scroll-indicator {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(6px);
+    opacity: 0.4;
+  }
+}
+
+@keyframes rotate-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotate-slow-rev {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes sovereign-pulse {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes threat-flash {
+  0%,
+  100% {
+    border-color: oklch(0.55 0.22 25 / 0.3);
+  }
+  50% {
+    border-color: oklch(0.55 0.22 25 / 0.8);
+    box-shadow: 0 0 20px oklch(0.55 0.22 25 / 0.4);
+  }
+}
+
+.animate-beat {
+  animation: beat-pulse 2s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.animate-sovereign-pulse {
+  animation: sovereign-pulse 3s ease-in-out infinite;
+}
+
+.animate-threat-flash {
+  animation: threat-flash 1.2s ease-in-out infinite;
+}
+
+.animate-rotate-slow {
+  animation: rotate-slow 20s linear infinite;
+}
+
+.animate-rotate-slow-rev {
+  animation: rotate-slow-rev 30s linear infinite;
+}
+
+.skeleton-dark {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.02) 25%,
+    rgba(255, 255, 255, 0.06) 50%,
+    rgba(255, 255, 255, 0.02) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.line-pulse {
+  animation: vertical-line-pulse 2.4s ease-in-out infinite;
+}
+
+.scroll-bounce {
+  animation: scroll-indicator 1.8s ease-in-out infinite;
+}
