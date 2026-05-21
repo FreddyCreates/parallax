@@ -30,6 +30,11 @@ import ProtocolExecution "protocol_execution";
 import ModelRegistry "model_registry";
 import ContextRouter "context_router";
 import NovaRuntime "nova_runtime";
+import PhantomIntel "phantom_intelligence";
+import PhantomExchange "phantom_exchange";
+import AiArtifactRegistry "ai_artifact_registry";
+import PhantomClearinghouse "phantom_clearinghouse";
+import TokenFactory "token_factory";
 
 
 
@@ -80,6 +85,30 @@ actor PARALLAX {
   // Same pattern as domains 25/26: kept out of SovereignState to avoid M0170 on
   // upgrade. Initialises to default on first upgrade, persists normally thereafter.
   var novaRuntimeState : NovaRuntime.NovaRuntimeState = NovaRuntime.defaultNovaRuntimeState();
+
+  // ── DOMAIN 28 — PHANTOM_INTELLIGENCE_STATE ──────────────────────────────
+  // AI-first intelligence engine powering all exchange operations.
+  // Reasons about trades, values AI artifacts, detects arbitrage, predicts prices.
+  var phantomIntelligenceState : PhantomIntel.PhantomIntelligenceState = PhantomIntel.defaultPhantomIntelligenceState();
+
+  // ── DOMAIN 29 — PHANTOM_EXCHANGE_STATE ──────────────────────────────────
+  // Zero-gas-fee decentralized exchange with order book, matching engine.
+  // Trades ALL tokens: crypto, AI tokens, AI artifacts, sovereign tokens, custom tokens.
+  var phantomExchangeState : PhantomExchange.PhantomExchangeState = PhantomExchange.defaultPhantomExchangeState();
+
+  // ── DOMAIN 30 — AI_ARTIFACT_REGISTRY_STATE ──────────────────────────────
+  // Registry and marketplace for AI artifacts of value.
+  // Models, embeddings, reasoning protocols — all tokenized and tradeable.
+  var aiArtifactRegistryState : AiArtifactRegistry.AiArtifactRegistryState = AiArtifactRegistry.defaultAiArtifactRegistryState();
+
+  // ── DOMAIN 31 — PHANTOM_CLEARINGHOUSE_STATE ─────────────────────────────
+  // Real-time clearing and settlement. Zero fees. Instant finality.
+  // Multi-asset netting, cross-chain settlement, organism-guaranteed.
+  var phantomClearinghouseState : PhantomClearinghouse.PhantomClearinghouseState = PhantomClearinghouse.defaultPhantomClearinghouseState();
+
+  // ── DOMAIN 32 — TOKEN_FACTORY_STATE ─────────────────────────────────────
+  // Create and manage custom tokens: AI tokens, creator tokens, artifact tokens.
+  var tokenFactoryState : TokenFactory.TokenFactoryState = TokenFactory.defaultTokenFactoryState();
 
 
   // ══════════════════════════════════════════════════════════════════════
@@ -145,6 +174,23 @@ actor PARALLAX {
       // PHI LAW: coherence gate R >= 0.618 (phi^-1) enforced per engine.
       let novaCoherence = SovereignDB.getKuramotoR(db);
       novaRuntimeState := NovaRuntime.tickNovaRuntime(novaRuntimeState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM INTELLIGENCE — Domain 28: AI market reasoning ─────────────
+      // Reasons about trades, decays signals, scans arbitrage, updates predictions.
+      phantomIntelligenceState := PhantomIntel.tickIntelligence(phantomIntelligenceState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM EXCHANGE — Domain 29: matching engine ─────────────────────
+      // Runs price-time priority matching across all active order books.
+      // Settlement is INSTANT — fill = settlement (same beat). ZERO GAS.
+      phantomExchangeState := PhantomExchange.tickExchange(phantomExchangeState, beat.toInt());
+
+      // ── PHANTOM CLEARINGHOUSE — Domain 31: netting & clearing ─────────────
+      // Fibonacci-gated netting cycles. Settlement velocity tracking.
+      phantomClearinghouseState := PhantomClearinghouse.tickClearinghouse(phantomClearinghouseState, beat.toInt());
+
+      // ── TOKEN FACTORY — Domain 32: yield distribution ─────────────────────
+      // Distribute phi-derived yield to staked token holders (Fibonacci-gated).
+      tokenFactoryState := TokenFactory.distributeYield(tokenFactoryState, beat.toInt());
 
       // ── BANKING SSU beat increment — Domain 17 ───────────────────────────
       // PIL loop: upregulate weakest monitoring domain each beat
@@ -1607,6 +1653,331 @@ actor PARALLAX {
   public query func getNovaActiveLanguages() : async [NovaRuntime.NovaCognitiveLanguage] {
     NovaRuntime.getActiveLanguages(novaRuntimeState)
   };
+
+  // ══════════════════════════════════════════════════════════════════════
+  // PHANTOM INTELLIGENCE — Domain 28
+  // AI-first exchange intelligence: reasoning, valuation, risk, arbitrage
+  // ══════════════════════════════════════════════════════════════════════
+
+  public query func getPhantomIntelligenceState() : async PhantomIntel.PhantomIntelligenceState {
+    phantomIntelligenceState
+  };
+
+  /// injectMarketSignal — external market data enters the intelligence layer
+  public shared func injectMarketSignal(
+    tokenPair   : Text,
+    signalType  : Text,
+    magnitude   : Float,
+    confidence  : Float,
+    sourceLayer : Text,
+  ) : async Nat {
+    let sigType : PhantomIntel.SignalType = switch (signalType) {
+      case "priceMovement"        { #priceMovement };
+      case "volumeSpike"          { #volumeSpike };
+      case "orderFlowImbalance"   { #orderFlowImbalance };
+      case "arbitrageOpportunity" { #arbitrageOpportunity };
+      case "liquidityShift"       { #liquidityShift };
+      case "aiArtifactCreation"   { #aiArtifactCreation };
+      case "coherenceBreakout"    { #coherenceBreakout };
+      case "whaleMovement"        { #whaleMovement };
+      case "crossChainSignal"     { #crossChainSignal };
+      case _                      { #doctrineAlignment };
+    };
+
+    let signal : PhantomIntel.MarketSignal = {
+      signalId      = phantomIntelligenceState.signalCount + 1;
+      tokenPair     = tokenPair;
+      signalType    = sigType;
+      magnitude     = magnitude;
+      confidence    = confidence;
+      beatTimestamp = SovereignDB.getBeatCount(db).toInt();
+      decayRate     = 0.618;
+      sourceLayer   = sourceLayer;
+    };
+    phantomIntelligenceState := PhantomIntel.injectSignal(phantomIntelligenceState, signal);
+    phantomIntelligenceState.signalCount
+  };
+
+  /// predictPrice — harmonic-based price forecasting
+  public shared func predictPrice(tokenPair : Text, currentPrice : Float, horizonBeats : Nat) : async PhantomIntel.PricePrediction {
+    let beat = SovereignDB.getBeatCount(db).toInt();
+    let coherenceR = SovereignDB.getKuramotoR(db);
+    let (newState, prediction) = PhantomIntel.predictPrice(
+      phantomIntelligenceState, tokenPair, currentPrice, horizonBeats, beat, coherenceR
+    );
+    phantomIntelligenceState := newState;
+    prediction
+  };
+
+  /// assessRisk — phi-bounded risk computation for a trading pair
+  public shared func assessTradeRisk(tokenPair : Text, volatility : Float, liquidity : Float, counterparty : Float, doctrine : Float) : async PhantomIntel.RiskAssessment {
+    let beat = SovereignDB.getBeatCount(db).toInt();
+    let (newState, assessment) = PhantomIntel.assessRisk(
+      phantomIntelligenceState, tokenPair, volatility, liquidity, counterparty, doctrine, beat
+    );
+    phantomIntelligenceState := newState;
+    assessment
+  };
+
+  // ══════════════════════════════════════════════════════════════════════
+  // PHANTOM EXCHANGE — Domain 29
+  // Zero-gas-fee decentralized exchange for ALL tokens
+  // ══════════════════════════════════════════════════════════════════════
+
+  public query func getPhantomExchangeState() : async PhantomExchange.PhantomExchangeState {
+    phantomExchangeState
+  };
+
+  public query func getOrderBook(pairId : Text) : async ?PhantomExchange.OrderBook {
+    PhantomExchange.getOrderBook(phantomExchangeState, pairId)
+  };
+
+  public query func getRecentFills() : async [PhantomExchange.Fill] {
+    phantomExchangeState.recentFills
+  };
+
+  public query func getTradingPairs() : async [(Text, PhantomExchange.TradingPair)] {
+    phantomExchangeState.pairs
+  };
+
+  /// placeOrder — submit a new order (limit or market) to the Phantom Exchange
+  /// ZERO GAS FEES. Settlement is instant (same beat).
+  public shared(msg) func placeOrder(
+    pairId    : Text,
+    side      : Text,
+    orderType : Text,
+    price     : Float,
+    quantity  : Float,
+  ) : async PhantomExchange.Order {
+    let beat = SovereignDB.getBeatCount(db).toInt();
+    let coherenceR = SovereignDB.getKuramotoR(db);
+    let owner = Principal.toText(msg.caller);
+
+    let orderSide : PhantomExchange.OrderSide = switch (side) {
+      case "buy"  { #buy };
+      case _      { #sell };
+    };
+    let oType : PhantomExchange.OrderType = switch (orderType) {
+      case "market"      { #market };
+      case "stopLimit"   { #stopLimit };
+      case "iceberg"     { #iceberg };
+      case _             { #limit };
+    };
+
+    let (newState, order) = PhantomExchange.placeOrder(
+      phantomExchangeState, pairId, owner, orderSide, oType, price, quantity, #gtc, beat, coherenceR
+    );
+    phantomExchangeState := newState;
+
+    // Run matching engine immediately after order placement
+    phantomExchangeState := PhantomExchange.runMatchingEngine(phantomExchangeState, beat);
+
+    order
+  };
+
+  /// cancelOrder — cancel an open order
+  public shared func cancelExchangeOrder(orderId : Nat, pairId : Text) : async Bool {
+    let beat = SovereignDB.getBeatCount(db).toInt();
+    phantomExchangeState := PhantomExchange.cancelOrder(phantomExchangeState, orderId, pairId, beat);
+    true
+  };
+
+  /// addTradingPair — list a new trading pair on the exchange
+  public shared(msg) func addTradingPair(
+    pairId   : Text,
+    base     : Text,
+    quote    : Text,
+    baseCat  : Text,
+    quoteCat : Text,
+    tickSize : Float,
+  ) : async Bool {
+    assertCreator(msg.caller);
+    let beat = SovereignDB.getBeatCount(db).toInt();
+    let bCat : PhantomExchange.TokenCategory = parseTokenCategory(baseCat);
+    let qCat : PhantomExchange.TokenCategory = parseTokenCategory(quoteCat);
+    phantomExchangeState := PhantomExchange.addTradingPair(
+      phantomExchangeState, pairId, base, quote, bCat, qCat, tickSize, beat
+    );
+    true
+  };
+
+  func parseTokenCategory(cat : Text) : PhantomExchange.TokenCategory {
+    switch (cat) {
+      case "crypto"          { #crypto };
+      case "aiToken"         { #aiToken };
+      case "aiArtifact"      { #aiArtifact };
+      case "sovereignToken"  { #sovereignToken };
+      case "creatorToken"    { #creatorToken };
+      case "stablecoin"      { #stablecoin };
+      case "nft"             { #nft };
+      case "syntheticAsset"  { #syntheticAsset };
+      case "realWorldAsset"  { #realWorldAsset };
+      case "governanceToken" { #governanceToken };
+      case _                 { #crypto };
+    }
+  };
+
+  // ══════════════════════════════════════════════════════════════════════
+  // AI ARTIFACT REGISTRY — Domain 30
+  // Register, verify, trade AI artifacts of value
+  // ══════════════════════════════════════════════════════════════════════
+
+  public query func getAiArtifactRegistryState() : async AiArtifactRegistry.AiArtifactRegistryState {
+    aiArtifactRegistryState
+  };
+
+  public query func getAiArtifact(artifactId : Text) : async ?AiArtifactRegistry.ArtifactRecord {
+    AiArtifactRegistry.getArtifact(aiArtifactRegistryState, artifactId)
+  };
+
+  public query func getTradeableArtifacts() : async [AiArtifactRegistry.ArtifactRecord] {
+    AiArtifactRegistry.getTradeableArtifacts(aiArtifactRegistryState)
+  };
+
+  /// registerAiArtifact — mint a new AI artifact into the registry
+  public shared(msg) func registerAiArtifact(
+    name         : Text,
+    description  : Text,
+    artifactType : Text,
+    tokenSymbol  : Text,
+    totalSupply  : Float,
+    qualityScore : Float,
+  ) : async AiArtifactRegistry.ArtifactRecord {
+    let beat = SovereignDB.getBeatCount(db).toInt();
+    let creator = Principal.toText(msg.caller);
+    let aType : AiArtifactRegistry.ArtifactType = switch (artifactType) {
+      case "sovereignModel"     { #sovereignModel };
+      case "vectorEmbedding"    { #vectorEmbedding };
+      case "reasoningProtocol"  { #reasoningProtocol };
+      case "cognitiveOutput"    { #cognitiveOutput };
+      case "trainingDataset"    { #trainingDataset };
+      case "predictionRecord"   { #predictionRecord };
+      case "compositeAgent"     { #compositeAgent };
+      case "generativeArt"      { #generativeArt };
+      case "knowledgeGraph"     { #knowledgeGraph };
+      case _                    { #simulationResult };
+    };
+    let (newState, artifact) = AiArtifactRegistry.registerArtifact(
+      aiArtifactRegistryState, name, description, aType, creator, tokenSymbol, totalSupply, qualityScore, beat
+    );
+    aiArtifactRegistryState := newState;
+    artifact
+  };
+
+  /// verifyAiArtifact — verify and enable trading for an artifact
+  public shared(msg) func verifyAiArtifact(artifactId : Text) : async Bool {
+    assertCreator(msg.caller);
+    let beat = SovereignDB.getBeatCount(db).toInt();
+    aiArtifactRegistryState := AiArtifactRegistry.verifyArtifact(aiArtifactRegistryState, artifactId, beat);
+    true
+  };
+
+  // ══════════════════════════════════════════════════════════════════════
+  // PHANTOM CLEARINGHOUSE — Domain 31
+  // Real-time clearing, settlement, netting — ZERO gas fees
+  // ══════════════════════════════════════════════════════════════════════
+
+  public query func getPhantomClearinghouseState() : async PhantomClearinghouse.PhantomClearinghouseState {
+    phantomClearinghouseState
+  };
+
+  public query func getSettlementVelocity() : async Float {
+    phantomClearinghouseState.settlementVelocity
+  };
+
+  public query func getTotalGasFeesSaved() : async Float {
+    phantomClearinghouseState.totalGasFeesSaved
+  };
+
+  /// crossChainSettle — settle across chains without bridges (internal reserves)
+  public shared(msg) func crossChainSettle(
+    sourceChain : Text,
+    destChain   : Text,
+    sourceToken : Text,
+    destToken   : Text,
+    sourceAmt   : Float,
+    destAmt     : Float,
+  ) : async Bool {
+    assertCreator(msg.caller);
+    let beat = SovereignDB.getBeatCount(db).toInt();
+    phantomClearinghouseState := PhantomClearinghouse.crossChainSettle(
+      phantomClearinghouseState, sourceChain, destChain, sourceToken, destToken, sourceAmt, destAmt, beat
+    );
+    true
+  };
+
+  // ══════════════════════════════════════════════════════════════════════
+  // TOKEN FACTORY — Domain 32
+  // Create, mint, burn, list custom tokens
+  // ══════════════════════════════════════════════════════════════════════
+
+  public query func getTokenFactoryState() : async TokenFactory.TokenFactoryState {
+    tokenFactoryState
+  };
+
+  public query func getAllCustomTokens() : async [TokenFactory.TokenDefinition] {
+    TokenFactory.getAllTokens(tokenFactoryState)
+  };
+
+  public query func getAiTokens() : async [TokenFactory.TokenDefinition] {
+    TokenFactory.getAiTokens(tokenFactoryState)
+  };
+
+  /// createCustomToken — mint a brand new token type into existence
+  public shared(msg) func createCustomToken(
+    symbol      : Text,
+    name        : Text,
+    description : Text,
+    tokenType   : Text,
+    maxSupply   : Float,
+  ) : async TokenFactory.TokenDefinition {
+    let beat = SovereignDB.getBeatCount(db).toInt();
+    let creator = Principal.toText(msg.caller);
+    let tType : TokenFactory.CustomTokenType = switch (tokenType) {
+      case "aiCompute"       { #aiCompute };
+      case "aiMemory"        { #aiMemory };
+      case "aiInference"     { #aiInference };
+      case "aiTraining"      { #aiTraining };
+      case "aiData"          { #aiData };
+      case "creatorPersonal" { #creatorPersonal };
+      case "artifactBacked"  { #artifactBacked };
+      case "governance"      { #governance };
+      case "yield"           { #yield };
+      case "utility"         { #utility };
+      case "rewardPoints"    { #rewardPoints };
+      case _                 { #fractionalNFT };
+    };
+    let (newState, token) = TokenFactory.createToken(
+      tokenFactoryState, symbol, name, description, tType, creator, maxSupply, beat
+    );
+    tokenFactoryState := newState;
+    token
+  };
+
+  /// mintCustomTokens — mint additional supply of an existing token
+  public shared(msg) func mintCustomTokens(tokenId : Text, recipient : Text, amount : Float, reason : Text) : async Bool {
+    assertCreator(msg.caller);
+    let beat = SovereignDB.getBeatCount(db).toInt();
+    tokenFactoryState := TokenFactory.mintTokens(tokenFactoryState, tokenId, recipient, amount, reason, beat);
+    true
+  };
+
+  /// burnCustomTokens — burn (destroy) token supply
+  public shared(msg) func burnCustomTokens(tokenId : Text, amount : Float, reason : Text) : async Bool {
+    let beat = SovereignDB.getBeatCount(db).toInt();
+    let burner = Principal.toText(msg.caller);
+    tokenFactoryState := TokenFactory.burnTokens(tokenFactoryState, tokenId, burner, amount, reason, beat);
+    true
+  };
+
+  /// verifyAndListToken — verify doctrine compliance and list on Phantom Exchange
+  public shared(msg) func verifyAndListToken(tokenId : Text) : async Bool {
+    assertCreator(msg.caller);
+    let beat = SovereignDB.getBeatCount(db).toInt();
+    tokenFactoryState := TokenFactory.verifyAndList(tokenFactoryState, tokenId, beat);
+    true
+  };
+
 };
 
 
