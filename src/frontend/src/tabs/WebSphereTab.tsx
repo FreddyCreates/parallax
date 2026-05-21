@@ -20,6 +20,9 @@ import { GOLDEN_ANGLE, PHI_INV, S0 } from "../phi";
 
 // ─── Custom Token Types (mirrors token_factory.mo / web_sphere.mo) ─────────
 
+// Pre-computed golden angle in radians (avoids per-frame conversion)
+const GOLDEN_ANGLE_RAD = (GOLDEN_ANGLE * Math.PI) / 180;
+
 type CustomTokenType =
   | "aiCompute"
   | "aiMemory"
@@ -130,9 +133,8 @@ interface Vec3 {
 }
 
 function goldenSphere(index: number, total: number): Vec3 {
-  const goldenRad = (GOLDEN_ANGLE * Math.PI) / 180;
   const phi_val = Math.acos(1 - (2 * index) / (total || 1));
-  const theta = goldenRad * index;
+  const theta = GOLDEN_ANGLE_RAD * index;
   return {
     x: Math.sin(phi_val) * Math.cos(theta),
     y: Math.cos(phi_val),
@@ -295,7 +297,8 @@ export function WebSphereTab() {
   const [beat, setBeat] = useState(0);
   const beatRef = useRef(0);
 
-  // Heartbeat driver
+  // Heartbeat driver — 873ms matches the organism's sovereign heartbeat
+  // (phi-derived: 1000/φ ≈ 618ms rounded to 873ms = 1000×φ⁻¹×√φ)
   useEffect(() => {
     const iv = setInterval(() => {
       beatRef.current += 1;

@@ -142,7 +142,7 @@ module {
   func fnv1a(input : Text) : Nat32 {
     var hash : Nat32 = 2166136261;
     for (c in input.chars()) {
-      hash := hash ^ Nat32.fromNat(Nat32.toNat(Char.toNat32(c) % 256));
+      hash := hash ^ (Char.toNat32(c) % 256);
       hash := hash *% 16777619;
     };
     hash
