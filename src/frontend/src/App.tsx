@@ -25,6 +25,7 @@ import { SubstrateTab } from "./tabs/SubstrateTab";
 import { ThesaurusParallaxiTab } from "./tabs/ThesaurusParallaxiTab";
 import { TreasuryTab } from "./tabs/TreasuryTab";
 import { VaelTab } from "./tabs/VaelTab";
+import { WebSphereTab } from "./tabs/WebSphereTab";
 import { WyomingTab } from "./tabs/WyomingTab";
 
 type TabId =
@@ -48,7 +49,8 @@ type TabId =
   | "birth-ai"
   | "builder"
   | "models"
-  | "nova";
+  | "nova"
+  | "websphere";
 
 const TABS: { id: TabId; label: string; short: string; icon: string }[] = [
   { id: "substrate", label: "SUBSTRATE", short: "SUB", icon: "\u25c8" },
@@ -72,6 +74,7 @@ const TABS: { id: TabId; label: string; short: string; icon: string }[] = [
   { id: "builder", label: "BUILDER", short: "BLD", icon: "\u2699" },
   { id: "models", label: "MODELS", short: "MDL", icon: "\u2227" },
   { id: "nova", label: "NOVA", short: "NOV", icon: "\u29bf" },
+  { id: "websphere", label: "WEBSPHERE", short: "WSP", icon: "\u29be" },
 ];
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -387,6 +390,7 @@ export default function App() {
     if (tabId === "builder") return "oklch(0.65 0.18 145)";
     if (tabId === "models") return "oklch(0.78 0.15 85)";
     if (tabId === "nova") return "oklch(0.82 0.18 75)";
+    if (tabId === "websphere") return "oklch(0.70 0.20 220)";
     return "oklch(0.65 0.20 290)";
   };
 
@@ -668,6 +672,7 @@ export default function App() {
               {activeTab === "builder" && <BuilderTab />}
               {activeTab === "models" && <ModelsTab />}
               {activeTab === "nova" && <NOVATab />}
+              {activeTab === "websphere" && <WebSphereTab />}
             </motion.div>
           </AnimatePresence>
         </div>
