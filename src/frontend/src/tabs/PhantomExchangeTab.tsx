@@ -1,5 +1,5 @@
 import { useInternetIdentity } from "@caffeineai/core-infrastructure";
-import { AnimatePresence, motion } from "motion/react";
+import { motion } from "motion/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { useActor } from "../hooks/useActor";
@@ -120,13 +120,14 @@ export default function PhantomExchangeTab() {
   const fetchState = useCallback(async () => {
     if (!actor) return;
     try {
+      const a = actor as any; // New Phantom domain methods — bindings regenerated on deploy
       const [exchangeState, clearingState, intelState, artState, tokenState] =
         await Promise.all([
-          actor.getPhantomExchangeState().catch(() => null),
-          actor.getPhantomClearinghouseState().catch(() => null),
-          actor.getPhantomIntelligenceState().catch(() => null),
-          actor.getTradeableArtifacts().catch(() => []),
-          actor.getAllCustomTokens().catch(() => []),
+          a.getPhantomExchangeState?.().catch(() => null) ?? Promise.resolve(null),
+          a.getPhantomClearinghouseState?.().catch(() => null) ?? Promise.resolve(null),
+          a.getPhantomIntelligenceState?.().catch(() => null) ?? Promise.resolve(null),
+          a.getTradeableArtifacts?.().catch(() => []) ?? Promise.resolve([]),
+          a.getAllCustomTokens?.().catch(() => []) ?? Promise.resolve([]),
         ]);
 
       if (exchangeState) {
@@ -199,7 +200,8 @@ export default function PhantomExchangeTab() {
     if (!actor || !orderPrice || !orderQuantity) return;
     setLoading(true);
     try {
-      await actor.placeOrder(
+      const a = actor as any;
+      await a.placeOrder(
         selectedPair.pairId,
         orderSide,
         "limit",
