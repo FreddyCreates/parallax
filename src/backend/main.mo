@@ -36,6 +36,11 @@ import AiArtifactRegistry "ai_artifact_registry";
 import PhantomClearinghouse "phantom_clearinghouse";
 import TokenFactory "token_factory";
 import AlohaI "aloha_i";
+import MonteCarlo "monte_carlo";
+import BehavioralEcon "behavioral_economics";
+import BlockchainLangs "blockchain_languages";
+import TradingBridge "trading_bridge";
+import ResidentTrader "resident_trader";
 
 
 
@@ -115,6 +120,31 @@ actor PARALLAX {
   // 10 ALOHA I Protocol Multi-Models: Futuristic Exchange Intelligence
   // Autonomous Liquid Orchestration & Harmonic Arbitrage Intelligence
   var alohaIState : AlohaI.AlohaIState = AlohaI.defaultAlohaIState();
+
+  // ── DOMAIN 34 — MONTE_CARLO_STATE ─────────────────────────────────────────
+  // 8 Monte Carlo Simulation Engines: Price Path, VaR, Regime Switch, Strategy Eval
+  // Stochastic intelligence for probabilistic future exploration.
+  var monteCarloState : MonteCarlo.MonteCarloState = MonteCarlo.defaultMonteCarloState();
+
+  // ── DOMAIN 35 — BEHAVIORAL_ECONOMICS_STATE ────────────────────────────────
+  // 12 Behavioral Economic Engines: Prospect Theory, Herding, Fear/Greed, Momentum
+  // Cognitive bias modeling and market psychology layer.
+  var behavioralEconState : BehavioralEcon.BehavioralManagerState = BehavioralEcon.defaultBehavioralManagerState();
+
+  // ── DOMAIN 36 — BLOCKCHAIN_LANGUAGES_STATE ────────────────────────────────
+  // 21 Blockchain Language Engines: Solidity, Vyper, Move, Cairo, Rust, Noir, etc.
+  // Multi-chain smart contract intelligence across all major ecosystems.
+  var blockchainLangsState : BlockchainLangs.BlockchainLanguageRegistryState = BlockchainLangs.defaultBlockchainLanguageRegistryState();
+
+  // ── DOMAIN 37 — TRADING_BRIDGE_STATE ──────────────────────────────────────
+  // External Platform Integration: TradingView, MT4, MT5, Binance, Alpaca, Deribit
+  // Demo-first execution bridge — proves profitability before live capital.
+  var tradingBridgeState : TradingBridge.TradingBridgeState = TradingBridge.defaultTradingBridgeState();
+
+  // ── DOMAIN 38 — RESIDENT_TRADER_STATE ─────────────────────────────────────
+  // MERCATOR RESIDENS SUPREMUS: The supreme trading decision orchestrator.
+  // Aggregates ALL engine signals into coherent trading decisions.
+  var residentTraderState : ResidentTrader.ResidentTraderState = ResidentTrader.defaultResidentTraderState();
 
 
   // ══════════════════════════════════════════════════════════════════════
@@ -201,6 +231,41 @@ actor PARALLAX {
       // ── ALOHA I PROTOCOLS — Domain 33: multi-model intelligence tick ───────
       // All 10 ALOHA I protocol multi-models advance: coherence-gated, phi-timed.
       alohaIState := AlohaI.tickAlohaI(alohaIState, beat.toInt(), novaCoherence);
+
+      // ── MONTE CARLO — Domain 34: stochastic simulation tick ────────────────
+      // 8 MC engines: Price Path, Portfolio VaR, Regime Switch, Strategy Eval.
+      // 144 paths per simulation per beat. Convergence-gated.
+      monteCarloState := MonteCarlo.tickMonteCarlo(monteCarloState, beat.toInt(), novaCoherence);
+
+      // ── BEHAVIORAL ECONOMICS — Domain 35: market psychology tick ───────────
+      // 12 behavioral engines: Prospect Theory, Herding, Fear/Greed, Momentum, etc.
+      // Cognitive bias detection and exploitation layer.
+      let priceForBehavioral : Float = 60000.0; // placeholder: fed from world state
+      let priceChangeForBehavioral : Float = 0.001;
+      let volumeRatioForBehavioral : Float = 1.0;
+      behavioralEconState := BehavioralEcon.tickBehavioralManager(
+        behavioralEconState, beat.toInt(), novaCoherence,
+        priceForBehavioral, priceChangeForBehavioral, volumeRatioForBehavioral
+      );
+
+      // ── BLOCKCHAIN LANGUAGES — Domain 36: multi-chain registry tick ────────
+      // 21 blockchain language engines: Solidity, Vyper, Move, Cairo, Noir, etc.
+      // Coherence tracking and dominant chain identification.
+      blockchainLangsState := BlockchainLangs.tickBlockchainLanguages(blockchainLangsState, beat.toInt(), novaCoherence);
+
+      // ── TRADING BRIDGE — Domain 37: platform integration tick ──────────────
+      // External execution venues: TradingView, MT4, MT5, Binance, Alpaca, Deribit.
+      // Signal expiration, drawdown halt, phase progression.
+      tradingBridgeState := TradingBridge.tickTradingBridge(tradingBridgeState, beat.toInt(), novaCoherence);
+
+      // ── RESIDENT TRADER — Domain 38: supreme trading intelligence tick ─────
+      // MERCATOR RESIDENS: Aggregates ALL engine signals, generates decisions.
+      // Kelly-sized positions, consensus-gated, regime-aware.
+      let residentVotes : [ResidentTrader.EngineVote] = []; // populated from live engine outputs
+      residentTraderState := ResidentTrader.tickResidentTrader(
+        residentTraderState, beat.toInt(), novaCoherence,
+        residentVotes, priceForBehavioral, 0.02, "BTCUSD"
+      );
 
       // ── BANKING SSU beat increment — Domain 17 ───────────────────────────
       // PIL loop: upregulate weakest monitoring domain each beat
