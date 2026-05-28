@@ -367,6 +367,30 @@ module {
         supportedAssets = ["BTCUSDT", "ETHUSDT", "SOLUSDT", "XRPUSDT", "DOGEUSDT", "AVAXUSDT"];
         maxLeverage = 25.0;
         feeTier = 0.0006;
+      },
+      {
+        platformId = #kraken;
+        platformName = "Kraken";
+        accountMode = #demo;
+        apiEndpoint = "https://demo-futures.kraken.com/derivatives/api/v3";
+        connected = false;
+        lastPingBeat = 0;
+        latencyMs = 0.0;
+        supportedAssets = ["XBTUSD", "ETHUSD", "SOLUSD", "XRPUSD", "DOTUSD", "ADAUSD"];
+        maxLeverage = 5.0;
+        feeTier = 0.0002;
+      },
+      {
+        platformId = #interactiveBrokers;
+        platformName = "Interactive Brokers";
+        accountMode = #demo;
+        apiEndpoint = "https://localhost:5000/v1/api";
+        connected = false;
+        lastPingBeat = 0;
+        latencyMs = 0.0;
+        supportedAssets = ["AAPL", "MSFT", "NVDA", "TSLA", "SPY", "QQQ", "ES", "NQ", "GC", "CL"];
+        maxLeverage = 4.0;
+        feeTier = 0.00005;
       }
     ];
   };
@@ -380,7 +404,9 @@ module {
       defaultPerf(#coinbaseAdv),
       defaultPerf(#alpaca),
       defaultPerf(#deribit),
-      defaultPerf(#bybit)
+      defaultPerf(#bybit),
+      defaultPerf(#kraken),
+      defaultPerf(#interactiveBrokers)
     ];
   };
 
