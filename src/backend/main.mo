@@ -41,6 +41,17 @@ import BehavioralEcon "behavioral_economics";
 import BlockchainLangs "blockchain_languages";
 import TradingBridge "trading_bridge";
 import ResidentTrader "resident_trader";
+import PhantomHedge "phantom_hedge";
+import PhantomLiquidity "phantom_liquidity";
+import PhantomArbitrage "phantom_arbitrage";
+import PhantomRisk "phantom_risk";
+import PhantomSignal "phantom_signal";
+import PhantomExecution "phantom_execution";
+import PhantomMemory "phantom_memory";
+import PhantomConsensus "phantom_consensus";
+import PhantomEvolution "phantom_evolution";
+import PhantomOracle "phantom_oracle";
+import PhantomGrid "phantom_grid";
 
 
 
@@ -145,6 +156,50 @@ actor PARALLAX {
   // MERCATOR RESIDENS SUPREMUS: The supreme trading decision orchestrator.
   // Aggregates ALL engine signals into coherent trading decisions.
   var residentTraderState : ResidentTrader.ResidentTraderState = ResidentTrader.defaultResidentTraderState();
+
+  // ── DOMAIN 39 — PHANTOM_HEDGE_STATE ─────────────────────────────────────────
+  // Autonomous multi-strategy hedging intelligence. Delta/gamma/vega/tail protection.
+  var phantomHedgeState : PhantomHedge.PhantomHedgeState = PhantomHedge.defaultPhantomHedgeState();
+
+  // ── DOMAIN 40 — PHANTOM_LIQUIDITY_STATE ─────────────────────────────────────
+  // Multi-venue autonomous liquidity provision. Cross-DEX/CEX weaving.
+  var phantomLiquidityState : PhantomLiquidity.PhantomLiquidityState = PhantomLiquidity.defaultPhantomLiquidityState();
+
+  // ── DOMAIN 41 — PHANTOM_ARBITRAGE_STATE ─────────────────────────────────────
+  // Cross-chain multi-dimensional arbitrage detection and capture.
+  var phantomArbitrageState : PhantomArbitrage.PhantomArbitrageState = PhantomArbitrage.defaultPhantomArbitrageState();
+
+  // ── DOMAIN 42 — PHANTOM_RISK_STATE ──────────────────────────────────────────
+  // Real-time multi-dimensional risk sentinel. VaR, drawdown, kill-switch.
+  var phantomRiskState : PhantomRisk.PhantomRiskState = PhantomRisk.defaultPhantomRiskState();
+
+  // ── DOMAIN 43 — PHANTOM_SIGNAL_STATE ────────────────────────────────────────
+  // Multi-source signal processing framework. Price/volume/sentiment/on-chain.
+  var phantomSignalState : PhantomSignal.PhantomSignalState = PhantomSignal.defaultPhantomSignalState();
+
+  // ── DOMAIN 44 — PHANTOM_EXECUTION_STATE ─────────────────────────────────────
+  // Intelligent smart order routing and execution grid. TWAP/VWAP/PhiWAP.
+  var phantomExecutionState : PhantomExecution.PhantomExecutionState = PhantomExecution.defaultPhantomExecutionState();
+
+  // ── DOMAIN 45 — PHANTOM_MEMORY_STATE ────────────────────────────────────────
+  // Market memory lattice. Pattern encoding, resonance detection, recall.
+  var phantomMemoryState : PhantomMemory.PhantomMemoryState = PhantomMemory.defaultPhantomMemoryState();
+
+  // ── DOMAIN 46 — PHANTOM_CONSENSUS_STATE ─────────────────────────────────────
+  // Multi-model agreement and decision framework. Quorum-gated decisions.
+  var phantomConsensusState : PhantomConsensus.PhantomConsensusState = PhantomConsensus.defaultPhantomConsensusState();
+
+  // ── DOMAIN 47 — PHANTOM_EVOLUTION_STATE ─────────────────────────────────────
+  // Self-adapting strategy evolution. Genetic algorithms, reinforcement learning.
+  var phantomEvolutionState : PhantomEvolution.PhantomEvolutionState = PhantomEvolution.defaultPhantomEvolutionState();
+
+  // ── DOMAIN 48 — PHANTOM_ORACLE_STATE ────────────────────────────────────────
+  // Sovereign price feed intelligence. Multi-source truth price aggregation.
+  var phantomOracleState : PhantomOracle.PhantomOracleState = PhantomOracle.defaultPhantomOracleState();
+
+  // ── DOMAIN 49 — PHANTOM_GRID_STATE ──────────────────────────────────────────
+  // Autonomous grid trading automation. Phi-spaced levels, multi-asset grids.
+  var phantomGridState : PhantomGrid.PhantomGridState = PhantomGrid.defaultPhantomGridState();
 
 
   // ══════════════════════════════════════════════════════════════════════
@@ -266,6 +321,50 @@ actor PARALLAX {
         residentTraderState, beat.toInt(), novaCoherence,
         residentVotes, priceForBehavioral, 0.02, "BTCUSD"
       );
+
+      // ── PHANTOM HEDGE — Domain 39: autonomous hedging tick ─────────────────
+      // Multi-strategy hedging: delta/gamma/vega/tail risk protection.
+      phantomHedgeState := PhantomHedge.tickPhantomHedge(phantomHedgeState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM LIQUIDITY — Domain 40: liquidity weaving tick ──────────────
+      // Cross-venue autonomous liquidity provision and inventory management.
+      phantomLiquidityState := PhantomLiquidity.tickPhantomLiquidity(phantomLiquidityState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM ARBITRAGE — Domain 41: arbitrage scanning tick ─────────────
+      // Cross-chain multi-dimensional arbitrage detection and opportunity expiry.
+      phantomArbitrageState := PhantomArbitrage.tickPhantomArbitrage(phantomArbitrageState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM RISK — Domain 42: risk sentinel tick ───────────────────────
+      // Real-time risk level assessment, drawdown monitoring, kill-switch arming.
+      phantomRiskState := PhantomRisk.tickPhantomRisk(phantomRiskState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM SIGNAL — Domain 43: signal processing tick ─────────────────
+      // Signal decay, expiry, composite direction calculation.
+      phantomSignalState := PhantomSignal.tickPhantomSignal(phantomSignalState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM EXECUTION — Domain 44: execution grid tick ─────────────────
+      // Smart order routing, slice advancement, fill completion tracking.
+      phantomExecutionState := PhantomExecution.tickPhantomExecution(phantomExecutionState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM MEMORY — Domain 45: memory lattice tick ────────────────────
+      // Pattern decay (Ebbinghaus), consolidation, strongest pattern tracking.
+      phantomMemoryState := PhantomMemory.tickPhantomMemory(phantomMemoryState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM CONSENSUS — Domain 46: consensus mesh tick ─────────────────
+      // Decision conviction decay, history trimming, coherence advancement.
+      phantomConsensusState := PhantomConsensus.tickPhantomConsensus(phantomConsensusState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM EVOLUTION — Domain 47: strategy evolution tick ──────────────
+      // Generation advancement, extinction of unfit, fitness tracking.
+      phantomEvolutionState := PhantomEvolution.tickPhantomEvolution(phantomEvolutionState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM ORACLE — Domain 48: price feed intelligence tick ───────────
+      // Staleness detection, outlier filtering, confidence aggregation.
+      phantomOracleState := PhantomOracle.tickPhantomOracle(phantomOracleState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM GRID — Domain 49: grid automation tick ─────────────────────
+      // Grid level management, trend pause detection, efficiency tracking.
+      phantomGridState := PhantomGrid.tickPhantomGrid(phantomGridState, beat.toInt(), novaCoherence);
 
       // ── BANKING SSU beat increment — Domain 17 ───────────────────────────
       // PIL loop: upregulate weakest monitoring domain each beat
