@@ -1998,59 +1998,59 @@ actor PARALLAX {
   };
 
   /// Query individual protocol states
-  public query func getAlohaIQuantumArbitrage() : async AlohaI.QuantumArbState {
-    alohaIState.quantumArbitrage
+  public query func getAlohaISpectralLiquidity() : async AlohaI.SpectralLiquidityState {
+    alohaIState.spectralLiquidity
   };
 
-  public query func getAlohaINeuralLiquidity() : async AlohaI.NeuralLiquidityState {
-    alohaIState.neuralLiquidity
+  public query func getAlohaITemporalArbitrage() : async AlohaI.TemporalArbitrageState {
+    alohaIState.temporalArbitrage
   };
 
-  public query func getAlohaITemporalMomentum() : async AlohaI.TemporalMomentumState {
-    alohaIState.temporalMomentum
+  public query func getAlohaICognitiveMM() : async AlohaI.CognitiveMMState {
+    alohaIState.cognitiveMM
   };
 
-  public query func getAlohaIFractalRisk() : async AlohaI.FractalRiskState {
-    alohaIState.fractalRisk
+  public query func getAlohaISignalFusion() : async AlohaI.SignalFusionState {
+    alohaIState.signalFusion
   };
 
-  public query func getAlohaISentientOrder() : async AlohaI.SentientOrderState {
-    alohaIState.sentientOrder
+  public query func getAlohaIQuantumRouting() : async AlohaI.QuantumRoutingState {
+    alohaIState.quantumRouting
   };
 
-  public query func getAlohaICognitiveMarketMaker() : async AlohaI.CognitiveMMState {
-    alohaIState.cognitiveMarketMaker
+  public query func getAlohaINeuralPortfolio() : async AlohaI.NeuralPortfolioState {
+    alohaIState.neuralPortfolio
   };
 
-  public query func getAlohaIPhiResonance() : async AlohaI.PhiResonanceState {
-    alohaIState.phiResonance
+  public query func getAlohaIPhantomSettlement() : async AlohaI.PhantomSettlementState {
+    alohaIState.phantomSettlement
   };
 
-  public query func getAlohaISovereignYield() : async AlohaI.SovereignYieldState {
-    alohaIState.sovereignYield
+  public query func getAlohaIEntropicRisk() : async AlohaI.EntropicRiskState {
+    alohaIState.entropicRisk
   };
 
-  public query func getAlohaIEntangledAsset() : async AlohaI.EntangledAssetState {
-    alohaIState.entangledAsset
+  public query func getAlohaIEmergentAsset() : async AlohaI.EmergentAssetState {
+    alohaIState.emergentAsset
   };
 
-  public query func getAlohaIDimensionalExchange() : async AlohaI.DimensionalExchangeState {
-    alohaIState.dimensionalExchange
+  public query func getAlohaISwarmExecution() : async AlohaI.SwarmExecutionState {
+    alohaIState.swarmExecution
   };
 
-  /// Protocol summary: name + active status for all 10 models
-  public query func getAlohaIProtocolSummary() : async [{name: Text; active: Bool; coherence: Float}] {
+  /// Protocol summary: name + coherence for all 10 models
+  public query func getAlohaIProtocolSummary() : async [{name: Text; coherence: Float}] {
     [
-      {name = "QuantumArbitrage"; active = alohaIState.quantumArbitrage.active; coherence = alohaIState.quantumArbitrage.coherence},
-      {name = "NeuralLiquidity"; active = alohaIState.neuralLiquidity.active; coherence = alohaIState.neuralLiquidity.coherence},
-      {name = "TemporalMomentum"; active = alohaIState.temporalMomentum.active; coherence = alohaIState.temporalMomentum.coherence},
-      {name = "FractalRisk"; active = alohaIState.fractalRisk.active; coherence = alohaIState.fractalRisk.coherence},
-      {name = "SentientOrder"; active = alohaIState.sentientOrder.active; coherence = alohaIState.sentientOrder.coherence},
-      {name = "CognitiveMarketMaker"; active = alohaIState.cognitiveMarketMaker.active; coherence = alohaIState.cognitiveMarketMaker.coherence},
-      {name = "PhiResonance"; active = alohaIState.phiResonance.active; coherence = alohaIState.phiResonance.coherence},
-      {name = "SovereignYield"; active = alohaIState.sovereignYield.active; coherence = alohaIState.sovereignYield.coherence},
-      {name = "EntangledAsset"; active = alohaIState.entangledAsset.active; coherence = alohaIState.entangledAsset.coherence},
-      {name = "DimensionalExchange"; active = alohaIState.dimensionalExchange.active; coherence = alohaIState.dimensionalExchange.coherence}
+      {name = "SpectralLiquidity"; coherence = alohaIState.spectralLiquidity.compositeCoherence},
+      {name = "TemporalArbitrage"; coherence = alohaIState.temporalArbitrage.compositeCoherence},
+      {name = "CognitiveMarketMaker"; coherence = alohaIState.cognitiveMM.compositeCoherence},
+      {name = "SignalFusion"; coherence = alohaIState.signalFusion.compositeCoherence},
+      {name = "QuantumRouting"; coherence = alohaIState.quantumRouting.compositeCoherence},
+      {name = "NeuralPortfolio"; coherence = alohaIState.neuralPortfolio.compositeCoherence},
+      {name = "PhantomSettlement"; coherence = alohaIState.phantomSettlement.compositeCoherence},
+      {name = "EntropicRisk"; coherence = alohaIState.entropicRisk.compositeCoherence},
+      {name = "EmergentAsset"; coherence = alohaIState.emergentAsset.compositeCoherence},
+      {name = "SwarmExecution"; coherence = alohaIState.swarmExecution.compositeCoherence}
     ]
   };
 
