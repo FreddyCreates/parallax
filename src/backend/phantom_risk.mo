@@ -117,9 +117,10 @@ module {
       #elevated
     } else { #nominal };
 
-    // Kill switch arms at critical
+    // Kill switch arms at critical or catastrophic
     let armed = switch (level) {
-      case (#critical or #catastrophic) { true };
+      case (#critical) { true };
+      case (#catastrophic) { true };
       case _ { false };
     };
 

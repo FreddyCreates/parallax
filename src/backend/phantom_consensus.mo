@@ -106,7 +106,7 @@ module {
 
     // Keep only recent decisions (last Fibonacci-89 decisions)
     let recent = if (decayed.size() > 89) {
-      Array.subArray(decayed, decayed.size() - 89, 89)
+      Array.tabulate<ConsensusDecision>(89, func(i) { decayed[decayed.size() - 89 + i] })
     } else { decayed };
 
     let newCoherence = state.consensusCoherence * 0.9 + kuramotoR * 0.1;

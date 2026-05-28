@@ -91,10 +91,15 @@ module {
       return { state with lastTickBeat = beat };
     };
 
-    // Apply Ebbinghaus forgetting curve (phi-derived)
+    // Apply Ebbinghaus forgetting curve (phi-derived decay per epoch)
     let decayed = Array.map<MemoryTrace, MemoryTrace>(state.activeTraces, func(trace) {
       let beatsSinceLastSeen = beat - trace.lastSeenBeat;
-      let decayFactor = Float.pow(MEMORY_DECAY_PHI, Float.fromInt(beatsSinceLastSeen) / 1000.0);
+      // Approximate exponential decay: strength * (PHI_INV ^ (beats/1000))
+      let decaySteps = Float.fromInt(beatsSinceLastSeen) / 1000.0;
+      let decayFactor = if (decaySteps <= 0.0) { 1.0 } else {
+        // Use iterative multiplication for phi^-n approximation
+        Float.exp(decaySteps * Float.log(MEMORY_DECAY_PHI))
+      };
       let newStrength = trace.strength * decayFactor;
       { trace with strength = newStrength }
     });
