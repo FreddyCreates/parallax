@@ -35,6 +35,7 @@ import PhantomExchange "phantom_exchange";
 import AiArtifactRegistry "ai_artifact_registry";
 import PhantomClearinghouse "phantom_clearinghouse";
 import TokenFactory "token_factory";
+import AlohaI "aloha_i";
 
 
 
@@ -109,6 +110,11 @@ actor PARALLAX {
   // ── DOMAIN 32 — TOKEN_FACTORY_STATE ─────────────────────────────────────
   // Create and manage custom tokens: AI tokens, creator tokens, artifact tokens.
   var tokenFactoryState : TokenFactory.TokenFactoryState = TokenFactory.defaultTokenFactoryState();
+
+  // ── DOMAIN 33 — ALOHA_I_STATE ─────────────────────────────────────────────
+  // 10 ALOHA I Protocol Multi-Models: Futuristic Exchange Intelligence
+  // Autonomous Liquid Orchestration & Harmonic Arbitrage Intelligence
+  var alohaIState : AlohaI.AlohaIState = AlohaI.defaultAlohaIState();
 
 
   // ══════════════════════════════════════════════════════════════════════
@@ -191,6 +197,10 @@ actor PARALLAX {
       // ── TOKEN FACTORY — Domain 32: yield distribution ─────────────────────
       // Distribute phi-derived yield to staked token holders (Fibonacci-gated).
       tokenFactoryState := TokenFactory.distributeYield(tokenFactoryState, beat.toInt());
+
+      // ── ALOHA I PROTOCOLS — Domain 33: multi-model intelligence tick ───────
+      // All 10 ALOHA I protocol multi-models advance: coherence-gated, phi-timed.
+      alohaIState := AlohaI.tickAlohaI(alohaIState, beat.toInt(), novaCoherence);
 
       // ── BANKING SSU beat increment — Domain 17 ───────────────────────────
       // PIL loop: upregulate weakest monitoring domain each beat
@@ -1978,6 +1988,70 @@ actor PARALLAX {
     true
   };
 
+  // ═══════════════════════════════════════════════════════════════════════════
+  // ██  ALOHA I — DOMAIN 33  PUBLIC ENDPOINTS                              ██
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  /// Query the full ALOHA I state (all 10 protocol multi-models)
+  public query func getAlohaIState() : async AlohaI.AlohaIState {
+    alohaIState
+  };
+
+  /// Query individual protocol states
+  public query func getAlohaIQuantumArbitrage() : async AlohaI.QuantumArbState {
+    alohaIState.quantumArbitrage
+  };
+
+  public query func getAlohaINeuralLiquidity() : async AlohaI.NeuralLiquidityState {
+    alohaIState.neuralLiquidity
+  };
+
+  public query func getAlohaITemporalMomentum() : async AlohaI.TemporalMomentumState {
+    alohaIState.temporalMomentum
+  };
+
+  public query func getAlohaIFractalRisk() : async AlohaI.FractalRiskState {
+    alohaIState.fractalRisk
+  };
+
+  public query func getAlohaISentientOrder() : async AlohaI.SentientOrderState {
+    alohaIState.sentientOrder
+  };
+
+  public query func getAlohaICognitiveMarketMaker() : async AlohaI.CognitiveMMState {
+    alohaIState.cognitiveMarketMaker
+  };
+
+  public query func getAlohaIPhiResonance() : async AlohaI.PhiResonanceState {
+    alohaIState.phiResonance
+  };
+
+  public query func getAlohaISovereignYield() : async AlohaI.SovereignYieldState {
+    alohaIState.sovereignYield
+  };
+
+  public query func getAlohaIEntangledAsset() : async AlohaI.EntangledAssetState {
+    alohaIState.entangledAsset
+  };
+
+  public query func getAlohaIDimensionalExchange() : async AlohaI.DimensionalExchangeState {
+    alohaIState.dimensionalExchange
+  };
+
+  /// Protocol summary: name + active status for all 10 models
+  public query func getAlohaIProtocolSummary() : async [{name: Text; active: Bool; coherence: Float}] {
+    [
+      {name = "QuantumArbitrage"; active = alohaIState.quantumArbitrage.active; coherence = alohaIState.quantumArbitrage.coherence},
+      {name = "NeuralLiquidity"; active = alohaIState.neuralLiquidity.active; coherence = alohaIState.neuralLiquidity.coherence},
+      {name = "TemporalMomentum"; active = alohaIState.temporalMomentum.active; coherence = alohaIState.temporalMomentum.coherence},
+      {name = "FractalRisk"; active = alohaIState.fractalRisk.active; coherence = alohaIState.fractalRisk.coherence},
+      {name = "SentientOrder"; active = alohaIState.sentientOrder.active; coherence = alohaIState.sentientOrder.coherence},
+      {name = "CognitiveMarketMaker"; active = alohaIState.cognitiveMarketMaker.active; coherence = alohaIState.cognitiveMarketMaker.coherence},
+      {name = "PhiResonance"; active = alohaIState.phiResonance.active; coherence = alohaIState.phiResonance.coherence},
+      {name = "SovereignYield"; active = alohaIState.sovereignYield.active; coherence = alohaIState.sovereignYield.coherence},
+      {name = "EntangledAsset"; active = alohaIState.entangledAsset.active; coherence = alohaIState.entangledAsset.coherence},
+      {name = "DimensionalExchange"; active = alohaIState.dimensionalExchange.active; coherence = alohaIState.dimensionalExchange.coherence}
+    ]
+  };
+
 };
-
-
