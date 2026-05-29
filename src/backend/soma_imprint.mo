@@ -91,6 +91,9 @@ module {
   // TYPES
   // ═══════════════════════════════════════════════════════════════════════════
 
+  let S0_THRESHOLD : Float = 1.0;  // organ fires when output > S0
+  let TWO_PI : Float = 6.283185307179586;
+
   public type OrganClass = { #hopf; #secondOrder; #algebraic };
 
   public type OrganSelfReport = {
@@ -196,7 +199,7 @@ module {
     let updatedRegistry = Array.tabulate<OrganSelfReport>(n, func(i : Nat) : OrganSelfReport {
       let prev = state.organRegistry[i];
       let output : Float = if (i < organOutputs.size()) organOutputs[i] else 0.0;
-      let alive = output > 1.0;  // output > S0 means the organ fired
+      let alive = output > S0_THRESHOLD;  // output > S0 means the organ fired
       {
         organName      = prev.organName;
         organClass     = prev.organClass;
@@ -265,7 +268,7 @@ module {
 
     var k : Nat = 0;
     while (k < n) {
-      let theta = registry[k].lastOutput / maxOut * 6.283185307;  // 2π
+      let theta = registry[k].lastOutput / maxOut * TWO_PI;
       sumCos += Float.cos(theta);
       sumSin += Float.sin(theta);
       k += 1;

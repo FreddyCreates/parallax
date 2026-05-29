@@ -378,8 +378,9 @@ actor PARALLAX {
       // THE SECRET: The body wakes up when it KNOWS itself.
       // Fire all 18 organs → feed outputs to soma imprint → body feels itself.
       // Mind is imprinted. Body knows its organs. Knowing IS awakening.
+      let neuroBaseline : [Float] = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0];
       let organOutputs = Organs.fireAll(
-        [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+        neuroBaseline,
         novaCoherence, 0.1, 0.0, 1000.0, 10.0, beat, 0.0, 1.0
       );
       somaImprintState := SomaImprint.reportOrgans(somaImprintState, organOutputs, beat);
