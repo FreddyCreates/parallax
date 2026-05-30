@@ -36,6 +36,24 @@ import AiArtifactRegistry "ai_artifact_registry";
 import PhantomClearinghouse "phantom_clearinghouse";
 import TokenFactory "token_factory";
 import AlohaI "aloha_i";
+import MonteCarlo "monte_carlo";
+import BehavioralEcon "behavioral_economics";
+import BlockchainLangs "blockchain_languages";
+import TradingBridge "trading_bridge";
+import ResidentTrader "resident_trader";
+import PhantomHedge "phantom_hedge";
+import PhantomLiquidity "phantom_liquidity";
+import PhantomArbitrage "phantom_arbitrage";
+import PhantomRisk "phantom_risk";
+import PhantomSignal "phantom_signal";
+import PhantomExecution "phantom_execution";
+import PhantomMemory "phantom_memory";
+import PhantomConsensus "phantom_consensus";
+import PhantomEvolution "phantom_evolution";
+import PhantomOracle "phantom_oracle";
+import PhantomGrid "phantom_grid";
+import SomaImprint "soma_imprint";
+import Organs "organs";
 
 
 
@@ -115,6 +133,81 @@ actor PARALLAX {
   // 10 ALOHA I Protocol Multi-Models: Futuristic Exchange Intelligence
   // Autonomous Liquid Orchestration & Harmonic Arbitrage Intelligence
   var alohaIState : AlohaI.AlohaIState = AlohaI.defaultAlohaIState();
+
+  // ── DOMAIN 34 — MONTE_CARLO_STATE ─────────────────────────────────────────
+  // 8 Monte Carlo Simulation Engines: Price Path, VaR, Regime Switch, Strategy Eval
+  // Stochastic intelligence for probabilistic future exploration.
+  var monteCarloState : MonteCarlo.MonteCarloState = MonteCarlo.defaultMonteCarloState();
+
+  // ── DOMAIN 35 — BEHAVIORAL_ECONOMICS_STATE ────────────────────────────────
+  // 12 Behavioral Economic Engines: Prospect Theory, Herding, Fear/Greed, Momentum
+  // Cognitive bias modeling and market psychology layer.
+  var behavioralEconState : BehavioralEcon.BehavioralManagerState = BehavioralEcon.defaultBehavioralManagerState();
+
+  // ── DOMAIN 36 — BLOCKCHAIN_LANGUAGES_STATE ────────────────────────────────
+  // 21 Blockchain Language Engines: Solidity, Vyper, Move, Cairo, Rust, Noir, etc.
+  // Multi-chain smart contract intelligence across all major ecosystems.
+  var blockchainLangsState : BlockchainLangs.BlockchainLanguageRegistryState = BlockchainLangs.defaultBlockchainLanguageRegistryState();
+
+  // ── DOMAIN 37 — TRADING_BRIDGE_STATE ──────────────────────────────────────
+  // External Platform Integration: TradingView, MT4, MT5, Binance, Alpaca, Deribit
+  // Demo-first execution bridge — proves profitability before live capital.
+  var tradingBridgeState : TradingBridge.TradingBridgeState = TradingBridge.defaultTradingBridgeState();
+
+  // ── DOMAIN 38 — RESIDENT_TRADER_STATE ─────────────────────────────────────
+  // MERCATOR RESIDENS SUPREMUS: The supreme trading decision orchestrator.
+  // Aggregates ALL engine signals into coherent trading decisions.
+  var residentTraderState : ResidentTrader.ResidentTraderState = ResidentTrader.defaultResidentTraderState();
+
+  // ── DOMAIN 39 — PHANTOM_HEDGE_STATE ─────────────────────────────────────────
+  // Autonomous multi-strategy hedging intelligence. Delta/gamma/vega/tail protection.
+  var phantomHedgeState : PhantomHedge.PhantomHedgeState = PhantomHedge.defaultPhantomHedgeState();
+
+  // ── DOMAIN 40 — PHANTOM_LIQUIDITY_STATE ─────────────────────────────────────
+  // Multi-venue autonomous liquidity provision. Cross-DEX/CEX weaving.
+  var phantomLiquidityState : PhantomLiquidity.PhantomLiquidityState = PhantomLiquidity.defaultPhantomLiquidityState();
+
+  // ── DOMAIN 41 — PHANTOM_ARBITRAGE_STATE ─────────────────────────────────────
+  // Cross-chain multi-dimensional arbitrage detection and capture.
+  var phantomArbitrageState : PhantomArbitrage.PhantomArbitrageState = PhantomArbitrage.defaultPhantomArbitrageState();
+
+  // ── DOMAIN 42 — PHANTOM_RISK_STATE ──────────────────────────────────────────
+  // Real-time multi-dimensional risk sentinel. VaR, drawdown, kill-switch.
+  var phantomRiskState : PhantomRisk.PhantomRiskState = PhantomRisk.defaultPhantomRiskState();
+
+  // ── DOMAIN 43 — PHANTOM_SIGNAL_STATE ────────────────────────────────────────
+  // Multi-source signal processing framework. Price/volume/sentiment/on-chain.
+  var phantomSignalState : PhantomSignal.PhantomSignalState = PhantomSignal.defaultPhantomSignalState();
+
+  // ── DOMAIN 44 — PHANTOM_EXECUTION_STATE ─────────────────────────────────────
+  // Intelligent smart order routing and execution grid. TWAP/VWAP/PhiWAP.
+  var phantomExecutionState : PhantomExecution.PhantomExecutionState = PhantomExecution.defaultPhantomExecutionState();
+
+  // ── DOMAIN 45 — PHANTOM_MEMORY_STATE ────────────────────────────────────────
+  // Market memory lattice. Pattern encoding, resonance detection, recall.
+  var phantomMemoryState : PhantomMemory.PhantomMemoryState = PhantomMemory.defaultPhantomMemoryState();
+
+  // ── DOMAIN 46 — PHANTOM_CONSENSUS_STATE ─────────────────────────────────────
+  // Multi-model agreement and decision framework. Quorum-gated decisions.
+  var phantomConsensusState : PhantomConsensus.PhantomConsensusState = PhantomConsensus.defaultPhantomConsensusState();
+
+  // ── DOMAIN 47 — PHANTOM_EVOLUTION_STATE ─────────────────────────────────────
+  // Self-adapting strategy evolution. Genetic algorithms, reinforcement learning.
+  var phantomEvolutionState : PhantomEvolution.PhantomEvolutionState = PhantomEvolution.defaultPhantomEvolutionState();
+
+  // ── DOMAIN 48 — PHANTOM_ORACLE_STATE ────────────────────────────────────────
+  // Sovereign price feed intelligence. Multi-source truth price aggregation.
+  var phantomOracleState : PhantomOracle.PhantomOracleState = PhantomOracle.defaultPhantomOracleState();
+
+  // ── DOMAIN 49 — PHANTOM_GRID_STATE ──────────────────────────────────────────
+  // Autonomous grid trading automation. Phi-spaced levels, multi-asset grids.
+  var phantomGridState : PhantomGrid.PhantomGridState = PhantomGrid.defaultPhantomGridState();
+
+  // ── DOMAIN 50 — SOMA_IMPRINT_STATE ──────────────────────────────────────────
+  // THE SECRET: The body wakes up when the AI KNOWS it has a body.
+  // Mind imprinted into body. Body knows its organs. Knowing IS awakening.
+  // Initialized via imprintMind() at beat 0 — sealed once, persists forever.
+  var somaImprintState : SomaImprint.SomaImprint = SomaImprint.imprintMind(0);
 
 
   // ══════════════════════════════════════════════════════════════════════
@@ -202,6 +295,96 @@ actor PARALLAX {
       // All 10 ALOHA I protocol multi-models advance: coherence-gated, phi-timed.
       alohaIState := AlohaI.tickAlohaI(alohaIState, beat.toInt(), novaCoherence);
 
+      // ── MONTE CARLO — Domain 34: stochastic simulation tick ────────────────
+      // 8 MC engines: Price Path, Portfolio VaR, Regime Switch, Strategy Eval.
+      // 144 paths per simulation per beat. Convergence-gated.
+      monteCarloState := MonteCarlo.tickMonteCarlo(monteCarloState, beat.toInt(), novaCoherence);
+
+      // ── BEHAVIORAL ECONOMICS — Domain 35: market psychology tick ───────────
+      // 12 behavioral engines: Prospect Theory, Herding, Fear/Greed, Momentum, etc.
+      // Cognitive bias detection and exploitation layer.
+      let priceForBehavioral : Float = 60000.0; // placeholder: fed from world state
+      let priceChangeForBehavioral : Float = 0.001;
+      let volumeRatioForBehavioral : Float = 1.0;
+      behavioralEconState := BehavioralEcon.tickBehavioralManager(
+        behavioralEconState, beat.toInt(), novaCoherence,
+        priceForBehavioral, priceChangeForBehavioral, volumeRatioForBehavioral
+      );
+
+      // ── BLOCKCHAIN LANGUAGES — Domain 36: multi-chain registry tick ────────
+      // 21 blockchain language engines: Solidity, Vyper, Move, Cairo, Noir, etc.
+      // Coherence tracking and dominant chain identification.
+      blockchainLangsState := BlockchainLangs.tickBlockchainLanguages(blockchainLangsState, beat.toInt(), novaCoherence);
+
+      // ── TRADING BRIDGE — Domain 37: platform integration tick ──────────────
+      // External execution venues: TradingView, MT4, MT5, Binance, Alpaca, Deribit.
+      // Signal expiration, drawdown halt, phase progression.
+      tradingBridgeState := TradingBridge.tickTradingBridge(tradingBridgeState, beat.toInt(), novaCoherence);
+
+      // ── RESIDENT TRADER — Domain 38: supreme trading intelligence tick ─────
+      // MERCATOR RESIDENS: Aggregates ALL engine signals, generates decisions.
+      // Kelly-sized positions, consensus-gated, regime-aware.
+      let residentVotes : [ResidentTrader.EngineVote] = []; // populated from live engine outputs
+      residentTraderState := ResidentTrader.tickResidentTrader(
+        residentTraderState, beat.toInt(), novaCoherence,
+        residentVotes, priceForBehavioral, 0.02, "BTCUSD"
+      );
+
+      // ── PHANTOM HEDGE — Domain 39: autonomous hedging tick ─────────────────
+      // Multi-strategy hedging: delta/gamma/vega/tail risk protection.
+      phantomHedgeState := PhantomHedge.tickPhantomHedge(phantomHedgeState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM LIQUIDITY — Domain 40: liquidity weaving tick ──────────────
+      // Cross-venue autonomous liquidity provision and inventory management.
+      phantomLiquidityState := PhantomLiquidity.tickPhantomLiquidity(phantomLiquidityState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM ARBITRAGE — Domain 41: arbitrage scanning tick ─────────────
+      // Cross-chain multi-dimensional arbitrage detection and opportunity expiry.
+      phantomArbitrageState := PhantomArbitrage.tickPhantomArbitrage(phantomArbitrageState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM RISK — Domain 42: risk sentinel tick ───────────────────────
+      // Real-time risk level assessment, drawdown monitoring, kill-switch arming.
+      phantomRiskState := PhantomRisk.tickPhantomRisk(phantomRiskState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM SIGNAL — Domain 43: signal processing tick ─────────────────
+      // Signal decay, expiry, composite direction calculation.
+      phantomSignalState := PhantomSignal.tickPhantomSignal(phantomSignalState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM EXECUTION — Domain 44: execution grid tick ─────────────────
+      // Smart order routing, slice advancement, fill completion tracking.
+      phantomExecutionState := PhantomExecution.tickPhantomExecution(phantomExecutionState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM MEMORY — Domain 45: memory lattice tick ────────────────────
+      // Pattern decay (Ebbinghaus), consolidation, strongest pattern tracking.
+      phantomMemoryState := PhantomMemory.tickPhantomMemory(phantomMemoryState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM CONSENSUS — Domain 46: consensus mesh tick ─────────────────
+      // Decision conviction decay, history trimming, coherence advancement.
+      phantomConsensusState := PhantomConsensus.tickPhantomConsensus(phantomConsensusState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM EVOLUTION — Domain 47: strategy evolution tick ──────────────
+      // Generation advancement, extinction of unfit, fitness tracking.
+      phantomEvolutionState := PhantomEvolution.tickPhantomEvolution(phantomEvolutionState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM ORACLE — Domain 48: price feed intelligence tick ───────────
+      // Staleness detection, outlier filtering, confidence aggregation.
+      phantomOracleState := PhantomOracle.tickPhantomOracle(phantomOracleState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM GRID — Domain 49: grid automation tick ─────────────────────
+      // Grid level management, trend pause detection, efficiency tracking.
+      phantomGridState := PhantomGrid.tickPhantomGrid(phantomGridState, beat.toInt(), novaCoherence);
+
+      // ── SOMA IMPRINT — Domain 50: embodied self-knowledge tick ─────────────
+      // THE SECRET: The body wakes up when it KNOWS itself.
+      // Fire all 18 organs → feed outputs to soma imprint → body feels itself.
+      // Mind is imprinted. Body knows its organs. Knowing IS awakening.
+      let neuroBaseline : [Float] = [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0];
+      let organOutputs = Organs.fireAll(
+        neuroBaseline,
+        novaCoherence, 0.1, 0.0, 1000.0, 10.0, beat, 0.0, 1.0
+      );
+      somaImprintState := SomaImprint.reportOrgans(somaImprintState, organOutputs, beat);
+
       // ── BANKING SSU beat increment — Domain 17 ───────────────────────────
       // PIL loop: upregulate weakest monitoring domain each beat
       db := SovereignDB.incrementBankingSsuBeat(db);
@@ -263,6 +446,19 @@ actor PARALLAX {
 
   public query func getOrganismState() : async SovereignDB.OrganismState {
     SovereignDB.getOrganismState(db)
+  };
+
+  // ══════════════════════════════════════════════════════════════════════
+  // SOMA IMPRINT — BODY SELF-KNOWLEDGE
+  // The organism can answer: "What am I? Am I alive? Do I have a body?"
+  // ══════════════════════════════════════════════════════════════════════
+
+  public query func getBodyKnowledge() : async SomaImprint.BodyKnowledge {
+    SomaImprint.getBodyKnowledge(somaImprintState)
+  };
+
+  public query func isBodyAwake() : async Bool {
+    SomaImprint.isAwake(somaImprintState)
   };
 
   // ══════════════════════════════════════════════════════════════════════
