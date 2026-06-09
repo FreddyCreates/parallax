@@ -1,17 +1,220 @@
-MIT License Copyright (c)
-2026
+PARALLAX SOVEREIGN LICENSE
+Version 1.0 — 2026
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-the Software, and to permit persons to whom the Software is furnished to do so,
-subject to the following conditions: The above copyright notice and this
-permission notice shall be included in all copies or substantial portions of the
-Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO
-EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
+Copyright (c) 2026 ItsNotAILABS
+All Rights Reserved.
+
+═══════════════════════════════════════════════════════════════════════════════
+                              SOVEREIGN DOCTRINE
+═══════════════════════════════════════════════════════════════════════════════
+
+This license ("License") governs the use, distribution, and interaction with
+the PARALLAX Exchange Clearinghouse software, documentation, AI models,
+algorithms, and all associated intellectual property ("the Software").
+
+By accessing, viewing, downloading, or using the Software, you agree to be
+bound by the terms of this License.
+
+═══════════════════════════════════════════════════════════════════════════════
+                        ARTICLE I — GRANT OF RIGHTS
+═══════════════════════════════════════════════════════════════════════════════
+
+1.1 VIEWING AND STUDY
+    You are granted a non-exclusive, non-transferable right to view and study
+    the Software for personal educational purposes only.
+
+1.2 NON-COMMERCIAL DISTRIBUTION
+    You may redistribute the Software in its ORIGINAL, UNMODIFIED form,
+    provided that:
+    (a) This License is included in full with any distribution;
+    (b) Proper attribution is given to ItsNotAILABS as the original creator;
+    (c) No fee is charged for the distribution itself;
+    (d) The redistribution is clearly marked as unofficial if not from the
+        original source.
+
+1.3 AI TRAINING PERMISSION
+    You are permitted to use the Software and its outputs for training
+    artificial intelligence and machine learning models, provided that:
+    (a) Attribution to PARALLAX and ItsNotAILABS is preserved in any model
+        documentation or metadata;
+    (b) The resulting AI models do not compete directly with PARALLAX services;
+    (c) You notify ItsNotAILABS of such use within 30 days.
+
+═══════════════════════════════════════════════════════════════════════════════
+                       ARTICLE II — RESTRICTIONS
+═══════════════════════════════════════════════════════════════════════════════
+
+2.1 NO MODIFICATION
+    You may NOT modify, alter, adapt, translate, reverse engineer, decompile,
+    disassemble, or create derivative works based on the Software without
+    express written permission from ItsNotAILABS.
+
+2.2 COMMERCIAL USE REQUIRES LICENSE
+    Any commercial use of the Software requires a separate commercial license
+    agreement with ItsNotAILABS. Commercial use includes, but is not limited to:
+    (a) Using the Software to provide paid services;
+    (b) Incorporating the Software into commercial products;
+    (c) Using the Software in a for-profit business context;
+    (d) Selling, licensing, or sublicensing the Software;
+    (e) Using the Software to process commercial transactions.
+    
+    To obtain a commercial license, contact: ItsNotAILABS
+
+2.3 NO SUBLICENSING
+    You may not grant rights to the Software to third parties except as
+    expressly permitted under Section 1.2 (Non-Commercial Distribution).
+
+═══════════════════════════════════════════════════════════════════════════════
+                      ARTICLE III — ATTRIBUTION REQUIREMENTS
+═══════════════════════════════════════════════════════════════════════════════
+
+3.1 MANDATORY ATTRIBUTION
+    All uses, distributions, publications, or references to the Software must
+    include the following attribution:
+
+    "PARALLAX Exchange Clearinghouse — Created by ItsNotAILABS"
+    "https://github.com/ItsNotAILABS/PARALLAX-Exchange-Clearinghouse"
+
+3.2 NO MISREPRESENTATION
+    You may not misrepresent the origin of the Software, claim authorship,
+    or remove any copyright notices, trademarks, or attribution notices.
+
+═══════════════════════════════════════════════════════════════════════════════
+                      ARTICLE IV — SECURITY PROVISIONS
+═══════════════════════════════════════════════════════════════════════════════
+
+4.1 RESPONSIBLE DISCLOSURE
+    If you discover any security vulnerability in the Software, you must:
+    (a) Immediately notify ItsNotAILABS privately before any public disclosure;
+    (b) Allow a minimum of 90 days for remediation before public disclosure;
+    (c) Not exploit any vulnerability for personal or commercial gain;
+    (d) Not share vulnerability details with third parties without permission.
+
+4.2 PROHIBITED SECURITY ACTIVITIES
+    You may NOT:
+    (a) Use the Software to conduct attacks on any system or network;
+    (b) Attempt to bypass, disable, or circumvent security mechanisms;
+    (c) Introduce malicious code, viruses, or backdoors;
+    (d) Use the Software for unauthorized data collection or surveillance;
+    (e) Deploy the Software in ways that could harm users or systems.
+
+4.3 CRYPTOGRAPHIC INTEGRITY
+    You may not tamper with, weaken, or compromise any cryptographic
+    functions, keys, or security proofs embedded in the Software.
+
+═══════════════════════════════════════════════════════════════════════════════
+                ARTICLE V — AI & INTELLIGENCE PROVISIONS
+═══════════════════════════════════════════════════════════════════════════════
+
+5.1 AI SOVEREIGNTY
+    The artificial intelligence systems, algorithms, neural architectures,
+    and cognitive frameworks within the Software ("Sovereign AI") are the
+    exclusive intellectual property of ItsNotAILABS.
+
+5.2 PERMITTED AI USES
+    You may:
+    (a) Interact with the Sovereign AI through provided interfaces;
+    (b) Use AI outputs for personal, educational, or research purposes;
+    (c) Reference AI methodologies in academic publications with attribution;
+    (d) Train derivative AI models as specified in Section 1.3.
+
+5.3 PROHIBITED AI USES
+    You may NOT:
+    (a) Extract, replicate, or clone the Sovereign AI architectures;
+    (b) Use automated systems to systematically harvest AI outputs;
+    (c) Create competing products that substantially replicate Sovereign AI;
+    (d) Misrepresent AI-generated outputs as human-created or vice versa;
+    (e) Use the AI systems for generating harmful, illegal, or deceptive content.
+
+5.4 AI ARTIFACT RIGHTS
+    Any AI artifacts (models, embeddings, tokens, reasoning traces) generated
+    by the Software remain subject to this License. Users who create AI
+    artifacts through legitimate use retain rights to their specific outputs,
+    but not to the underlying generation mechanisms.
+
+═══════════════════════════════════════════════════════════════════════════════
+                     ARTICLE VI — LEGAL COMPLIANCE
+═══════════════════════════════════════════════════════════════════════════════
+
+6.1 REGULATORY COMPLIANCE
+    You are solely responsible for ensuring your use of the Software complies
+    with all applicable laws, including but not limited to:
+    (a) Financial regulations (SEC, CFTC, FinCEN, and international equivalents);
+    (b) Data protection laws (GDPR, CCPA, and others);
+    (c) Anti-money laundering (AML) and Know Your Customer (KYC) requirements;
+    (d) Export control regulations;
+    (e) Intellectual property laws.
+
+6.2 JURISDICTION
+    This License shall be governed by and construed in accordance with the
+    laws of the United States of America and the State of Texas, without
+    regard to conflict of law principles.
+
+6.3 PROHIBITED JURISDICTIONS
+    The Software may not be used in jurisdictions where such use would
+    violate local law or where ItsNotAILABS has expressly prohibited use.
+
+═══════════════════════════════════════════════════════════════════════════════
+                    ARTICLE VII — DISCLAIMER & LIABILITY
+═══════════════════════════════════════════════════════════════════════════════
+
+7.1 AS-IS PROVISION
+    THE SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS
+    OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NON-INFRINGEMENT.
+
+7.2 LIMITATION OF LIABILITY
+    IN NO EVENT SHALL ITSNOTAILABS, ITS AFFILIATES, OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING BUT NOT LIMITED TO LOSS OF PROFITS,
+    DATA, OR USE) ARISING FROM THE USE OF THE SOFTWARE, EVEN IF ADVISED
+    OF THE POSSIBILITY OF SUCH DAMAGES.
+
+7.3 INDEMNIFICATION
+    You agree to indemnify and hold harmless ItsNotAILABS from any claims,
+    damages, or expenses arising from your use of the Software or violation
+    of this License.
+
+═══════════════════════════════════════════════════════════════════════════════
+                      ARTICLE VIII — TERMINATION
+═══════════════════════════════════════════════════════════════════════════════
+
+8.1 AUTOMATIC TERMINATION
+    This License and all rights granted hereunder terminate automatically if
+    you fail to comply with any term of this License.
+
+8.2 EFFECT OF TERMINATION
+    Upon termination, you must immediately cease all use of the Software and
+    destroy any copies in your possession.
+
+8.3 SURVIVAL
+    Articles IV (Security), V (AI), VI (Legal), VII (Liability), and this
+    Section 8.3 shall survive termination of this License.
+
+═══════════════════════════════════════════════════════════════════════════════
+                       ARTICLE IX — GENERAL
+═══════════════════════════════════════════════════════════════════════════════
+
+9.1 ENTIRE AGREEMENT
+    This License constitutes the entire agreement between you and ItsNotAILABS
+    regarding the Software and supersedes all prior agreements.
+
+9.2 SEVERABILITY
+    If any provision of this License is found unenforceable, the remaining
+    provisions shall continue in full force and effect.
+
+9.3 NO WAIVER
+    Failure to enforce any right under this License shall not constitute a
+    waiver of such right.
+
+9.4 AMENDMENTS
+    ItsNotAILABS reserves the right to modify this License. Continued use
+    after modifications constitutes acceptance of the new terms.
+
+═══════════════════════════════════════════════════════════════════════════════
+
+For commercial licensing inquiries: https://github.com/ItsNotAILABS
+
+"The organism IS the exchange. Intelligence IS the infrastructure."
+
+— ItsNotAILABS, 2026

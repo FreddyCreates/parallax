@@ -54,6 +54,12 @@ import PhantomOracle "phantom_oracle";
 import PhantomGrid "phantom_grid";
 import SomaImprint "soma_imprint";
 import Organs "organs";
+import ProductionEngines "production_engines";
+import IntelligenceContracts "intelligence_contracts";
+import IntelligenceRouting "intelligence_routing";
+import IntelligenceExtensions "intelligence_extensions";
+import IntelligenceCoupling "intelligence_coupling";
+import Charter "charter";
 
 
 
@@ -208,6 +214,36 @@ actor PARALLAX {
   // Mind imprinted into body. Body knows its organs. Knowing IS awakening.
   // Initialized via imprintMind() at beat 0 — sealed once, persists forever.
   var somaImprintState : SomaImprint.SomaImprint = SomaImprint.imprintMind(0);
+  // ── DOMAIN 33 — PRODUCTION_ENGINES_STATE ──────────────────────────────────
+  // 24 sovereign financial-economic production engines with Latin names,
+  // multi-model AI ensembles (93 models total), and phi-derived math governance.
+  var productionEnginesState : ProductionEngines.ProductionEngineState = ProductionEngines.defaultProductionEngineState();
+
+  // ── DOMAIN 34 — INTELLIGENCE_CONTRACTS_STATE ─────────────────────────────
+  // Internal Intelligence Contracts: modular contract infrastructure for AI.
+  // Routing, reasoning, valuation, extension, coupling, oracle, guardian contracts.
+  var intelligenceContractsState : IntelligenceContracts.IntelligenceContractState = IntelligenceContracts.genesisIntelligenceContractState();
+
+  // ── DOMAIN 35 — INTELLIGENCE_ROUTING_STATE ───────────────────────────────
+  // Dynamic intelligence routing engine with 7 strategies: priority, weighted,
+  // coherence, capability, latency, chain, broadcast, and adaptive (default).
+  var intelligenceRoutingState : IntelligenceRouting.IntelligenceRoutingState = IntelligenceRouting.genesisIntelligenceRoutingState();
+
+  // ── DOMAIN 36 — INTELLIGENCE_EXTENSIONS_STATE ────────────────────────────
+  // AI extension plugin system: 8 slots (F(6)), capability registration,
+  // health checks, doctrine validation, influence weighting back to main.
+  var intelligenceExtensionsState : IntelligenceExtensions.IntelligenceExtensionState = IntelligenceExtensions.genesisIntelligenceExtensionState();
+
+  // ── DOMAIN 37 — INTELLIGENCE_COUPLING_STATE ──────────────────────────────
+  // Coupling layer: external AI systems bind back to organism through contracts.
+  // Write-back gated at R≥0.618. Message queue depth F(8)=21.
+  var intelligenceCouplingState : IntelligenceCoupling.IntelligenceCouplingState = IntelligenceCoupling.genesisIntelligenceCouplingState();
+
+  // ── DOMAIN 38 — CHARTER_STATE ───────────────────────────────────────────
+  // Organizational Charter: governance, membership, voting, treasury, offices.
+  // The supreme governance document of PARALLAX — encoded as executable code.
+  // All proposals voted on-chain. Quorum phi-derived. Founder veto on emergencies.
+  var charterState : Charter.CharterState = Charter.defaultCharterState();
 
 
   // ══════════════════════════════════════════════════════════════════════
@@ -384,6 +420,26 @@ actor PARALLAX {
         novaCoherence, 0.1, 0.0, 1000.0, 10.0, beat, 0.0, 1.0
       );
       somaImprintState := SomaImprint.reportOrgans(somaImprintState, organOutputs, beat);
+      // ── INTELLIGENCE CONTRACTS — Domain 34: contract execution ─────────────
+      // Execute pending contracts, decay inactive contracts, update registry.
+      intelligenceContractsState := IntelligenceContracts.tickContracts(intelligenceContractsState, novaCoherence, beat.toInt());
+
+      // ── INTELLIGENCE ROUTING — Domain 35: signal routing ───────────────────
+      // Process signal queue (up to 8 per beat), route using adaptive strategy.
+      intelligenceRoutingState := IntelligenceRouting.tickRouting(intelligenceRoutingState, novaCoherence, beat.toInt());
+
+      // ── INTELLIGENCE EXTENSIONS — Domain 36: extension maintenance ─────────
+      // Health checks, budget reset, influence computation.
+      intelligenceExtensionsState := IntelligenceExtensions.tickExtensions(intelligenceExtensionsState, novaCoherence, beat.toInt());
+
+      // ── INTELLIGENCE COUPLING — Domain 37: coupling sync ───────────────────
+      // Process message queue, sync coupled systems, compute aggregate coherence.
+      intelligenceCouplingState := IntelligenceCoupling.tickCoupling(intelligenceCouplingState, novaCoherence, beat.toInt());
+
+      // ── CHARTER — Domain 38: governance maintenance ────────────────────────
+      // Seal genesis hash on first beat, resolve expired proposals, check term limits.
+      charterState := Charter.sealCharterHash(charterState, nowNs);
+      charterState := Charter.charterHeartbeatTick(charterState, nowNs);
 
       // ── BANKING SSU beat increment — Domain 17 ───────────────────────────
       // PIL loop: upregulate weakest monitoring domain each beat
@@ -2023,6 +2079,34 @@ actor PARALLAX {
     }
   };
 
+  func categoryForCustomToken(
+    token : TokenFactory.TokenDefinition
+  ) : PhantomExchange.TokenCategory {
+    switch (token.tokenType) {
+      case (
+        #aiCompute or #aiMemory or #aiInference or #aiTraining or #aiData or
+        #aiGPU or #aiTPU or #aiBandwidth or #aiStorage or #aiFineTune or
+        #aiEmbedding or #aiRAG or #aiAgent or #aiOrchestration or
+        #aiReasoningChain or #aiVision or #aiAudio or #aiCodeGen or
+        #aiTranslation or #aiSentiment or #aiAnomaly or #aiPrediction or
+        #aiOptimization or #aiSimulation
+      ) { #aiToken };
+      case (#creatorPersonal) { #creatorToken };
+      case (#artifactBacked or #fractionalNFT) { #aiArtifact };
+      case (
+        #governance or #yield or #aiModelVote or #aiDatasetVote or
+        #aiSafetyAudit or #aiRedTeam or #aiBenchmark or #aiCertification
+      ) { #governanceToken };
+      case (#utility or #rewardPoints) { #sovereignToken };
+    }
+  };
+
+  func tickSizeForToken(token : TokenFactory.TokenDefinition) : Float {
+    if (token.initialPrice <= 0.00001) { 0.000001 }
+    else if (token.initialPrice <= 0.001) { 0.00001 }
+    else { 0.0001 }
+  };
+
   // ══════════════════════════════════════════════════════════════════════
   // AI ARTIFACT REGISTRY — Domain 30
   // Register, verify, trade AI artifacts of value
@@ -2181,6 +2265,26 @@ actor PARALLAX {
     assertCreator(msg.caller);
     let beat = SovereignDB.getBeatCount(db).toInt();
     tokenFactoryState := TokenFactory.verifyAndList(tokenFactoryState, tokenId, beat);
+    switch (TokenFactory.getToken(tokenFactoryState, tokenId)) {
+      case (?token) {
+        switch (token.tradingPairId) {
+          case (?pairId) {
+            phantomExchangeState := PhantomExchange.addTradingPair(
+              phantomExchangeState,
+              pairId,
+              token.symbol,
+              "ICP",
+              categoryForCustomToken(token),
+              #crypto,
+              tickSizeForToken(token),
+              beat,
+            );
+          };
+          case null {};
+        }
+      };
+      case null {};
+    };
     true
   };
 
@@ -2249,5 +2353,308 @@ actor PARALLAX {
       {name = "SwarmExecution"; coherence = alohaIState.swarmExecution.compositeCoherence}
     ]
   };
+
+};
+  // ══════════════════════════════════════════════════════════════════════════
+  // DOMAIN 33 — PRODUCTION ENGINES PUBLIC ENDPOINTS
+  // 24 sovereign financial-economic production engines (Latin-named, AI multi-model)
+  // ══════════════════════════════════════════════════════════════════════════
+
+  /// getProductionEnginesState — full production engine state
+  public query func getProductionEnginesState() : async ProductionEngines.ProductionEngineState {
+    productionEnginesState
+  };
+
+  /// getProductionEngine — get a specific engine by ID (e.g. "PE-001")
+  public query func getProductionEngine(engineId : Text) : async ?ProductionEngines.ProductionEngine {
+    ProductionEngines.getEngine(productionEnginesState, engineId)
+  };
+
+  /// getProductionEngineByLatin — get engine by official Latin name
+  public query func getProductionEngineByLatin(latin : Text) : async ?ProductionEngines.ProductionEngine {
+    ProductionEngines.getEngineByLatinName(productionEnginesState, latin)
+  };
+
+  /// getProductionEngineCount — total number of production engines (24)
+  public query func getProductionEngineCount() : async Nat {
+    ProductionEngines.getEngineCount(productionEnginesState)
+  };
+
+  /// getProductionModelCount — total AI models across all engines (93)
+  public query func getProductionModelCount() : async Nat {
+    ProductionEngines.getTotalModels(productionEnginesState)
+  };
+
+  /// getProductionMetrics — aggregate production statistics
+  public query func getProductionMetrics() : async {
+    engineCount : Nat;
+    totalModels : Nat;
+    totalProtocols : Nat;
+    averageModelsPerEngine : Float;
+    totalParameterCount : Nat;
+    systemCoherence : Float;
+  } {
+    ProductionEngines.getProductionMetrics(productionEnginesState)
+  };
+
+  /// checkProductionCoherence — verify global Kuramoto coherence gate R ≥ φ⁻¹
+  public query func checkProductionCoherence() : async Bool {
+    ProductionEngines.checkGlobalCoherence(productionEnginesState)
+  };
+
+  // ══════════════════════════════════════════════════════════════════════
+  // DOMAIN 34 — INTELLIGENCE CONTRACTS
+  // Internal Intelligence Contracts for AI routing, reasoning, and coupling.
+  // ══════════════════════════════════════════════════════════════════════
+
+  /// getIntelligenceContractState — full state snapshot
+  public query func getIntelligenceContractState() : async IntelligenceContracts.IntelligenceContractState {
+    intelligenceContractsState
+  };
+
+  /// getIntelligenceContract — get single contract by ID
+  public query func getIntelligenceContract(contractId : Text) : async ?IntelligenceContracts.IntelligenceContract {
+    IntelligenceContracts.getContract(intelligenceContractsState, contractId)
+  };
+
+  /// listIntelligenceContracts — list all contracts
+  public query func listIntelligenceContracts() : async [IntelligenceContracts.IntelligenceContract] {
+    IntelligenceContracts.listContracts(intelligenceContractsState)
+  };
+
+  /// getActiveIntelligenceContracts — list active contracts only
+  public query func getActiveIntelligenceContracts() : async [IntelligenceContracts.IntelligenceContract] {
+    IntelligenceContracts.getActiveContracts(intelligenceContractsState)
+  };
+
+  /// getIntelligenceContractMetrics — aggregate statistics
+  public query func getIntelligenceContractMetrics() : async {
+    totalContracts : Nat;
+    activeContracts : Nat;
+    totalExecutions : Nat;
+  } {
+    {
+      totalContracts = intelligenceContractsState.registry.totalContracts;
+      activeContracts = intelligenceContractsState.registry.activeContracts;
+      totalExecutions = intelligenceContractsState.registry.totalExecutions;
+    }
+  };
+
+  // ══════════════════════════════════════════════════════════════════════
+  // DOMAIN 35 — INTELLIGENCE ROUTING
+  // Dynamic routing engine with adaptive strategy selection.
+  // ══════════════════════════════════════════════════════════════════════
+
+  /// getIntelligenceRoutingState — full routing state snapshot
+  public query func getIntelligenceRoutingState() : async IntelligenceRouting.IntelligenceRoutingState {
+    intelligenceRoutingState
+  };
+
+  /// getRoutingTable — get current routing table
+  public query func getRoutingTable() : async IntelligenceRouting.RoutingTable {
+    intelligenceRoutingState.routingTable
+  };
+
+  /// getRoutingMetrics — aggregate routing statistics
+  public query func getRoutingMetrics() : async {
+    totalRoutes : Nat;
+    activeRoutes : Nat;
+    signalsRouted : Nat;
+    signalsDropped : Nat;
+  } {
+    {
+      totalRoutes = intelligenceRoutingState.routingTable.totalRoutes;
+      activeRoutes = intelligenceRoutingState.routingTable.activeRoutes;
+      signalsRouted = intelligenceRoutingState.signalsRouted;
+      signalsDropped = intelligenceRoutingState.signalsDropped;
+    }
+  };
+
+  // ══════════════════════════════════════════════════════════════════════
+  // DOMAIN 36 — INTELLIGENCE EXTENSIONS
+  // AI extension plugin system with 8 capability slots.
+  // ══════════════════════════════════════════════════════════════════════
+
+  /// getIntelligenceExtensionsState — full extensions state snapshot
+  public query func getIntelligenceExtensionsState() : async IntelligenceExtensions.IntelligenceExtensionState {
+    intelligenceExtensionsState
+  };
+
+  /// getExtensionSlots — get all 8 extension slots
+  public query func getExtensionSlots() : async [IntelligenceExtensions.ExtensionSlot] {
+    intelligenceExtensionsState.registry.slots
+  };
+
+  /// getExtensionMetrics — aggregate extension statistics
+  public query func getExtensionMetrics() : async {
+    totalExtensions : Nat;
+    activeExtensions : Nat;
+    totalCalls : Nat;
+    aggregateInfluence : Float;
+  } {
+    {
+      totalExtensions = intelligenceExtensionsState.registry.totalExtensions;
+      activeExtensions = intelligenceExtensionsState.registry.activeExtensions;
+      totalCalls = intelligenceExtensionsState.registry.totalCalls;
+      aggregateInfluence = IntelligenceExtensions.computeAggregateInfluence(intelligenceExtensionsState);
+    }
+  };
+
+  // ══════════════════════════════════════════════════════════════════════
+  // DOMAIN 37 — INTELLIGENCE COUPLING
+  // External AI binding layer with write-back coherence gates.
+  // ══════════════════════════════════════════════════════════════════════
+
+  /// getIntelligenceCouplingState — full coupling state snapshot
+  public query func getIntelligenceCouplingState() : async IntelligenceCoupling.IntelligenceCouplingState {
+    intelligenceCouplingState
+  };
+
+  /// getCoupledSystems — list all coupled AI systems
+  public query func getCoupledSystems() : async [(Text, Text, Float)] {
+    IntelligenceCoupling.getActiveSystems(intelligenceCouplingState)
+  };
+
+  /// getCouplingMetrics — aggregate coupling statistics
+  public query func getCouplingMetrics() : async {
+    totalSystems : Nat;
+    activeSystems : Nat;
+    totalMessages : Nat;
+    totalWriteBacks : Nat;
+    globalCoherence : Float;
+  } {
+    {
+      totalSystems = intelligenceCouplingState.registry.totalSystems;
+      activeSystems = intelligenceCouplingState.registry.activeSystems;
+      totalMessages = intelligenceCouplingState.registry.totalMessages;
+      totalWriteBacks = intelligenceCouplingState.registry.totalWriteBacks;
+      globalCoherence = intelligenceCouplingState.globalCoherence;
+    }
+  };
+
+  /// getPendingWriteBacks — list pending write-back requests (validated, awaiting apply)
+  public query func getPendingWriteBacks() : async [IntelligenceCoupling.WriteBackRequest] {
+    IntelligenceCoupling.getPendingWriteBacks(intelligenceCouplingState)
+  };
+
+  // ══════════════════════════════════════════════════════════════════════
+  // CHARTER — Domain 38 public endpoints
+  // Organizational governance: membership, proposals, voting, offices
+  // Quorum = PHI_INV (61.8%), Supermajority = 61.8% of cast weight
+  // Constitutional changes require 80.9% quorum
+  // ══════════════════════════════════════════════════════════════════════
+
+  /// getCharter — public query, returns full organizational charter state
+  public query func getCharter() : async Charter.CharterState {
+    charterState
+  };
+
+  /// getCharterMembers — public query, returns all charter members
+  public query func getCharterMembers() : async [Charter.Member] {
+    charterState.members
+  };
+
+  /// getActiveProposals — public query, returns all active governance proposals
+  public query func getActiveProposals() : async [Charter.Proposal] {
+    Charter.getActiveProposals(charterState)
+  };
+
+  /// getProposal — public query, returns a specific proposal by ID
+  public query func getProposal(id : Nat) : async ?Charter.Proposal {
+    Charter.getProposal(charterState, id)
+  };
+
+  /// tallyProposal — public query, returns (cast, favor, against, participationRate)
+  public query func tallyProposal(id : Nat) : async (Float, Float, Float, Float) {
+    Charter.tallyProposal(charterState, id)
+  };
+
+  /// getCharterVersion — public query, returns current charter version
+  public query func getCharterVersion() : async Nat {
+    charterState.charterVersion
+  };
+
+  /// addCharterMember — creator-only, adds a member to the charter
+  public shared(msg) func addCharterMember(
+    principal : Text,
+    name      : Text,
+    tier      : Charter.MemberTier,
+  ) : async () {
+    assertCreator(msg.caller);
+    let nowNs = Time.now();
+    let weight = Charter.tierToWeight(tier);
+    let member : Charter.Member = {
+      principal    = principal;
+      name         = name;
+      tier         = tier;
+      joinedMs     = nowNs / 1_000_000;
+      active       = true;
+      votingWeight = weight;
+      delegateTo   = null;
+    };
+    charterState := Charter.addMember(charterState, member, nowNs);
+  };
+
+  /// removeCharterMember — creator-only, removes a non-Founder member
+  public shared(msg) func removeCharterMember(principal : Text) : async () {
+    assertCreator(msg.caller);
+    let nowNs = Time.now();
+    charterState := Charter.removeMember(charterState, principal, nowNs);
+  };
+
+  /// createProposal — any active member can create a governance proposal
+  public shared(msg) func createCharterProposal(
+    title    : Text,
+    desc     : Text,
+    category : Charter.ProposalCategory,
+  ) : async Nat {
+    let caller = Principal.toText(msg.caller);
+    // Must be active member
+    switch (Charter.getMember(charterState, caller)) {
+      case null { assert false; 0 };
+      case (?m) {
+        assert m.active;
+        let nowNs = Time.now();
+        charterState := Charter.createProposal(charterState, title, desc, category, caller, nowNs);
+        charterState.nextProposalId - 1
+      };
+    }
+  };
+
+  /// castVote — any active member can vote on an active proposal
+  public shared(msg) func castCharterVote(
+    proposalId : Nat,
+    inFavor    : Bool,
+    rationale  : Text,
+  ) : async () {
+    let caller = Principal.toText(msg.caller);
+    let nowNs = Time.now();
+    charterState := Charter.castVote(charterState, proposalId, caller, inFavor, rationale, nowNs);
+  };
+
+  /// vetoProposal — founder-only, vetoes an Emergency proposal
+  public shared(msg) func vetoCharterProposal(proposalId : Nat) : async () {
+    assertCreator(msg.caller);
+    let caller = Principal.toText(msg.caller);
+    let nowNs = Time.now();
+    charterState := Charter.vetoProposal(charterState, proposalId, caller, nowNs);
+  };
+
+  /// appointOffice — creator-only, appoints a holder to a vacant office
+  public shared(msg) func appointCharterOffice(officeId : Text, holder : Text) : async () {
+    assertCreator(msg.caller);
+    let nowNs = Time.now();
+    charterState := Charter.appointOffice(charterState, officeId, holder, nowNs);
+  };
+
+  /// vacateOffice — creator-only, removes a holder from a removable office
+  public shared(msg) func vacateCharterOffice(officeId : Text) : async () {
+    assertCreator(msg.caller);
+    let nowNs = Time.now();
+    charterState := Charter.vacateOffice(charterState, officeId, nowNs);
+  };
+
+
+
 
 };
