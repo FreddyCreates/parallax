@@ -24,7 +24,7 @@ services:
       dockerfile: Dockerfile
     container_name: parralax-trading-api
     environment:
-      - DATABASE_URL=******postgres:5432/parralax
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-parralax}:${POSTGRES_PASSWORD:-parralax}@postgres:5432/parralax
       - REDIS_URL=redis://redis:6379
       - ENVIRONMENT=production
     ports:

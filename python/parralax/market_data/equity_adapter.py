@@ -46,7 +46,14 @@ class EquityMarketAdapter(MarketDataAdapter):
         )
 
     async def stream_trades(self, symbol: str) -> AsyncIterator[Trade]:
-        """Stream equity trades."""
-        # Placeholder for WebSocket stream
-        return
-        yield  # type: ignore[misc]
+        """Stream equity trades — placeholder for WebSocket implementation."""
+        # TODO: Implement via Alpaca/IBKR WebSocket stream
+        if False:  # pragma: no cover
+            yield Trade(
+                symbol=symbol,
+                price=0.0,
+                quantity=0.0,
+                side="buy",
+                timestamp=datetime.now(timezone.utc),
+                venue=self.provider,
+            )
