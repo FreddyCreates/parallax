@@ -54,6 +54,24 @@ import PhantomOracle "phantom_oracle";
 import PhantomGrid "phantom_grid";
 import SomaImprint "soma_imprint";
 import Organs "organs";
+import PhantomSentiment "phantom_sentiment";
+import PhantomPortfolio "phantom_portfolio";
+import PhantomRegime "phantom_regime";
+import PhantomVolatility "phantom_volatility";
+import PhantomCorrelation "phantom_correlation";
+import PhantomMicrostructure "phantom_microstructure";
+import PhantomFunding "phantom_funding";
+import PhantomOptions "phantom_options";
+import PhantomNeural "phantom_neural";
+import PhantomGenetic "phantom_genetic";
+import PhantomFractal "phantom_fractal";
+import PhantomWavelets "phantom_wavelets";
+import PhantomEntropy "phantom_entropy";
+import PhantomTopology "phantom_topology";
+import CryptoKeys "cryptographia_keys";
+import CryptoShadowWire "cryptographia_shadow_wire";
+import CryptoVault "cryptographia_vault";
+import CryptoReceipts "cryptographia_receipts";
 
 
 
@@ -209,6 +227,83 @@ actor PARALLAX {
   // Initialized via imprintMind() at beat 0 — sealed once, persists forever.
   var somaImprintState : SomaImprint.SomaImprint = SomaImprint.imprintMind(0);
 
+
+  // ── DOMAIN 51 — PHANTOM_SENTIMENT_STATE ───────────────────────────────────
+  // Multi-source sentiment intelligence: social, news, on-chain, fear/greed.
+  var phantomSentimentState : PhantomSentiment.PhantomSentimentState = PhantomSentiment.defaultPhantomSentimentState();
+
+  // ── DOMAIN 52 — PHANTOM_PORTFOLIO_STATE ─────────────────────────────────────
+  // Portfolio optimization: mean-variance, risk parity, Kelly, Black-Litterman.
+  var phantomPortfolioState : PhantomPortfolio.PhantomPortfolioState = PhantomPortfolio.defaultPhantomPortfolioState();
+
+  // ── DOMAIN 53 — PHANTOM_REGIME_STATE ────────────────────────────────────────
+  // Market regime classification: trending, mean-reverting, volatile, crisis.
+  var phantomRegimeState : PhantomRegime.PhantomRegimeState = PhantomRegime.defaultPhantomRegimeState();
+
+  // ── DOMAIN 54 — PHANTOM_VOLATILITY_STATE ────────────────────────────────────
+  // Volatility surface: GARCH, Heston, term structure, vol regime.
+  var phantomVolatilityState : PhantomVolatility.PhantomVolatilityState = PhantomVolatility.defaultPhantomVolatilityState();
+
+  // ── DOMAIN 55 — PHANTOM_CORRELATION_STATE ───────────────────────────────────
+  // Cross-asset dynamic correlation: DCC-GARCH, contagion, diversification.
+  var phantomCorrelationState : PhantomCorrelation.PhantomCorrelationState = PhantomCorrelation.defaultPhantomCorrelationState();
+
+  // ── DOMAIN 56 — PHANTOM_MICROSTRUCTURE_STATE ────────────────────────────────
+  // Order flow microstructure: VPIN, Kyle lambda, LOB imbalance, toxicity.
+  var phantomMicrostructureState : PhantomMicrostructure.PhantomMicrostructureState = PhantomMicrostructure.defaultPhantomMicrostructureState();
+
+  // ── DOMAIN 57 — PHANTOM_FUNDING_STATE ───────────────────────────────────────
+  // Funding rate arbitrage: basis trades, carry, yield curve, rate forecast.
+  var phantomFundingState : PhantomFunding.PhantomFundingState = PhantomFunding.defaultPhantomFundingState();
+
+  // ── DOMAIN 58 — PHANTOM_OPTIONS_STATE ───────────────────────────────────────
+  // Options pricing: Black-Scholes, Greeks, strategies, IV solver.
+  var phantomOptionsState : PhantomOptions.PhantomOptionsState = PhantomOptions.defaultPhantomOptionsState();
+
+  // ── DOMAIN 59 — PHANTOM_NEURAL_STATE ────────────────────────────────────────
+  // Neural network inference: ensemble prediction, online learning.
+  var phantomNeuralState : PhantomNeural.PhantomNeuralState = PhantomNeural.defaultPhantomNeuralState();
+
+  // ── DOMAIN 60 — PHANTOM_GENETIC_STATE ───────────────────────────────────────
+  // Genetic algorithm: strategy evolution, fitness, crossover, mutation.
+  var phantomGeneticState : PhantomGenetic.PhantomGeneticState = PhantomGenetic.defaultPhantomGeneticState();
+
+  // ── DOMAIN 61 — PHANTOM_FRACTAL_STATE ───────────────────────────────────────
+  // Fractal analysis: Hurst exponent, R/S, fractal dimension, persistence.
+  var phantomFractalState : PhantomFractal.PhantomFractalState = PhantomFractal.defaultPhantomFractalState();
+
+  // ── DOMAIN 62 — PHANTOM_WAVELETS_STATE ──────────────────────────────────────
+  // Wavelet decomposition: multi-scale, denoising, participant identification.
+  var phantomWaveletsState : PhantomWavelets.PhantomWaveletState = PhantomWavelets.defaultPhantomWaveletState();
+
+  // ── DOMAIN 63 — PHANTOM_ENTROPY_STATE ───────────────────────────────────────
+  // Information entropy: Shannon, sample, permutation, predictability.
+  var phantomEntropyState : PhantomEntropy.PhantomEntropyState = PhantomEntropy.defaultPhantomEntropyState();
+
+  // ── DOMAIN 64 — PHANTOM_TOPOLOGY_STATE ──────────────────────────────────────
+  // Topological data analysis: Betti numbers, persistence, structural breaks.
+  var phantomTopologyState : PhantomTopology.PhantomTopologyState = PhantomTopology.defaultPhantomTopologyState();
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // CRYPTOGRAPHIA PHANTASMA — Sovereign Cryptographic Internal Systems
+  // "Secrecy as structure, not darkness."
+  // ══════════════════════════════════════════════════════════════════════════
+
+  // ── INTERNAL SYSTEM 1 — QUANTUM-INSPIRED KEYING ──────────────────────────
+  // Ephemeral, context-bound, state-dependent, time-bounded keys.
+  var cryptoKeyState : CryptoKeys.CryptographiaKeyState = CryptoKeys.defaultCryptographiaKeyState();
+
+  // ── INTERNAL SYSTEM 2 — SHADOW WIRES ─────────────────────────────────────
+  // Protected inter-agent communication channels.
+  var cryptoShadowWireState : CryptoShadowWire.CryptographiaShadowWireState = CryptoShadowWire.defaultShadowWireState();
+
+  // ── INTERNAL SYSTEM 3 — SOVEREIGN VAULTS ─────────────────────────────────
+  // Governed memory structures with policy-gated access.
+  var cryptoVaultState : CryptoVault.CryptographiaVaultState = CryptoVault.defaultCryptographiaVaultState();
+
+  // ── INTERNAL SYSTEM 4 — COMPUTATIONAL RECEIPTS ───────────────────────────
+  // Verifiable proof objects. Private-core / public-proof separation.
+  var cryptoReceiptState : CryptoReceipts.CryptographiaReceiptState = CryptoReceipts.defaultCryptographiaReceiptState();
 
   // ══════════════════════════════════════════════════════════════════════
   // CREATOR SUPREMACY LAW — assertCreator gate
@@ -384,6 +479,76 @@ actor PARALLAX {
         novaCoherence, 0.1, 0.0, 1000.0, 10.0, beat, 0.0, 1.0
       );
       somaImprintState := SomaImprint.reportOrgans(somaImprintState, organOutputs, beat);
+
+      // ══════════════════════════════════════════════════════════════════════
+      // DOMAINS 51–64: 14 NEW PRODUCTION-GRADE PROTOCOL ENGINES
+      // ══════════════════════════════════════════════════════════════════════
+
+      // ── PHANTOM SENTIMENT — Domain 51: market emotion intelligence ─────────
+      phantomSentimentState := PhantomSentiment.tickPhantomSentiment(phantomSentimentState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM PORTFOLIO — Domain 52: portfolio optimization tick ──────────
+      phantomPortfolioState := PhantomPortfolio.tickPhantomPortfolio(phantomPortfolioState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM REGIME — Domain 53: market regime classification ────────────
+      phantomRegimeState := PhantomRegime.tickPhantomRegime(phantomRegimeState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM VOLATILITY — Domain 54: vol surface and GARCH ──────────────
+      phantomVolatilityState := PhantomVolatility.tickPhantomVolatility(phantomVolatilityState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM CORRELATION — Domain 55: dynamic correlation ────────────────
+      phantomCorrelationState := PhantomCorrelation.tickPhantomCorrelation(phantomCorrelationState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM MICROSTRUCTURE — Domain 56: order flow analysis ─────────────
+      phantomMicrostructureState := PhantomMicrostructure.tickPhantomMicrostructure(phantomMicrostructureState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM FUNDING — Domain 57: funding rate arbitrage ─────────────────
+      phantomFundingState := PhantomFunding.tickPhantomFunding(phantomFundingState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM OPTIONS — Domain 58: options pricing & Greeks ───────────────
+      phantomOptionsState := PhantomOptions.tickPhantomOptions(phantomOptionsState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM NEURAL — Domain 59: neural network inference ────────────────
+      phantomNeuralState := PhantomNeural.tickPhantomNeural(phantomNeuralState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM GENETIC — Domain 60: genetic strategy evolution ─────────────
+      phantomGeneticState := PhantomGenetic.tickPhantomGenetic(phantomGeneticState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM FRACTAL — Domain 61: Hurst & fractal dimension ─────────────
+      phantomFractalState := PhantomFractal.tickPhantomFractal(phantomFractalState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM WAVELETS — Domain 62: multi-scale wavelet decomposition ────
+      phantomWaveletsState := PhantomWavelets.tickPhantomWavelet(phantomWaveletsState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM ENTROPY — Domain 63: information entropy measurement ───────
+      phantomEntropyState := PhantomEntropy.tickPhantomEntropy(phantomEntropyState, beat.toInt(), novaCoherence);
+
+      // ── PHANTOM TOPOLOGY — Domain 64: topological data analysis ────────────
+      phantomTopologyState := PhantomTopology.tickPhantomTopology(phantomTopologyState, beat.toInt(), novaCoherence);
+
+      // ══════════════════════════════════════════════════════════════════════
+      // CRYPTOGRAPHIA PHANTASMA — Sovereign Internal Security Systems
+      // "Prove work occurred without surrendering the private pathway."
+      // ══════════════════════════════════════════════════════════════════════
+
+      // ── QUANTUM-INSPIRED KEYING — key expiry, entropy harvest, rotation ────
+      cryptoKeyState := CryptoKeys.tickCryptographiaKeys(cryptoKeyState, beat.toInt(), novaCoherence);
+
+      // ── SHADOW WIRES — wire lifecycle, dormancy, termination ────────────────
+      cryptoShadowWireState := CryptoShadowWire.tickShadowWires(cryptoShadowWireState, beat.toInt(), novaCoherence);
+
+      // ── SOVEREIGN VAULTS — integrity decay, temporal locks ──────────────────
+      cryptoVaultState := CryptoVault.tickCryptographiaVaults(cryptoVaultState, beat.toInt(), novaCoherence);
+
+      // ── COMPUTATIONAL RECEIPTS — chain verification, summary generation ────
+      cryptoReceiptState := CryptoReceipts.tickCryptographiaReceipts(cryptoReceiptState, beat.toInt(), novaCoherence);
+
+      // ── HEARTBEAT RECEIPT — mint proof of this cardiac cycle ────────────────
+      cryptoReceiptState := CryptoReceipts.mintReceipt(
+        cryptoReceiptState, #heartbeat,
+        Nat64.fromNat(beat), Nat64.fromNat(beat + 1),
+        1, beat.toInt(), novaCoherence
+      );
 
       // ── BANKING SSU beat increment — Domain 17 ───────────────────────────
       // PIL loop: upregulate weakest monitoring domain each beat
@@ -2247,6 +2412,115 @@ actor PARALLAX {
       {name = "EntropicRisk"; coherence = alohaIState.entropicRisk.compositeCoherence},
       {name = "EmergentAsset"; coherence = alohaIState.emergentAsset.compositeCoherence},
       {name = "SwarmExecution"; coherence = alohaIState.swarmExecution.compositeCoherence}
+    ]
+  };
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // PROTOCOL ENGINE QUERY ENDPOINTS — Domains 51–64
+  // ══════════════════════════════════════════════════════════════════════════
+
+  public query func getPhantomSentimentState() : async PhantomSentiment.PhantomSentimentState {
+    phantomSentimentState
+  };
+
+  public query func getPhantomPortfolioState() : async PhantomPortfolio.PhantomPortfolioState {
+    phantomPortfolioState
+  };
+
+  public query func getPhantomRegimeState() : async PhantomRegime.PhantomRegimeState {
+    phantomRegimeState
+  };
+
+  public query func getPhantomVolatilityState() : async PhantomVolatility.PhantomVolatilityState {
+    phantomVolatilityState
+  };
+
+  public query func getPhantomCorrelationState() : async PhantomCorrelation.PhantomCorrelationState {
+    phantomCorrelationState
+  };
+
+  public query func getPhantomMicrostructureState() : async PhantomMicrostructure.PhantomMicrostructureState {
+    phantomMicrostructureState
+  };
+
+  public query func getPhantomFundingState() : async PhantomFunding.PhantomFundingState {
+    phantomFundingState
+  };
+
+  public query func getPhantomOptionsState() : async PhantomOptions.PhantomOptionsState {
+    phantomOptionsState
+  };
+
+  public query func getPhantomNeuralState() : async PhantomNeural.PhantomNeuralState {
+    phantomNeuralState
+  };
+
+  public query func getPhantomGeneticState() : async PhantomGenetic.PhantomGeneticState {
+    phantomGeneticState
+  };
+
+  public query func getPhantomFractalState() : async PhantomFractal.PhantomFractalState {
+    phantomFractalState
+  };
+
+  public query func getPhantomWaveletState() : async PhantomWavelets.PhantomWaveletState {
+    phantomWaveletsState
+  };
+
+  public query func getPhantomEntropyState() : async PhantomEntropy.PhantomEntropyState {
+    phantomEntropyState
+  };
+
+  public query func getPhantomTopologyState() : async PhantomTopology.PhantomTopologyState {
+    phantomTopologyState
+  };
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // CRYPTOGRAPHIA PHANTASMA QUERY ENDPOINTS
+  // ══════════════════════════════════════════════════════════════════════════
+
+  public query func getCryptographiaKeyState() : async CryptoKeys.CryptographiaKeyState {
+    cryptoKeyState
+  };
+
+  public query func getCryptographiaShadowWireState() : async CryptoShadowWire.CryptographiaShadowWireState {
+    cryptoShadowWireState
+  };
+
+  public query func getCryptographiaVaultState() : async CryptoVault.CryptographiaVaultState {
+    cryptoVaultState
+  };
+
+  public query func getCryptographiaReceiptState() : async CryptoReceipts.CryptographiaReceiptState {
+    cryptoReceiptState
+  };
+
+  // ── Domain health summary for all 64 domains ────────────────────────────
+  public query func getProtocolEngineHealth() : async [{name: Text; domain: Nat; coherence: Float}] {
+    [
+      {name = "PhantomSentiment"; domain = 51; coherence = phantomSentimentState.coherence},
+      {name = "PhantomPortfolio"; domain = 52; coherence = phantomPortfolioState.coherence},
+      {name = "PhantomRegime"; domain = 53; coherence = phantomRegimeState.coherence},
+      {name = "PhantomVolatility"; domain = 54; coherence = phantomVolatilityState.coherence},
+      {name = "PhantomCorrelation"; domain = 55; coherence = phantomCorrelationState.coherence},
+      {name = "PhantomMicrostructure"; domain = 56; coherence = phantomMicrostructureState.coherence},
+      {name = "PhantomFunding"; domain = 57; coherence = phantomFundingState.coherence},
+      {name = "PhantomOptions"; domain = 58; coherence = phantomOptionsState.coherence},
+      {name = "PhantomNeural"; domain = 59; coherence = phantomNeuralState.coherence},
+      {name = "PhantomGenetic"; domain = 60; coherence = phantomGeneticState.coherence},
+      {name = "PhantomFractal"; domain = 61; coherence = phantomFractalState.coherence},
+      {name = "PhantomWavelets"; domain = 62; coherence = phantomWaveletsState.coherence},
+      {name = "PhantomEntropy"; domain = 63; coherence = phantomEntropyState.coherence},
+      {name = "PhantomTopology"; domain = 64; coherence = phantomTopologyState.coherence}
+    ]
+  };
+
+  public query func getCryptographiaHealth() : async [{system: Text; coherence: Float}] {
+    [
+      {system = "QuantumKeys"; coherence = cryptoKeyState.coherence},
+      {system = "ShadowWires"; coherence = cryptoShadowWireState.coherence},
+      {system = "SovereignVaults"; coherence = cryptoVaultState.coherence},
+      {system = "ComputationalReceipts"; coherence = cryptoReceiptState.coherence}
     ]
   };
 
