@@ -1,0 +1,75 @@
+version: "3.9"
+
+services:
+  # Rust HFT Execution Engine
+  execution-engine:
+    build:
+      context: ./rust/execution-engine
+      dockerfile: Dockerfile
+    container_name: parralax-execution-engine
+    environment:
+      - RUST_LOG=info
+      - REDIS_URL=redis://redis:6379
+    ports:
+      - "8081:8081"
+    depends_on:
+      - redis
+      - postgres
+    restart: unless-stopped
+
+  # Python Trading API
+  trading-api:
+    build:
+      context: ./python
+      dockerfile: Dockerfile
+    container_name: parralax-trading-api
+    environment:
+      - DATABASE_URL=******postgres:5432/parralax
+      - REDIS_URL=redis://redis:6379
+      - ENVIRONMENT=production
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - redis
+    restart: unless-stopped
+
+  # React Dashboard
+  dashboard:
+    build:
+      context: ./src/frontend
+      dockerfile: Dockerfile
+    container_name: parralax-dashboard
+    ports:
+      - "3000:3000"
+    depends_on:
+      - trading-api
+    restart: unless-stopped
+
+  # PostgreSQL — Primary data store
+  postgres:
+    image: postgres:16-alpine
+    container_name: parralax-postgres
+    environment:
+      - POSTGRES_DB=parralax
+      - POSTGRES_USER=parralax
+      - POSTGRES_PASSWORD=parralax
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  # Redis — Cache + Message Queue
+  redis:
+    image: redis:7-alpine
+    container_name: parralax-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
