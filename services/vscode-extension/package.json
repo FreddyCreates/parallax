@@ -1,0 +1,61 @@
+{
+  "name": "parralax-ai",
+  "displayName": "PARRALAX AI",
+  "description": "PARRALAX AI — Inline completions, chat, code review powered by sovereign AI",
+  "version": "1.0.0",
+  "publisher": "parralax",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": ["Programming Languages", "Machine Learning", "Other"],
+  "activationEvents": ["onStartupFinished"],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "parralax.complete",
+        "title": "PARRALAX: Inline Completion"
+      },
+      {
+        "command": "parralax.chat",
+        "title": "PARRALAX: Open Chat"
+      },
+      {
+        "command": "parralax.review",
+        "title": "PARRALAX: Review Selection"
+      },
+      {
+        "command": "parralax.explain",
+        "title": "PARRALAX: Explain Code"
+      }
+    ],
+    "configuration": {
+      "title": "PARRALAX AI",
+      "properties": {
+        "parralax.apiUrl": {
+          "type": "string",
+          "default": "http://localhost:8084",
+          "description": "PARRALAX AI Service URL"
+        },
+        "parralax.model": {
+          "type": "string",
+          "default": "claude-sonnet-4-20250514",
+          "description": "Default AI model"
+        },
+        "parralax.enableInlineCompletions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable inline AI completions"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "esbuild src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node",
+    "watch": "esbuild src/extension.ts --bundle --outfile=out/extension.js --external:vscode --format=cjs --platform=node --watch"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "esbuild": "^0.20.0"
+  }
+}

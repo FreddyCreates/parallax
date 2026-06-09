@@ -1,7 +1,80 @@
 version: "3.9"
 
 services:
-  # Rust HFT Execution Engine
+  # ═══════════════════════════════════════════════════════════
+  # CORE SERVICES — Production Multi-Language Architecture
+  # ═══════════════════════════════════════════════════════════
+
+  # Ruby on Rails 7.2 API — Auth (JWT), repos, issues, PRs, search, webhooks, Sidekiq
+  rails-api:
+    build:
+      context: ./services/rails-api
+      dockerfile: Dockerfile
+    container_name: parralax-rails-api
+    environment:
+      - RAILS_ENV=production
+      - DATABASE_URL=mysql2://root:${MYSQL_ROOT_PASSWORD:-parralax}@mysql:3306/parralax_production
+      - REDIS_URL=redis://redis:6379
+      - KAFKA_BROKERS=kafka:9092
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-parralax_jwt_secret_change_in_prod}
+    ports:
+      - "3001:3001"
+    depends_on:
+      - mysql
+      - redis
+      - kafka
+      - elasticsearch
+    restart: unless-stopped
+
+  # Go + go-git — Tree, blob, commits, branches, tags, compare, merge, smart HTTP
+  git-service:
+    build:
+      context: ./services/git-service
+      dockerfile: Dockerfile
+    container_name: parralax-git-service
+    environment:
+      - GIT_SERVICE_PORT=8082
+      - GIT_REPO_BASE_PATH=/var/lib/parralax/repos
+    ports:
+      - "8082:8082"
+    volumes:
+      - git_repos:/var/lib/parralax/repos
+    restart: unless-stopped
+
+  # Rust Engine — Tree-sitter parsing, LSP, CRDT real-time collaboration
+  rust-engine:
+    build:
+      context: ./services/rust-engine
+      dockerfile: Dockerfile
+    container_name: parralax-rust-engine
+    environment:
+      - RUST_LOG=info
+      - RUST_ENGINE_PORT=8083
+      - REDIS_URL=redis://redis:6379
+    ports:
+      - "8083:8083"
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  # Python FastAPI — AI Service with OpenAI + Anthropic LLM routing
+  ai-service:
+    build:
+      context: ./services/ai-service
+      dockerfile: Dockerfile
+    container_name: parralax-ai-service
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - REDIS_URL=redis://redis:6379
+    ports:
+      - "8084:8084"
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  # Rust HFT Execution Engine (existing)
   execution-engine:
     build:
       context: ./rust/execution-engine
@@ -14,27 +87,27 @@ services:
       - "8081:8081"
     depends_on:
       - redis
-      - postgres
+      - mysql
     restart: unless-stopped
 
-  # Python Trading API
+  # Python Trading API (existing)
   trading-api:
     build:
       context: ./python
       dockerfile: Dockerfile
     container_name: parralax-trading-api
     environment:
-      - DATABASE_URL=postgresql://${POSTGRES_USER:-parralax}:${POSTGRES_PASSWORD:-parralax}@postgres:5432/parralax
+      - DATABASE_URL=mysql2://root:${MYSQL_ROOT_PASSWORD:-parralax}@mysql:3306/parralax_production
       - REDIS_URL=redis://redis:6379
       - ENVIRONMENT=production
     ports:
       - "8000:8000"
     depends_on:
-      - postgres
+      - mysql
       - redis
     restart: unless-stopped
 
-  # React Dashboard
+  # React Dashboard (existing)
   dashboard:
     build:
       context: ./src/frontend
@@ -44,23 +117,46 @@ services:
       - "3000:3000"
     depends_on:
       - trading-api
+      - rails-api
     restart: unless-stopped
 
-  # PostgreSQL — Primary data store
-  postgres:
-    image: postgres:16-alpine
-    container_name: parralax-postgres
+  # Sidekiq — Background jobs for Rails API
+  sidekiq:
+    build:
+      context: ./services/rails-api
+      dockerfile: Dockerfile
+    container_name: parralax-sidekiq
+    command: bundle exec sidekiq -C config/sidekiq.yml
     environment:
-      - POSTGRES_DB=parralax
-      - POSTGRES_USER=parralax
-      - POSTGRES_PASSWORD=parralax
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - RAILS_ENV=production
+      - DATABASE_URL=mysql2://root:${MYSQL_ROOT_PASSWORD:-parralax}@mysql:3306/parralax_production
+      - REDIS_URL=redis://redis:6379
+      - KAFKA_BROKERS=kafka:9092
+    depends_on:
+      - mysql
+      - redis
+      - kafka
     restart: unless-stopped
 
-  # Redis — Cache + Message Queue
+  # ═══════════════════════════════════════════════════════════
+  # DATA LAYER
+  # ═══════════════════════════════════════════════════════════
+
+  # MySQL 8.4 — Full migrations (users, repos, issues, PRs, orgs, teams, webhooks, SSH keys)
+  mysql:
+    image: mysql:8.4
+    container_name: parralax-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-parralax}
+      - MYSQL_DATABASE=parralax_production
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4
+    restart: unless-stopped
+
+  # Redis 7 — Caching + Sidekiq background jobs
   redis:
     image: redis:7-alpine
     container_name: parralax-redis
@@ -68,8 +164,46 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
+    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+    restart: unless-stopped
+
+  # Elasticsearch 8.13 — Code, repo, user, issue search
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.0
+    container_name: parralax-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+    ports:
+      - "9200:9200"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    restart: unless-stopped
+
+  # Kafka (Confluent 7.6) — Event streaming (repo.created, issue.created, pr.merged)
+  kafka:
+    image: confluentinc/cp-kafka:7.6.0
+    container_name: parralax-kafka
+    environment:
+      - KAFKA_NODE_ID=1
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - KAFKA_PROCESS_ROLES=broker,controller
+      - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
+      - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
+      - CLUSTER_ID=parralax-kafka-cluster-001
+    ports:
+      - "9092:9092"
+    volumes:
+      - kafka_data:/var/lib/kafka/data
     restart: unless-stopped
 
 volumes:
-  postgres_data:
+  mysql_data:
   redis_data:
+  es_data:
+  kafka_data:
+  git_repos:
