@@ -9,6 +9,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from prometheus_client import make_asgi_app
 
 from app.routers import completions, chat, review, embeddings
+from app.routers.actuary import router as actuary_router
+from app.routers.trading import router as trading_router
 from app.providers import ProviderRegistry
 
 logger = structlog.get_logger()
@@ -49,13 +51,24 @@ app.include_router(completions.router, prefix="/api/v1", tags=["completions"])
 app.include_router(chat.router, prefix="/api/v1", tags=["chat"])
 app.include_router(review.router, prefix="/api/v1", tags=["review"])
 app.include_router(embeddings.router, prefix="/api/v1", tags=["embeddings"])
+app.include_router(actuary_router, prefix="/api/v1", tags=["actuary"])
+app.include_router(trading_router, prefix="/api/v1", tags=["trading"])
 
 
 @app.get("/health")
 async def health() -> dict:
     return {
         "status": "healthy",
-        "service": "parralax-ai-service",
-        "version": "1.0.0",
+        "service": "parralax-ai-intelligence-actuary-suite",
+        "version": "2.0.0",
         "providers": ["openai", "anthropic", "local"],
+        "modules": {
+            "actuary": ["risk_pricing", "greeks", "portfolio_insurance", "strategy_lifecycle", "reserves"],
+            "trading": [
+                "statistical_arbitrage", "market_making", "momentum", "mean_reversion",
+                "pairs_trading", "volatility_arbitrage", "liquidity_provision",
+                "cross_asset_arbitrage", "event_driven", "ml_alpha",
+            ],
+            "financial_languages": ["FIX", "FpML", "SWIFT", "ISDA_CDM", "XBRL", "ISO20022"],
+        },
     }
