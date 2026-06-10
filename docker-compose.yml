@@ -58,16 +58,18 @@ services:
       - redis
     restart: unless-stopped
 
-  # Python FastAPI — AI Service with OpenAI + Anthropic LLM routing
+  # Python FastAPI — AI Intelligence Actuary Suite (LLM routing + Trading Strategies + Financial Languages)
   ai-service:
     build:
       context: ./services/ai-service
       dockerfile: Dockerfile
-    container_name: parralax-ai-service
+    container_name: parralax-ai-intelligence-actuary-suite
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY:-}
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
       - REDIS_URL=redis://redis:6379
+      - ACTUARY_SUITE_ENABLED=true
+      - STRATEGY_ROUTER_CAPITAL=10000000
     ports:
       - "8084:8084"
     depends_on:

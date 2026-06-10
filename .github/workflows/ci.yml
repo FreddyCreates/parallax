@@ -85,7 +85,7 @@ jobs:
 
   # ═══ Python AI Service Tests ═══
   python-ai-service:
-    name: "Python AI Service (FastAPI)"
+    name: "Python AI Service (FastAPI + Actuary Suite)"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -104,10 +104,19 @@ jobs:
       - name: Test
         working-directory: services/ai-service
         run: pytest tests/ -v --cov=app || true
+      - name: Test Actuary Suite
+        working-directory: services/ai-service
+        run: python -c "from app.actuary import RiskPricingEngine, GreeksEngine; print('✅ Actuary Suite OK')"
+      - name: Test Trading Strategies
+        working-directory: services/ai-service
+        run: python -c "from app.strategies import StrategyRouter, StatisticalArbitrageStrategy, MarketMakingStrategy; print('✅ Trading Strategies OK')"
+      - name: Test Financial Languages
+        working-directory: services/ai-service
+        run: python -c "from app.routers.financial_languages import FIXEngine, FpMLEngine, SWIFTEngine, ISDACDMEngine, XBRLEngine, ISO20022Engine; print('✅ Financial Languages OK')"
 
   # ═══ Python Trading API Tests ═══
   python-trading:
-    name: "Python Trading API"
+    name: "Python Trading API + Strategy Engines"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -123,6 +132,12 @@ jobs:
       - name: Test
         working-directory: python
         run: pytest tests/ -v || true
+      - name: Test Strategy Engines
+        working-directory: python
+        run: python -c "from parralax.strategy.engines import AlphaEngine, ExecutionOrchestrator, SignalAggregator; print('✅ Strategy Engines OK')"
+      - name: Test Financial Languages
+        working-directory: python
+        run: python -c "from parralax.financial_languages import FinancialLanguageRouter; print('✅ Financial Language Router OK')"
 
   # ═══ Rails API Tests ═══
   rails-api:
