@@ -854,3 +854,390 @@ spec:
   selector:
     matchLabels:
       app: trading-api
+
+---
+# === PROMETHEUS CONFIGURATION ===
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: parralax
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+      evaluation_interval: 15s
+
+    scrape_configs:
+      - job_name: prometheus
+        static_configs:
+          - targets:
+              - prometheus.parralax.svc.cluster.local:9090
+
+      - job_name: rails-api
+        metrics_path: /metrics
+        static_configs:
+          - targets:
+              - rails-api.parralax.svc.cluster.local:3001
+
+      - job_name: git-service
+        metrics_path: /metrics
+        static_configs:
+          - targets:
+              - git-service.parralax.svc.cluster.local:8082
+
+      - job_name: rust-engine
+        metrics_path: /metrics
+        static_configs:
+          - targets:
+              - rust-engine.parralax.svc.cluster.local:8083
+
+      - job_name: ai-service
+        metrics_path: /metrics
+        static_configs:
+          - targets:
+              - ai-service.parralax.svc.cluster.local:8084
+
+      - job_name: execution-engine
+        metrics_path: /metrics
+        static_configs:
+          - targets:
+              - execution-engine.parralax.svc.cluster.local:8081
+
+      - job_name: trading-api
+        metrics_path: /metrics
+        static_configs:
+          - targets:
+              - trading-api.parralax.svc.cluster.local:8000
+
+---
+# === PROMETHEUS ===
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus
+  namespace: parralax
+  labels:
+    app: prometheus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+  template:
+    metadata:
+      labels:
+        app: prometheus
+    spec:
+      containers:
+        - name: prometheus
+          image: prom/prometheus:v2.53.0
+          args:
+            - --config.file=/etc/prometheus/prometheus.yml
+            - --storage.tsdb.path=/prometheus
+            - --web.enable-lifecycle
+          ports:
+            - name: web
+              containerPort: 9090
+          readinessProbe:
+            httpGet:
+              path: /-/ready
+              port: 9090
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /-/healthy
+              port: 9090
+            initialDelaySeconds: 30
+            periodSeconds: 15
+          volumeMounts:
+            - name: prometheus-config
+              mountPath: /etc/prometheus/prometheus.yml
+              subPath: prometheus.yml
+            - name: prometheus-storage
+              mountPath: /prometheus
+      volumes:
+        - name: prometheus-config
+          configMap:
+            name: prometheus-config
+        - name: prometheus-storage
+          emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus
+  namespace: parralax
+  labels:
+    app: prometheus
+spec:
+  selector:
+    app: prometheus
+  ports:
+    - name: web
+      port: 9090
+      targetPort: 9090
+  type: ClusterIP
+
+---
+# === GRAFANA DATASOURCE PROVISIONING ===
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-datasources
+  namespace: parralax
+data:
+  prometheus.yaml: |
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        url: http://prometheus.parralax.svc.cluster.local:9090
+        isDefault: true
+        editable: false
+
+---
+# === GRAFANA ===
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+  namespace: parralax
+  labels:
+    app: grafana
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      containers:
+        - name: grafana
+          image: grafana/grafana:11.1.0
+          env:
+            - name: GF_SERVER_HTTP_PORT
+              value: "3030"
+          ports:
+            - name: web
+              containerPort: 3030
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3030
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3030
+            initialDelaySeconds: 30
+            periodSeconds: 15
+          volumeMounts:
+            - name: grafana-datasources
+              mountPath: /etc/grafana/provisioning/datasources/prometheus.yaml
+              subPath: prometheus.yaml
+            - name: grafana-storage
+              mountPath: /var/lib/grafana
+      volumes:
+        - name: grafana-datasources
+          configMap:
+            name: grafana-datasources
+        - name: grafana-storage
+          emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana
+  namespace: parralax
+  labels:
+    app: grafana
+spec:
+  selector:
+    app: grafana
+  ports:
+    - name: web
+      port: 3030
+      targetPort: 3030
+  type: ClusterIP
+
+---
+# === MONITORING SERVICES FOR SERVICEMONITORS ===
+apiVersion: v1
+kind: Service
+metadata:
+  name: rails-api-metrics
+  namespace: parralax
+  labels:
+    app: rails-api
+    monitoring: prometheus
+spec:
+  selector:
+    app: rails-api
+  ports:
+    - name: http
+      port: 3001
+      targetPort: 3001
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ai-service-metrics
+  namespace: parralax
+  labels:
+    app: ai-service
+    monitoring: prometheus
+spec:
+  selector:
+    app: ai-service
+  ports:
+    - name: http
+      port: 8084
+      targetPort: 8084
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: trading-api-metrics
+  namespace: parralax
+  labels:
+    app: trading-api
+    monitoring: prometheus
+spec:
+  selector:
+    app: trading-api
+  ports:
+    - name: http
+      port: 8000
+      targetPort: 8000
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: execution-engine-metrics
+  namespace: parralax
+  labels:
+    app: execution-engine
+    monitoring: prometheus
+spec:
+  selector:
+    app: execution-engine
+  ports:
+    - name: http
+      port: 8081
+      targetPort: 8081
+  type: ClusterIP
+
+---
+# === SERVICEMONITORS ===
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: rails-api
+  namespace: parralax
+  labels:
+    release: prometheus
+spec:
+  namespaceSelector:
+    matchNames:
+      - parralax
+  selector:
+    matchLabels:
+      app: rails-api
+      monitoring: prometheus
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 30s
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: ai-service
+  namespace: parralax
+  labels:
+    release: prometheus
+spec:
+  namespaceSelector:
+    matchNames:
+      - parralax
+  selector:
+    matchLabels:
+      app: ai-service
+      monitoring: prometheus
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 30s
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: trading-api
+  namespace: parralax
+  labels:
+    release: prometheus
+spec:
+  namespaceSelector:
+    matchNames:
+      - parralax
+  selector:
+    matchLabels:
+      app: trading-api
+      monitoring: prometheus
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 30s
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: execution-engine
+  namespace: parralax
+  labels:
+    release: prometheus
+spec:
+  namespaceSelector:
+    matchNames:
+      - parralax
+  selector:
+    matchLabels:
+      app: execution-engine
+      monitoring: prometheus
+  endpoints:
+    - port: http
+      path: /metrics
+      interval: 30s
+
+---
+# === SECRET TEMPLATE ===
+apiVersion: v1
+kind: Secret
+metadata:
+  name: parralax-secrets
+  namespace: parralax
+type: Opaque
+stringData:
+  database-url: "replace-with-database-url"
+  jwt-secret: "change-me"
+  mysql-root-password: "change-me"
+  openai-api-key: "change-me"
+  anthropic-api-key: "change-me"

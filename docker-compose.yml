@@ -25,6 +25,14 @@ services:
       - redis
       - kafka
       - elasticsearch
+    healthcheck:
+      test: ["CMD", "ruby", "-rsocket", "-e", "TCPSocket.new('127.0.0.1', 3001).close"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    networks:
+      - parralax-net
     restart: unless-stopped
 
   # Go + go-git — Tree, blob, commits, branches, tags, compare, merge, smart HTTP
@@ -40,6 +48,8 @@ services:
       - "8082:8082"
     volumes:
       - git_repos:/var/lib/parralax/repos
+    networks:
+      - parralax-net
     restart: unless-stopped
 
   # Rust Engine — Tree-sitter parsing, LSP, CRDT real-time collaboration
@@ -56,6 +66,8 @@ services:
       - "8083:8083"
     depends_on:
       - redis
+    networks:
+      - parralax-net
     restart: unless-stopped
 
   # Python FastAPI — AI Intelligence Actuary Suite (LLM routing + Trading Strategies + Financial Languages)
@@ -74,6 +86,14 @@ services:
       - "8084:8084"
     depends_on:
       - redis
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; sock = socket.create_connection(('127.0.0.1', 8084), 5); sock.close()"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+    networks:
+      - parralax-net
     restart: unless-stopped
 
   # Rust HFT Execution Engine (existing)
@@ -90,6 +110,14 @@ services:
     depends_on:
       - redis
       - mysql
+    healthcheck:
+      test: ["CMD", "sh", "-c", "[ -x /proc/1/exe ] && [ \"$(readlink /proc/1/exe)\" = \"/usr/local/bin/parralax-execution-engine\" ]"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+    networks:
+      - parralax-net
     restart: unless-stopped
 
   # Python Trading API (existing)
@@ -107,6 +135,14 @@ services:
     depends_on:
       - mysql
       - redis
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; sock = socket.create_connection(('127.0.0.1', 8000), 5); sock.close()"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+    networks:
+      - parralax-net
     restart: unless-stopped
 
   # React Dashboard (existing)
@@ -120,6 +156,8 @@ services:
     depends_on:
       - trading-api
       - rails-api
+    networks:
+      - parralax-net
     restart: unless-stopped
 
   # Sidekiq — Background jobs for Rails API
@@ -138,6 +176,8 @@ services:
       - mysql
       - redis
       - kafka
+    networks:
+      - parralax-net
     restart: unless-stopped
 
   # ═══════════════════════════════════════════════════════════
@@ -156,6 +196,8 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
     command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4
+    networks:
+      - parralax-net
     restart: unless-stopped
 
   # Redis 7 — Caching + Sidekiq background jobs
@@ -167,6 +209,8 @@ services:
     volumes:
       - redis_data:/data
     command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+    networks:
+      - parralax-net
     restart: unless-stopped
 
   # Elasticsearch 8.13 — Code, repo, user, issue search
@@ -181,6 +225,8 @@ services:
       - "9200:9200"
     volumes:
       - es_data:/usr/share/elasticsearch/data
+    networks:
+      - parralax-net
     restart: unless-stopped
 
   # Kafka (Confluent 7.6) — Event streaming (repo.created, issue.created, pr.merged)
@@ -201,6 +247,57 @@ services:
       - "9092:9092"
     volumes:
       - kafka_data:/var/lib/kafka/data
+    networks:
+      - parralax-net
+    restart: unless-stopped
+
+  # ═══════════════════════════════════════════════════════════
+  # OBSERVABILITY
+  # ═══════════════════════════════════════════════════════════
+
+  prometheus:
+    image: prom/prometheus:v2.53.0
+    container_name: parralax-prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --web.enable-lifecycle
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    networks:
+      - parralax-net
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:11.1.0
+    container_name: parralax-grafana
+    environment:
+      - GF_SERVER_HTTP_PORT=3030
+    ports:
+      - "3030:3030"
+    depends_on:
+      - prometheus
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - grafana_data:/var/lib/grafana
+    networks:
+      - parralax-net
+    restart: unless-stopped
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.57
+    container_name: parralax-jaeger
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    ports:
+      - "16686:16686"
+      - "4317:4317"
+      - "4318:4318"
+    networks:
+      - parralax-net
     restart: unless-stopped
 
 volumes:
@@ -209,3 +306,9 @@ volumes:
   es_data:
   kafka_data:
   git_repos:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  parralax-net:
+    driver: bridge

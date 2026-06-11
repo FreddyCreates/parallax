@@ -10,6 +10,7 @@ from prometheus_client import make_asgi_app
 
 from app.routers import completions, chat, review, embeddings
 from app.routers.actuary import router as actuary_router
+from app.routers.financial_languages.router import router as financial_router
 from app.routers.trading import router as trading_router
 from app.providers import ProviderRegistry
 
@@ -53,6 +54,7 @@ app.include_router(review.router, prefix="/api/v1", tags=["review"])
 app.include_router(embeddings.router, prefix="/api/v1", tags=["embeddings"])
 app.include_router(actuary_router, prefix="/api/v1", tags=["actuary"])
 app.include_router(trading_router, prefix="/api/v1", tags=["trading"])
+app.include_router(financial_router, prefix="/api/v1", tags=["financial_languages"])
 
 
 @app.get("/health")
