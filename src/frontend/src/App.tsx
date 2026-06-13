@@ -27,6 +27,7 @@ import { TreasuryTab } from "./tabs/TreasuryTab";
 import { VaelTab } from "./tabs/VaelTab";
 import { WebSphereTab } from "./tabs/WebSphereTab";
 import { WyomingTab } from "./tabs/WyomingTab";
+import { TokenomicsTab } from "./tabs/TokenomicsTab";
 
 type TabId =
   | "substrate"
@@ -50,7 +51,8 @@ type TabId =
   | "builder"
   | "models"
   | "nova"
-  | "websphere";
+  | "websphere"
+  | "tokenomics";
 
 const TABS: { id: TabId; label: string; short: string; icon: string }[] = [
   { id: "substrate", label: "SUBSTRATE", short: "SUB", icon: "\u25c8" },
@@ -75,6 +77,7 @@ const TABS: { id: TabId; label: string; short: string; icon: string }[] = [
   { id: "models", label: "MODELS", short: "MDL", icon: "\u2227" },
   { id: "nova", label: "NOVA", short: "NOV", icon: "\u29bf" },
   { id: "websphere", label: "WEBSPHERE", short: "WSP", icon: "\u29be" },
+  { id: "tokenomics", label: "TOKENOMICS", short: "TKN", icon: "\u2234" },
 ];
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -391,6 +394,7 @@ export default function App() {
     if (tabId === "models") return "oklch(0.78 0.15 85)";
     if (tabId === "nova") return "oklch(0.82 0.18 75)";
     if (tabId === "websphere") return "oklch(0.70 0.20 220)";
+    if (tabId === "tokenomics") return "oklch(0.78 0.18 55)";
     return "oklch(0.65 0.20 290)";
   };
 
@@ -673,6 +677,7 @@ export default function App() {
               {activeTab === "models" && <ModelsTab />}
               {activeTab === "nova" && <NOVATab />}
               {activeTab === "websphere" && <WebSphereTab />}
+              {activeTab === "tokenomics" && <TokenomicsTab />}
             </motion.div>
           </AnimatePresence>
         </div>
