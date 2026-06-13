@@ -2,3 +2,9 @@
 canisters:
   - src/frontend
   - src/backend
+
+environments:
+  local:
+    network: local
+  mainnet:
+    network: ic
