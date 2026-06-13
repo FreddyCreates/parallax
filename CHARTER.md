@@ -1489,3 +1489,169 @@ Its core law is:
 > Preserve trader sovereignty.
 > Expand across every asset layer.
 > Turn market intelligence into executable infrastructure.
+
+---
+
+## 37. Extended Protocol Registry
+
+### 37.1 Macro Governance Protocols
+
+| Protocol | Document | Scope |
+|----------|----------|-------|
+| Macro Governance | GOVERNANCE_MACRO_PROTOCOL.md | System-wide temporal, policy, ethics |
+| Ethics | ETHICS_PROTOCOL.md | Ethical AI trading boundaries |
+| Temporal Operations | TEMPORAL_PROTOCOL.md | Time-based system coordination |
+| HTTP Services | HTTP_SERVICES_PROTOCOL.md | Service endpoint governance |
+
+### 37.2 Financial Language Protocols
+
+The system implements the following financial messaging standards:
+
+| Standard | Implementation | Use Case |
+|----------|---------------|----------|
+| FIX 4.4 | `app/routers/financial_languages/fix_protocol.py` | Order routing and execution |
+| FpML 5.x | `app/routers/financial_languages/fpml_engine.py` | Derivatives documentation |
+| SWIFT MT/MX | `app/routers/financial_languages/swift_engine.py` | Payment settlement |
+| ISDA CDM | `app/routers/financial_languages/isda_cdm.py` | Trade lifecycle events |
+| XBRL | `app/routers/financial_languages/xbrl_engine.py` | Regulatory reporting |
+| ISO 20022 | `app/routers/financial_languages/iso20022.py` | Universal financial messaging |
+
+### 37.3 Trading Strategy Protocols
+
+| Strategy | Implementation | Technique |
+|----------|---------------|-----------|
+| Statistical Arbitrage | `app/strategies/statistical_arbitrage.py` | Cointegration, z-score |
+| Market Making | `app/strategies/market_making.py` | Avellaneda-Stoikov |
+| Momentum | `app/strategies/momentum.py` | Multi-timeframe EMA |
+| Mean Reversion | `app/strategies/mean_reversion.py` | Bollinger, RSI, OU |
+| Pairs Trading | `app/strategies/pairs_trading.py` | Spread trading |
+| Volatility Arbitrage | `app/strategies/volatility_arb.py` | IV vs RV |
+| Liquidity Provision | `app/strategies/liquidity_provision.py` | Orderbook analysis |
+| Cross-Asset Arbitrage | `app/strategies/cross_asset.py` | Multi-market |
+| Event-Driven | `app/strategies/event_driven.py` | Catalyst trading |
+| ML Alpha | `app/strategies/ml_alpha.py` | Ensemble ML |
+
+---
+
+## 38. Working HTTP Services
+
+PARRALAX-AIHFTFUND operates the following live HTTP services:
+
+### 38.1 AI Intelligence Service (Port 8084)
+
+**FastAPI** application providing:
+- LLM routing (OpenAI + Anthropic + Local)
+- Actuarial risk pricing and Greeks calculation
+- Trading strategy signal generation
+- Financial language message generation
+- Portfolio insurance analysis
+- Strategy lifecycle management
+- Capital reserve calculations
+
+### 38.2 Rails API (Port 3000)
+
+**Ruby on Rails** application providing:
+- Fund management and NAV tracking
+- User authentication and authorization
+- Governance proposal management
+- Strategy registry and performance
+- Audit log and compliance reporting
+
+### 38.3 Rust Execution Engine (Port 8090)
+
+**High-performance Rust** application providing:
+- Ultra-low-latency order execution
+- Real-time market data streaming (WebSocket)
+- Pre-trade risk checks
+- Order book analysis
+- Kill switch infrastructure
+
+### 38.4 ICP Backend Canister
+
+**Internet Computer** canister providing:
+- On-chain state management
+- ALOHA I protocol orchestration
+- Token operations
+- Compute receipt storage
+- Agent registry
+- Heartbeat-driven coherence
+
+See `HTTP_SERVICES_PROTOCOL.md` for complete endpoint documentation.
+
+---
+
+## 39. Research Foundation
+
+The system design is informed by 70+ foundational research papers and standards across:
+
+- Market microstructure (Almgren-Chriss, Avellaneda-Stoikov)
+- Statistical arbitrage (Gatev-Goetzmann, Engle-Granger)
+- Machine learning in finance (de Prado, Heaton-Polson)
+- Risk management (Jorion, Acerbi-Tasche, Taleb)
+- Options theory (Black-Scholes, Gatheral)
+- Blockchain/DeFi (Nakamoto, Buterin, DFINITY)
+- AI governance (Dafoe, Russell-Norvig)
+- Portfolio theory (Markowitz, Kelly, Grinold-Kahn)
+
+See `RESEARCH_PAPERS.md` for complete bibliography with citations.
+
+---
+
+## 40. Test Coverage & Verification
+
+The system maintains comprehensive test coverage:
+
+- **200+ integration tests** covering all trading strategies, financial language engines, risk management, cross-service data flows, and governance protocol validation
+- Tests verify: signal generation, order lifecycle, settlement, risk gates, capital allocation, and full trade-to-settlement pipelines
+- Test location: `services/ai-service/tests/test_comprehensive_200.py`
+
+Test categories:
+1. Momentum Strategy (20 tests)
+2. Statistical Arbitrage (15 tests)
+3. Market Making (15 tests)
+4. Mean Reversion (15 tests)
+5. Pairs Trading (10 tests)
+6. Volatility Arbitrage (10 tests)
+7. Event-Driven (10 tests)
+8. ML Alpha (10 tests)
+9. Liquidity Provision (10 tests)
+10. Cross-Asset Arbitrage (10 tests)
+11. FIX Protocol (15 tests)
+12. FpML Engine (10 tests)
+13. SWIFT Engine (8 tests)
+14. ISDA CDM (10 tests)
+15. XBRL Engine (7 tests)
+16. ISO 20022 (8 tests)
+17. Strategy Router (12 tests)
+18. Cross-Service Integration (5 tests)
+
+---
+
+## 41. Complete Document Registry
+
+| Document | Purpose | Status |
+|----------|---------|--------|
+| CHARTER.md | Master system charter | ✅ Active |
+| README.md | Repository overview | ✅ Active |
+| GOVERNANCE.md | Governance structure | ✅ Active |
+| GOVERNANCE_MACRO_PROTOCOL.md | System-wide macro governance | ✅ Active |
+| RISK.md | Risk management framework | ✅ Active |
+| SECURITY.md | Security policies | ✅ Active |
+| ETHICS_PROTOCOL.md | Ethical AI trading | ✅ Active |
+| TEMPORAL_PROTOCOL.md | Time-based operations | ✅ Active |
+| HTTP_SERVICES_PROTOCOL.md | HTTP service endpoints | ✅ Active |
+| RESEARCH_PAPERS.md | Research bibliography | ✅ Active |
+| EXECUTION_PROTOCOL.md | Order lifecycle | ✅ Active |
+| COMPUTE_RECEIPT_PROTOCOL.md | Proof of computation | ✅ Active |
+| TOKEN_PROTOCOL.md | Token operations | ✅ Active |
+| NFT_PROTOCOL.md | Digital asset operations | ✅ Active |
+| TREASURY_PROTOCOL.md | Capital management | ✅ Active |
+| AGENT_AUTHORITY_CHARTER.md | Agent permissions | ✅ Active |
+| ASSET_ISSUANCE_CHARTER.md | Asset creation rules | ✅ Active |
+| COMPLIANCE_BOUNDARY.md | Regulatory boundaries | ✅ Active |
+| ROADMAP.md | Development roadmap | ✅ Active |
+| DESIGN.md | System design | ✅ Active |
+
+---
+
+*Charter Version 2.0 — Updated with extended protocols, research references, HTTP services, and governance macro framework.*

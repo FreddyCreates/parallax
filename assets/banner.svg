@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f0c29;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#302b63;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#24243e;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="cyan" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00d2ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7b2ff7;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="goldg" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f7971e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ffd200;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <rect width="800" height="400" fill="url(#bg)"/>
+  
+  <!-- Grid pattern -->
+  <g opacity="0.05" stroke="white" stroke-width="0.5">
+    <line x1="0" y1="50" x2="800" y2="50"/><line x1="0" y1="100" x2="800" y2="100"/>
+    <line x1="0" y1="150" x2="800" y2="150"/><line x1="0" y1="200" x2="800" y2="200"/>
+    <line x1="0" y1="250" x2="800" y2="250"/><line x1="0" y1="300" x2="800" y2="300"/>
+    <line x1="0" y1="350" x2="800" y2="350"/>
+    <line x1="100" y1="0" x2="100" y2="400"/><line x1="200" y1="0" x2="200" y2="400"/>
+    <line x1="300" y1="0" x2="300" y2="400"/><line x1="400" y1="0" x2="400" y2="400"/>
+    <line x1="500" y1="0" x2="500" y2="400"/><line x1="600" y1="0" x2="600" y2="400"/>
+    <line x1="700" y1="0" x2="700" y2="400"/>
+  </g>
+  
+  <!-- Geometric icon -->
+  <polygon points="400,80 440,140 400,200 360,140" fill="none" stroke="url(#cyan)" stroke-width="3"/>
+  <polygon points="400,100 420,140 400,180 380,140" fill="url(#cyan)" opacity="0.2"/>
+  <circle cx="400" cy="140" r="12" fill="url(#goldg)" opacity="0.9"/>
+  
+  <!-- Title -->
+  <text x="400" y="260" text-anchor="middle" font-family="'SF Pro Display', 'Inter', system-ui, sans-serif" font-size="56" font-weight="800" fill="white" letter-spacing="-2">PARRALAX</text>
+  <text x="400" y="300" text-anchor="middle" font-family="'SF Pro Display', 'Inter', system-ui, sans-serif" font-size="24" font-weight="400" fill="url(#cyan)">AI HFT FUND</text>
+  <text x="400" y="340" text-anchor="middle" font-family="'SF Pro Display', 'Inter', system-ui, sans-serif" font-size="14" font-weight="300" fill="#8892b0" letter-spacing="3">SOVEREIGN AI-NATIVE FINANCIAL INFRASTRUCTURE</text>
+  
+  <!-- Decorative bars -->
+  <rect x="300" y="360" width="200" height="2" fill="url(#cyan)" rx="1" opacity="0.6"/>
+</svg>

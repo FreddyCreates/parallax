@@ -1,0 +1,43 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets: ['prometheus:9090']
+
+  - job_name: rails-api
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['rails-api:3001']
+
+  - job_name: git-service
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['git-service:8082']
+
+  - job_name: rust-engine
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['rust-engine:8083']
+
+  - job_name: ai-service
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['ai-service:8084']
+
+  - job_name: execution-engine
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['execution-engine:8081']
+
+  - job_name: trading-api
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['trading-api:8000']
+
+  - job_name: dashboard
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['dashboard:3000']
