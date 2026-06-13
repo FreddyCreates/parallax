@@ -41,6 +41,7 @@ import IntelligenceRouting "intelligence_routing";
 import IntelligenceExtensions "intelligence_extensions";
 import IntelligenceCoupling "intelligence_coupling";
 import Charter "charter";
+import TokenomicsMeasurement "tokenomics_measurement";
 
 
 
@@ -147,6 +148,12 @@ actor PARALLAX {
   // All proposals voted on-chain. Quorum phi-derived. Founder veto on emergencies.
   var charterState : Charter.CharterState = Charter.defaultCharterState();
 
+  // ── DOMAIN 39 — TOKENOMICS_MEASUREMENT_STATE ────────────────────────────
+  // Measurement & Benchmarking Framework for cognitive token allocation.
+  // Token Value Function, CRPT scoring, Salience Allocation, Compression
+  // Efficiency, Benchmark Tasks, Runtime Loop, Evaluation Criteria, Hypotheses.
+  var tokenomicsMeasurementState : TokenomicsMeasurement.TokenomicsMeasurementState = TokenomicsMeasurement.defaultTokenomicsMeasurementState();
+
 
   // ══════════════════════════════════════════════════════════════════════
   // CREATOR SUPREMACY LAW — assertCreator gate
@@ -249,6 +256,11 @@ actor PARALLAX {
       // Seal genesis hash on first beat, resolve expired proposals, check term limits.
       charterState := Charter.sealCharterHash(charterState, nowNs);
       charterState := Charter.charterHeartbeatTick(charterState, nowNs);
+
+      // ── TOKENOMICS MEASUREMENT — Domain 39: measurement loop advance ───
+      // Advance the 11-step Runtime Measurement Loop by one step per beat.
+      // Salience scoring, budget allocation, compression audit, CRPT tracking.
+      tokenomicsMeasurementState := TokenomicsMeasurement.tick(tokenomicsMeasurementState, Nat64.toNat(beat));
 
       // ── BANKING SSU beat increment — Domain 17 ───────────────────────────
       // PIL loop: upregulate weakest monitoring domain each beat
@@ -2385,5 +2397,134 @@ actor PARALLAX {
 
 
 
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // DOMAIN 39 — TOKENOMICS MEASUREMENT & BENCHMARKING FRAMEWORK
+  // Token Value Function · CRPT Scoring · Salience Allocation ·
+  // Compression Efficiency · Benchmark Tasks · Runtime Loop ·
+  // Evaluation Criteria · Research Hypotheses
+  // ══════════════════════════════════════════════════════════════════════════
+
+  /// getTokenomicsState — full measurement state snapshot
+  public query func getTokenomicsState() : async TokenomicsMeasurement.TokenomicsMeasurementState {
+    tokenomicsMeasurementState
+  };
+
+  /// computeTokenValue — compute value of a token/group given components
+  public query func computeTokenValue(
+    decisionValue    : Float,
+    actionUsefulness : Float,
+    riskReduction    : Float,
+    compressionGain  : Float,
+    memoryReuse      : Float,
+    noiseWaste       : Float,
+  ) : async Float {
+    let components : TokenomicsMeasurement.TokenValueComponents = {
+      decisionValue    = decisionValue;
+      actionUsefulness = actionUsefulness;
+      riskReduction    = riskReduction;
+      compressionGain  = compressionGain;
+      memoryReuse      = memoryReuse;
+      noiseWaste       = noiseWaste;
+    };
+    TokenomicsMeasurement.computeTokenValue(components, tokenomicsMeasurementState.tokenValueWeights)
+  };
+
+  /// computeSalienceAllocation — compute salience scores and budget allocation
+  public query func computeSalienceAllocation(
+    items       : [TokenomicsMeasurement.SalienceComponents],
+    ids         : [Text],
+    totalBudget : Nat,
+  ) : async [TokenomicsMeasurement.SalienceItem] {
+    TokenomicsMeasurement.allocateBudget(items, ids, totalBudget, tokenomicsMeasurementState.salienceWeights)
+  };
+
+  /// scoreTokenomicsInteraction — score a completed AI interaction, updates running averages
+  public shared(msg) func scoreTokenomicsInteraction(
+    dq           : Float,
+    act          : Float,
+    risk         : Float,
+    reuse        : Float,
+    learn        : Float,
+    promptTokens : Nat,
+    outputTokens : Nat,
+    infoRetained : Float,
+    actionClarity : Float,
+    riskPreserved : Float,
+    crpt_eval    : Float,
+    compFidelity : Float,
+    actionConv   : Float,
+    riskPres     : Float,
+    reuseRate    : Float,
+    ctxHygiene   : Float,
+    adaptDepth   : Float,
+    errAvoid     : Float,
+    tvDecision   : Float,
+    tvAction     : Float,
+    tvRisk       : Float,
+    tvCompression : Float,
+    tvMemory     : Float,
+    tvNoise      : Float,
+  ) : async () {
+    assertCreator(msg.caller);
+    let cr : TokenomicsMeasurement.CognitiveReturn = {
+      decisionQuality = dq;
+      actionability   = act;
+      riskControl     = risk;
+      reuseValue      = reuse;
+      learningGain    = learn;
+    };
+    let comp : TokenomicsMeasurement.CompressionComponents = {
+      informationRetained = infoRetained;
+      actionClarity       = actionClarity;
+      riskPreserved       = riskPreserved;
+    };
+    let eval_ : TokenomicsMeasurement.EvaluationCriteria = {
+      cognitiveReturnPerToken = crpt_eval;
+      compressionFidelity     = compFidelity;
+      actionConversionRate    = actionConv;
+      riskPreservation        = riskPres;
+      reuseExtractionRate     = reuseRate;
+      contextHygiene          = ctxHygiene;
+      adaptiveDepthAccuracy   = adaptDepth;
+      errorAvoidance          = errAvoid;
+    };
+    let tv : TokenomicsMeasurement.TokenValueComponents = {
+      decisionValue    = tvDecision;
+      actionUsefulness = tvAction;
+      riskReduction    = tvRisk;
+      compressionGain  = tvCompression;
+      memoryReuse      = tvMemory;
+      noiseWaste       = tvNoise;
+    };
+    tokenomicsMeasurementState := TokenomicsMeasurement.scoreInteraction(
+      tokenomicsMeasurementState, cr, promptTokens, outputTokens, comp, eval_, tv
+    );
+  };
+
+  /// recordTokenomicsBenchmark — record a tokenomic vs non-tokenomic benchmark comparison
+  public shared(msg) func recordTokenomicsBenchmark(
+    taskClass     : TokenomicsMeasurement.BenchmarkTaskClass,
+    taskLabel     : Text,
+    // System A (baseline) components
+    dqA : Float, actA : Float, riskA : Float, reuseA : Float, accA : Float, wasteA : Float,
+    tokensA : Nat,
+    // System B (tokenomic) components
+    dqB : Float, actB : Float, riskB : Float, reuseB : Float, accB : Float, wasteB : Float,
+    tokensB : Nat,
+  ) : async () {
+    assertCreator(msg.caller);
+    let compA : TokenomicsMeasurement.BenchmarkScoreComponents = {
+      decisionQuality = dqA; actionability = actA; riskControl = riskA;
+      reuseValue = reuseA; accuracy = accA; waste = wasteA;
+    };
+    let compB : TokenomicsMeasurement.BenchmarkScoreComponents = {
+      decisionQuality = dqB; actionability = actB; riskControl = riskB;
+      reuseValue = reuseB; accuracy = accB; waste = wasteB;
+    };
+    tokenomicsMeasurementState := TokenomicsMeasurement.recordBenchmark(
+      tokenomicsMeasurementState, taskClass, taskLabel, compA, tokensA, compB, tokensB
+    );
+  };
 
 };
