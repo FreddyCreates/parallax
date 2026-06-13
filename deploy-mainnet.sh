@@ -41,7 +41,12 @@ if [ "$TARGET" = "all" ] || [ "$TARGET" = "backend" ]; then
     echo ""
     echo "▸ Deploying backend canister to mainnet..."
     icp deploy --environment mainnet backend
-    export BACKEND_CANISTER_ID=$(icp canister settings show --environment mainnet --id-only backend)
+    BACKEND_CANISTER_ID=$(icp canister settings show --environment mainnet --id-only backend) || {
+        echo "ERROR: Failed to get backend canister ID. Ensure canister is created first:"
+        echo "  icp canister create --environment mainnet backend"
+        exit 1
+    }
+    export BACKEND_CANISTER_ID
     echo "  Backend canister ID: $BACKEND_CANISTER_ID"
 fi
 
@@ -49,7 +54,11 @@ fi
 if [ "$TARGET" = "all" ] || [ "$TARGET" = "frontend" ]; then
     # Get backend canister ID if not already set
     if [ -z "$BACKEND_CANISTER_ID" ]; then
-        export BACKEND_CANISTER_ID=$(icp canister settings show --environment mainnet --id-only backend)
+        BACKEND_CANISTER_ID=$(icp canister settings show --environment mainnet --id-only backend) || {
+            echo "ERROR: Backend canister not found. Deploy backend first or set BACKEND_CANISTER_ID."
+            exit 1
+        }
+        export BACKEND_CANISTER_ID
     fi
 
     FRONTEND_CANISTER_ID=$(icp canister settings show --environment mainnet --id-only frontend 2>/dev/null || echo "")
