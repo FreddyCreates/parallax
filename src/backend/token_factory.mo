@@ -45,11 +45,55 @@ module {
   // ═══════════════════════════════════════════════════════════════════════════
 
   public type CustomTokenType = {
-    #aiCompute;         // Access to AI compute
-    #aiMemory;          // AI memory allocation
-    #aiInference;       // Pay for model inference
-    #aiTraining;        // Fund model training
+    // ═══════════════════════════════════════════════════════════════════════════
+    // CORE AI INFRASTRUCTURE TOKENS
+    // ═══════════════════════════════════════════════════════════════════════════
+    #aiCompute;         // Access to AI compute cycles
+    #aiMemory;          // AI memory allocation (VRAM/RAM)
+    #aiInference;       // Pay for model inference calls
+    #aiTraining;        // Fund model training epochs
     #aiData;            // Curated dataset access
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // ADVANCED AI RESOURCE TOKENS
+    // ═══════════════════════════════════════════════════════════════════════════
+    #aiGPU;             // GPU hours allocation (H100, A100, etc.)
+    #aiTPU;             // TPU access for large-scale training
+    #aiBandwidth;       // Network bandwidth for distributed training
+    #aiStorage;         // Persistent storage for models/data
+    #aiFineTune;        // Fine-tuning credits for foundation models
+    #aiEmbedding;       // Vector embedding generation credits
+    #aiRAG;             // Retrieval-augmented generation queries
+    #aiAgent;           // Autonomous AI agent execution time
+    #aiOrchestration;   // Multi-agent orchestration credits
+    #aiReasoningChain;  // Chain-of-thought reasoning credits
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // SPECIALIZED AI CAPABILITY TOKENS
+    // ═══════════════════════════════════════════════════════════════════════════
+    #aiVision;          // Image/video processing credits
+    #aiAudio;           // Speech-to-text/text-to-speech credits
+    #aiCodeGen;         // Code generation/completion tokens
+    #aiTranslation;     // Multi-language translation credits
+    #aiSentiment;       // Sentiment analysis credits
+    #aiAnomaly;         // Anomaly detection credits
+    #aiPrediction;      // Time-series prediction credits
+    #aiOptimization;    // Optimization algorithm credits
+    #aiSimulation;      // Simulation/synthetic data generation
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // AI GOVERNANCE & QUALITY TOKENS
+    // ═══════════════════════════════════════════════════════════════════════════
+    #aiModelVote;       // Voting rights on model selection
+    #aiDatasetVote;     // Voting rights on training data
+    #aiSafetyAudit;     // Safety/alignment audit credits
+    #aiRedTeam;         // Red-teaming/adversarial testing credits
+    #aiBenchmark;       // Model benchmarking credits
+    #aiCertification;   // Model certification/attestation
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // STANDARD TOKEN TYPES
+    // ═══════════════════════════════════════════════════════════════════════════
     #creatorPersonal;   // Personal creator token
     #artifactBacked;    // Backed by specific AI artifact
     #governance;        // DAO voting rights
@@ -162,9 +206,10 @@ module {
   // ═══════════════════════════════════════════════════════════════════════════
 
   public func defaultTokenFactoryState() : TokenFactoryState {
+    let tokens = genesisTokens();
     {
-      tokens               = genesisTokens();
-      totalTokensCreated   = 5;
+      tokens               = tokens;
+      totalTokensCreated   = tokens.size(); // dynamically computed from array
       holderBalances       = [];
       mintEvents           = [];
       burnEvents           = [];
@@ -181,13 +226,54 @@ module {
   };
 
   // Genesis AI tokens — pre-seeded at organism birth
+  // All supply caps are Fibonacci numbers × phi powers for sovereign harmony
   func genesisTokens() : [(Text, TokenDefinition)] {
     [
+      // ═══════════════════════════════════════════════════════════════════════════
+      // CORE AI INFRASTRUCTURE TOKENS (Fibonacci: 21, 34, 55, 89, 144)
+      // ═══════════════════════════════════════════════════════════════════════════
       mkToken("TKN-AICPU", "AICPU", "AI Compute Token", "Access to sovereign AI compute resources — 1 token = 1 compute unit per beat", #aiCompute, 89000000.0),
       mkToken("TKN-AIMEM", "AIMEM", "AI Memory Token", "Allocated memory for AI operations — 1 token = 1MB persistent memory", #aiMemory, 55000000.0),
       mkToken("TKN-AIINF", "AIINF", "AI Inference Token", "Pay for inference calls to any sovereign model — 1 token = 1 inference", #aiInference, 144000000.0),
       mkToken("TKN-AITRAIN", "AITRAIN", "AI Training Token", "Fund training runs for new models — 1 token = 1 training epoch", #aiTraining, 34000000.0),
       mkToken("TKN-AIDATA", "AIDATA", "AI Data Token", "Access to curated training datasets — 1 token = 1 dataset query", #aiData, 21000000.0),
+
+      // ═══════════════════════════════════════════════════════════════════════════
+      // ADVANCED AI RESOURCE TOKENS (Fibonacci: 13, 21, 34, 55, 89)
+      // ═══════════════════════════════════════════════════════════════════════════
+      mkToken("TKN-AIGPU", "AIGPU", "AI GPU Token", "GPU hours allocation (H100, A100, L40S) — 1 token = 1 GPU-hour", #aiGPU, 13000000.0),
+      mkToken("TKN-AITPU", "AITPU", "AI TPU Token", "TPU access for large-scale training — 1 token = 1 TPU-hour", #aiTPU, 8000000.0),
+      mkToken("TKN-AIBW", "AIBW", "AI Bandwidth Token", "Network bandwidth for distributed training — 1 token = 1GB transfer", #aiBandwidth, 34000000.0),
+      mkToken("TKN-AIST", "AIST", "AI Storage Token", "Persistent storage for models/data — 1 token = 1GB-month", #aiStorage, 55000000.0),
+      mkToken("TKN-AIFT", "AIFT", "AI Fine-Tune Token", "Fine-tuning credits for foundation models — 1 token = 1 fine-tune job", #aiFineTune, 21000000.0),
+      mkToken("TKN-AIEMB", "AIEMB", "AI Embedding Token", "Vector embedding generation — 1 token = 1000 embeddings", #aiEmbedding, 89000000.0),
+      mkToken("TKN-AIRAG", "AIRAG", "AI RAG Token", "Retrieval-augmented generation queries — 1 token = 1 RAG query", #aiRAG, 144000000.0),
+      mkToken("TKN-AIAGENT", "AIAGENT", "AI Agent Token", "Autonomous AI agent execution — 1 token = 1 agent-minute", #aiAgent, 34000000.0),
+      mkToken("TKN-AIORCH", "AIORCH", "AI Orchestration Token", "Multi-agent orchestration — 1 token = 1 orchestration cycle", #aiOrchestration, 21000000.0),
+      mkToken("TKN-AICHAIN", "AICHAIN", "AI Reasoning Chain Token", "Chain-of-thought reasoning — 1 token = 1 reasoning chain", #aiReasoningChain, 55000000.0),
+
+      // ═══════════════════════════════════════════════════════════════════════════
+      // SPECIALIZED AI CAPABILITY TOKENS (Fibonacci: 5, 8, 13, 21, 34)
+      // ═══════════════════════════════════════════════════════════════════════════
+      mkToken("TKN-AIVIS", "AIVIS", "AI Vision Token", "Image/video processing — 1 token = 1 image/10 video frames", #aiVision, 34000000.0),
+      mkToken("TKN-AIAUD", "AIAUD", "AI Audio Token", "Speech-to-text/text-to-speech — 1 token = 1 minute audio", #aiAudio, 21000000.0),
+      mkToken("TKN-AICODE", "AICODE", "AI Code Generation Token", "Code generation/completion — 1 token = 1 code completion", #aiCodeGen, 89000000.0),
+      mkToken("TKN-AITRANS", "AITRANS", "AI Translation Token", "Multi-language translation — 1 token = 1000 characters", #aiTranslation, 55000000.0),
+      mkToken("TKN-AISENT", "AISENT", "AI Sentiment Token", "Sentiment analysis — 1 token = 1 sentiment analysis", #aiSentiment, 13000000.0),
+      mkToken("TKN-AIANOM", "AIANOM", "AI Anomaly Token", "Anomaly detection — 1 token = 1 anomaly scan", #aiAnomaly, 8000000.0),
+      mkToken("TKN-AIPRED", "AIPRED", "AI Prediction Token", "Time-series prediction — 1 token = 1 prediction window", #aiPrediction, 34000000.0),
+      mkToken("TKN-AIOPT", "AIOPT", "AI Optimization Token", "Optimization algorithm — 1 token = 1 optimization run", #aiOptimization, 21000000.0),
+      mkToken("TKN-AISIM", "AISIM", "AI Simulation Token", "Simulation/synthetic data — 1 token = 1000 synthetic samples", #aiSimulation, 55000000.0),
+
+      // ═══════════════════════════════════════════════════════════════════════════
+      // AI GOVERNANCE & QUALITY TOKENS (Fibonacci: 3, 5, 8, 13)
+      // ═══════════════════════════════════════════════════════════════════════════
+      mkToken("TKN-AIMVOTE", "AIMVOTE", "AI Model Vote Token", "Voting rights on model selection — 1 token = 1 vote", #aiModelVote, 5000000.0),
+      mkToken("TKN-AIDVOTE", "AIDVOTE", "AI Dataset Vote Token", "Voting rights on training data — 1 token = 1 vote", #aiDatasetVote, 5000000.0),
+      mkToken("TKN-AISAFE", "AISAFE", "AI Safety Audit Token", "Safety/alignment audit — 1 token = 1 audit credit", #aiSafetyAudit, 3000000.0),
+      mkToken("TKN-AIRED", "AIRED", "AI Red Team Token", "Red-teaming/adversarial testing — 1 token = 1 red-team session", #aiRedTeam, 3000000.0),
+      mkToken("TKN-AIBENCH", "AIBENCH", "AI Benchmark Token", "Model benchmarking — 1 token = 1 benchmark suite run", #aiBenchmark, 8000000.0),
+      mkToken("TKN-AICERT", "AICERT", "AI Certification Token", "Model certification/attestation — 1 token = 1 certification", #aiCertification, 5000000.0),
     ]
   };
 

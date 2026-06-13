@@ -1,0 +1,71 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: >-
+  PARALLAX Exchange Clearinghouse: AI-First Sovereign
+  Decentralized Exchange
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - name: ItsNotAILABS
+    email: MedinaSITech@outlook.com
+  - given-names: Alfredo
+    family-names: Medina Hernandez
+    email: MedinaSITech@outlook.com
+    affiliation: PARALLAX Sovereign Organism
+repository-code: >-
+  https://github.com/ItsNotAILABS/PARALLAX-Exchange-Clearinghouse
+url: 'https://github.com/ItsNotAILABS/PARALLAX-Exchange-Clearinghouse'
+abstract: >-
+  PARALLAX is a next-generation AI-native decentralized
+  exchange built on the Internet Computer Protocol (ICP).
+  Unlike traditional DEXs, PARALLAX operates as a sovereign
+  organism — an autonomous system where intelligence IS the
+  infrastructure. Key features include zero gas fees,
+  873ms instant settlement, AI-first architecture with
+  Phantom Intelligence Engine, real-time clearinghouse with
+  multi-asset netting, 24 Latin-named production engines
+  with 93 AI model instances, and universal token trading
+  supporting crypto, AI tokens, AI artifacts, creator tokens,
+  stablecoins, and real world assets. All system parameters
+  are derived from the Golden Ratio (φ = 1.6180339887) and
+  Schumann Resonance (7.83 Hz).
+keywords:
+  - decentralized exchange
+  - DEX
+  - Internet Computer Protocol
+  - ICP
+  - Motoko
+  - artificial intelligence
+  - AI finance
+  - blockchain
+  - DeFi
+  - golden ratio
+  - phi
+  - Kuramoto synchronization
+  - multi-model AI
+  - production engines
+  - clearinghouse
+  - zero gas fees
+  - real-time settlement
+  - token factory
+  - AI artifacts
+  - sovereign organism
+license: LicenseRef-PARALLAX-Sovereign
+version: 0.1.0
+date-released: '2026-05-25'
+preferred-citation:
+  type: software
+  title: >-
+    PARALLAX Exchange Clearinghouse: AI-First Sovereign
+    Decentralized Exchange
+  authors:
+    - name: ItsNotAILABS
+    - given-names: Alfredo
+      family-names: Medina Hernandez
+  year: 2026
+  version: 0.1.0
+  url: 'https://github.com/ItsNotAILABS/PARALLAX-Exchange-Clearinghouse'

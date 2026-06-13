@@ -34,16 +34,94 @@ module {
   // ═══════════════════════════════════════════════════════════════════════════
 
   public type ArtifactType = {
-    #sovereignModel;      // A trained sovereign model from the model registry
-    #vectorEmbedding;     // A semantic embedding (knowledge encoded as vectors)
-    #reasoningProtocol;   // An executable reasoning protocol (steps + gates)
-    #cognitiveOutput;     // A completed cognition output (answer, analysis, creation)
-    #trainingDataset;     // Curated training data
-    #predictionRecord;    // A verified prediction with outcome proof
-    #compositeAgent;      // A multi-model agent composition
-    #generativeArt;       // AI-generated creative work (art, music, text)
-    #knowledgeGraph;      // Structured knowledge relationships
-    #simulationResult;    // Results from organism simulation runs
+    // ═══════════════════════════════════════════════════════════════════════════
+    // FOUNDATION AI ARTIFACTS
+    // ═══════════════════════════════════════════════════════════════════════════
+    #sovereignModel;        // A trained sovereign model from the model registry
+    #vectorEmbedding;       // A semantic embedding (knowledge encoded as vectors)
+    #reasoningProtocol;     // An executable reasoning protocol (steps + gates)
+    #cognitiveOutput;       // A completed cognition output (answer, analysis, creation)
+    #trainingDataset;       // Curated training data
+    #predictionRecord;      // A verified prediction with outcome proof
+    #compositeAgent;        // A multi-model agent composition
+    #generativeArt;         // AI-generated creative work (art, music, text)
+    #knowledgeGraph;        // Structured knowledge relationships
+    #simulationResult;      // Results from organism simulation runs
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // ADVANCED MODEL ARTIFACTS
+    // ═══════════════════════════════════════════════════════════════════════════
+    #foundationModel;       // Large foundation model (GPT, Claude, Llama, etc.)
+    #fineTunedModel;        // Fine-tuned derivative of a foundation model
+    #loraAdapter;           // LoRA/QLoRA adapter weights
+    #modelMerge;            // Merged model from multiple sources (TIES, SLERP, etc.)
+    #quantizedModel;        // Quantized model (GPTQ, AWQ, GGUF)
+    #distilledModel;        // Knowledge-distilled compact model
+    #multiModalModel;       // Multi-modal (vision+text, audio+text)
+    #specialistModel;       // Domain-specialist model (medical, legal, code)
+    #alignedModel;          // RLHF/DPO aligned model checkpoint
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // AUTONOMOUS AGENT ARTIFACTS
+    // ═══════════════════════════════════════════════════════════════════════════
+    #autonomousAgent;       // Full autonomous agent with tools and memory
+    #agentToolkit;          // Toolkit/plugin set for agents
+    #agentMemory;           // Agent long-term memory store
+    #agentPersona;          // Agent personality/persona configuration
+    #agentWorkflow;         // Multi-step agent workflow definition
+    #agentOrchestrator;     // Multi-agent orchestration system
+    #agentEvaluator;        // Agent performance evaluation system
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // RAG & KNOWLEDGE ARTIFACTS
+    // ═══════════════════════════════════════════════════════════════════════════
+    #ragPipeline;           // Complete RAG pipeline (retriever + generator)
+    #vectorDatabase;        // Indexed vector database (Pinecone, Weaviate, etc.)
+    #embeddingModel;        // Specialized embedding model
+    #rerankerModel;         // Cross-encoder reranking model
+    #chunkerProtocol;       // Document chunking/splitting protocol
+    #knowledgeBase;         // Curated knowledge base for RAG
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // PROMPT & EVALUATION ARTIFACTS
+    // ═══════════════════════════════════════════════════════════════════════════
+    #promptTemplate;        // Engineered prompt template
+    #promptLibrary;         // Collection of optimized prompts
+    #fewShotExamples;       // Few-shot learning example sets
+    #evaluationSuite;       // Model evaluation benchmark suite
+    #testHarness;           // Automated testing harness
+    #redTeamDataset;        // Adversarial/red-team test dataset
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // TRAINING & DATA ARTIFACTS
+    // ═══════════════════════════════════════════════════════════════════════════
+    #syntheticDataset;      // AI-generated synthetic training data
+    #labeledDataset;        // Human-labeled training dataset
+    #preferenceDataset;     // Human preference data for RLHF/DPO
+    #instructionDataset;    // Instruction-tuning dataset
+    #codeDataset;           // Code/programming training data
+    #multilingualDataset;   // Multi-language training data
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // CREATIVE & GENERATIVE ARTIFACTS
+    // ═══════════════════════════════════════════════════════════════════════════
+    #imageGenModel;         // Image generation model (SDXL, DALL-E, Midjourney)
+    #videoGenModel;         // Video generation model (Sora, Runway)
+    #audioGenModel;         // Audio/music generation model
+    #codeGenModel;          // Code generation model (Codex, StarCoder)
+    #threeDGenModel;        // 3D asset generation model
+    #motionGenModel;        // Motion/animation generation model
+    #textToSpeechModel;     // TTS voice model
+    #voiceClone;            // Cloned voice model
+
+    // ═══════════════════════════════════════════════════════════════════════════
+    // SAFETY & ALIGNMENT ARTIFACTS
+    // ═══════════════════════════════════════════════════════════════════════════
+    #safetyFilter;          // Content safety/moderation model
+    #alignmentProtocol;     // Constitutional AI/alignment protocol
+    #guardrailConfig;       // Guardrail configuration for safe deployment
+    #toxicityClassifier;    // Toxicity detection classifier
+    #biasAuditReport;       // Model bias audit report
   };
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -136,14 +214,15 @@ module {
   // ═══════════════════════════════════════════════════════════════════════════
 
   public func defaultAiArtifactRegistryState() : AiArtifactRegistryState {
+    let artifacts = genesisArtifacts();
     {
-      artifacts            = genesisArtifacts();
-      totalArtifacts       = 5;
+      artifacts            = artifacts;
+      totalArtifacts       = artifacts.size(); // dynamically computed from array
       listings             = [];
       totalListings        = 0;
       totalSales           = 0;
       totalRoyaltiesPaid   = 0.0;
-      creators             = [("alfredo-medina", defaultCreatorProfile())];
+      creators             = [("alfredo-medina", defaultCreatorProfile(artifacts.size()))];
       totalCreators        = 1;
       totalMarketCap       = 0.0;
       totalVolume          = 0.0;
@@ -152,11 +231,20 @@ module {
     }
   };
 
-  func defaultCreatorProfile() : CreatorProfile {
+  // Dynamically generate artifact IDs based on count
+  func generateArtifactIds(count : Nat) : [Text] {
+    Array.tabulate<Text>(count, func (i : Nat) : Text {
+      let num = i + 1;
+      let padded = if (num < 10) { "00" # Nat.toText(num) } else if (num < 100) { "0" # Nat.toText(num) } else { Nat.toText(num) };
+      "ART-GENESIS-" # padded
+    })
+  };
+
+  func defaultCreatorProfile(artifactCount : Nat) : CreatorProfile {
     {
       principal        = "alfredo-medina";
       displayName      = "Alfredo Medina Hernandez — The Architect of the Field";
-      artifactsCreated = ["ART-GENESIS-001", "ART-GENESIS-002", "ART-GENESIS-003", "ART-GENESIS-004", "ART-GENESIS-005"];
+      artifactsCreated = generateArtifactIds(artifactCount);
       totalRoyalties   = 0.0;
       reputationScore  = 1.0; // sovereign creator — maximum reputation
       memberSinceBeat  = 0;
@@ -164,13 +252,62 @@ module {
   };
 
   // Genesis artifacts — the founding AI artifacts of PARALLAX
+  // 30 genesis artifact instances (out of 55 artifact types) covering all major categories
   func genesisArtifacts() : [(Text, ArtifactRecord)] {
     [
+      // ═══════════════════════════════════════════════════════════════════════════
+      // FOUNDATION AI ARTIFACTS (IDs 001-010)
+      // ═══════════════════════════════════════════════════════════════════════════
       ("ART-GENESIS-001", mkArtifact("ART-GENESIS-001", "PHI Sovereign Model", "The foundational phi-family model governing all coupling constants", #sovereignModel, "PHI-001", 1000000.0)),
       ("ART-GENESIS-002", mkArtifact("ART-GENESIS-002", "Kuramoto Synchronization Protocol", "The universal sync protocol — R computation and coherence gating", #reasoningProtocol, "KURA-001", 500000.0)),
       ("ART-GENESIS-003", mkArtifact("ART-GENESIS-003", "PARALLAX Vector Space", "64-dim phi-seeded embedding space for all sovereign models", #vectorEmbedding, "VEC-001", 750000.0)),
       ("ART-GENESIS-004", mkArtifact("ART-GENESIS-004", "Enteric Standing Wave Set", "8 cosmological standing waves — the Third Brain's permanent residents", #knowledgeGraph, "ENT-001", 300000.0)),
       ("ART-GENESIS-005", mkArtifact("ART-GENESIS-005", "Cognition Layer World Model", "The CNS live world-model rebuilt every 873ms", #cognitiveOutput, "COG-001", 2000000.0)),
+      ("ART-GENESIS-006", mkArtifact("ART-GENESIS-006", "PARALLAX Training Corpus", "Curated sovereign training dataset — 10M tokens of phi-aligned text", #trainingDataset, "DATA-001", 1500000.0)),
+      ("ART-GENESIS-007", mkArtifact("ART-GENESIS-007", "Harmonic Wave Predictor", "Time-series prediction model using Schumann harmonics", #predictionRecord, "PRED-001", 800000.0)),
+      ("ART-GENESIS-008", mkArtifact("ART-GENESIS-008", "Sovereign Art Genesis", "AI-generated phi-harmonic visual art collection", #generativeArt, "ART-001", 600000.0)),
+      ("ART-GENESIS-009", mkArtifact("ART-GENESIS-009", "Market Simulation Engine", "Monte Carlo market simulation with 10M epochs", #simulationResult, "SIM-001", 900000.0)),
+      ("ART-GENESIS-010", mkArtifact("ART-GENESIS-010", "Multi-Model Agent Ensemble", "Composite agent with 12 specialized sub-models", #compositeAgent, "AGENT-001", 1200000.0)),
+
+      // ═══════════════════════════════════════════════════════════════════════════
+      // ADVANCED MODEL ARTIFACTS (IDs 011-015)
+      // ═══════════════════════════════════════════════════════════════════════════
+      ("ART-GENESIS-011", mkArtifact("ART-GENESIS-011", "PARALLAX Foundation Model", "7B parameter foundation model trained on sovereign corpus", #foundationModel, "FOUND-001", 5000000.0)),
+      ("ART-GENESIS-012", mkArtifact("ART-GENESIS-012", "Phi-Tuned Finance Model", "Fine-tuned model for phi-harmonic financial analysis", #fineTunedModel, "FINE-001", 2500000.0)),
+      ("ART-GENESIS-013", mkArtifact("ART-GENESIS-013", "Sovereign LoRA Adapter", "LoRA weights for domain adaptation to sovereign doctrine", #loraAdapter, "LORA-001", 400000.0)),
+      ("ART-GENESIS-014", mkArtifact("ART-GENESIS-014", "Quantized Inference Model", "4-bit GPTQ quantized model for efficient edge inference", #quantizedModel, "QUANT-001", 350000.0)),
+      ("ART-GENESIS-015", mkArtifact("ART-GENESIS-015", "RLHF Aligned Model", "DPO-aligned model with phi-harmonic reward shaping", #alignedModel, "ALIGN-001", 3000000.0)),
+
+      // ═══════════════════════════════════════════════════════════════════════════
+      // AUTONOMOUS AGENT ARTIFACTS (IDs 016-020)
+      // ═══════════════════════════════════════════════════════════════════════════
+      ("ART-GENESIS-016", mkArtifact("ART-GENESIS-016", "Sovereign Trade Agent", "Autonomous agent for executing phi-gated trades", #autonomousAgent, "TRADER-001", 1800000.0)),
+      ("ART-GENESIS-017", mkArtifact("ART-GENESIS-017", "Agent Tool Registry", "Comprehensive toolkit with 50+ verified tools", #agentToolkit, "TOOLS-001", 700000.0)),
+      ("ART-GENESIS-018", mkArtifact("ART-GENESIS-018", "Persistent Agent Memory", "Long-term memory store with semantic retrieval", #agentMemory, "MEM-001", 500000.0)),
+      ("ART-GENESIS-019", mkArtifact("ART-GENESIS-019", "Market Maker Workflow", "Multi-step workflow for automated market making", #agentWorkflow, "FLOW-001", 650000.0)),
+      ("ART-GENESIS-020", mkArtifact("ART-GENESIS-020", "Multi-Agent Orchestrator", "Orchestration system for coordinating 12 specialist agents", #agentOrchestrator, "ORCH-001", 1100000.0)),
+
+      // ═══════════════════════════════════════════════════════════════════════════
+      // RAG & KNOWLEDGE ARTIFACTS (IDs 021-024)
+      // ═══════════════════════════════════════════════════════════════════════════
+      ("ART-GENESIS-021", mkArtifact("ART-GENESIS-021", "Sovereign RAG Pipeline", "Complete RAG pipeline with phi-optimized retrieval", #ragPipeline, "RAG-001", 1400000.0)),
+      ("ART-GENESIS-022", mkArtifact("ART-GENESIS-022", "PARALLAX Vector DB", "1B vector database indexed with HNSW", #vectorDatabase, "VECDB-001", 2200000.0)),
+      ("ART-GENESIS-023", mkArtifact("ART-GENESIS-023", "Sovereign Embedding Model", "384-dim embedding model optimized for financial text", #embeddingModel, "EMBED-001", 800000.0)),
+      ("ART-GENESIS-024", mkArtifact("ART-GENESIS-024", "Doctrine Knowledge Base", "Complete sovereign law knowledge base for RAG", #knowledgeBase, "KB-001", 950000.0)),
+
+      // ═══════════════════════════════════════════════════════════════════════════
+      // CREATIVE & GENERATIVE ARTIFACTS (IDs 025-027)
+      // ═══════════════════════════════════════════════════════════════════════════
+      ("ART-GENESIS-025", mkArtifact("ART-GENESIS-025", "Phi-Harmonic Image Generator", "SDXL fine-tuned for sacred geometry generation", #imageGenModel, "IMGGEN-001", 1600000.0)),
+      ("ART-GENESIS-026", mkArtifact("ART-GENESIS-026", "Sovereign Code Generator", "Code generation model for Motoko and TypeScript", #codeGenModel, "CODEGEN-001", 1900000.0)),
+      ("ART-GENESIS-027", mkArtifact("ART-GENESIS-027", "Schumann Audio Generator", "Audio model for 7.83Hz harmonic soundscapes", #audioGenModel, "AUDIOGEN-001", 700000.0)),
+
+      // ═══════════════════════════════════════════════════════════════════════════
+      // SAFETY & EVALUATION ARTIFACTS (IDs 028-030)
+      // ═══════════════════════════════════════════════════════════════════════════
+      ("ART-GENESIS-028", mkArtifact("ART-GENESIS-028", "Sovereign Safety Filter", "Content moderation aligned with sovereign law", #safetyFilter, "SAFETY-001", 600000.0)),
+      ("ART-GENESIS-029", mkArtifact("ART-GENESIS-029", "Model Evaluation Suite", "Comprehensive benchmark suite for sovereign models", #evaluationSuite, "EVAL-001", 450000.0)),
+      ("ART-GENESIS-030", mkArtifact("ART-GENESIS-030", "Constitutional Guardrails", "Guardrail config enforcing 49 sovereign laws", #guardrailConfig, "GUARD-001", 550000.0)),
     ]
   };
 

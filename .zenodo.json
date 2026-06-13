@@ -1,0 +1,73 @@
+{
+  "title": "PARALLAX Exchange Clearinghouse: AI-First Sovereign Decentralized Exchange",
+  "description": "<p>PARALLAX is a next-generation AI-native decentralized exchange built on the Internet Computer Protocol (ICP). Unlike traditional DEXs, PARALLAX operates as a sovereign organism — an autonomous system where intelligence IS the infrastructure.</p>\n\n<h3>Key Features</h3>\n<ul>\n<li><strong>Zero Gas Fees</strong> — The organism pays all costs via ICP canister cycles</li>\n<li><strong>873ms Instant Settlement</strong> — Heartbeat-driven cryptographic finality derived from φ⁴ × (1000/7.83Hz)</li>\n<li><strong>AI-First Architecture</strong> — Phantom Intelligence Engine reasons about all trades</li>\n<li><strong>Real-Time Clearinghouse</strong> — Multi-asset netting, cross-chain settlement (ICP ↔ ckBTC ↔ ckETH)</li>\n<li><strong>24 Production Engines</strong> — Latin-named AI production engines with 93 model instances</li>\n<li><strong>Universal Token Trading</strong> — Crypto, AI tokens, AI artifacts, creator tokens, stablecoins, RWAs</li>\n</ul>\n\n<h3>Mathematical Foundation</h3>\n<p>All system parameters are derived from the Golden Ratio (φ = 1.6180339887...) and Schumann Resonance (7.83 Hz), ensuring harmonic operation grounded in natural mathematical constants.</p>\n\n<h3>Technology Stack</h3>\n<ul>\n<li><strong>Backend:</strong> Motoko on Internet Computer Protocol</li>\n<li><strong>Frontend:</strong> React + TypeScript + Tailwind CSS + Vite</li>\n<li><strong>Infrastructure:</strong> ICP Canisters with orthogonal persistence</li>\n<li><strong>AI Models:</strong> Multi-architecture ensembles (Transformer, Diffusion, GNN, RL, Bayesian)</li>\n</ul>",
+  "upload_type": "software",
+  "publication_type": "softwaredocumentation",
+  "creators": [
+    {
+      "name": "ItsNotAILABS",
+      "affiliation": "PARALLAX Sovereign Organism"
+    },
+    {
+      "name": "Medina Hernandez, Alfredo",
+      "affiliation": "PARALLAX Sovereign Organism"
+    }
+  ],
+  "version": "0.1.0",
+  "access_right": "open",
+  "license": "other-open",
+  "keywords": [
+    "decentralized exchange",
+    "DEX",
+    "Internet Computer Protocol",
+    "ICP",
+    "Motoko",
+    "artificial intelligence",
+    "AI finance",
+    "blockchain",
+    "DeFi",
+    "golden ratio",
+    "phi",
+    "Kuramoto synchronization",
+    "multi-model AI",
+    "production engines",
+    "clearinghouse",
+    "zero gas fees",
+    "real-time settlement",
+    "token factory",
+    "AI artifacts",
+    "sovereign organism"
+  ],
+  "notes": "This software is released under the PARALLAX Sovereign License v1.0. Commercial use requires a separate license agreement.",
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/ItsNotAILABS/PARALLAX-Exchange-Clearinghouse",
+      "relation": "isSupplementTo",
+      "resource_type": "software",
+      "scheme": "url"
+    }
+  ],
+  "subjects": [
+    {
+      "term": "Decentralized Finance",
+      "identifier": "https://id.loc.gov/authorities/subjects/sh2019001279",
+      "scheme": "url"
+    },
+    {
+      "term": "Artificial Intelligence",
+      "identifier": "https://id.loc.gov/authorities/subjects/sh85008180",
+      "scheme": "url"
+    },
+    {
+      "term": "Blockchain",
+      "identifier": "https://id.loc.gov/authorities/subjects/sh2016002315",
+      "scheme": "url"
+    }
+  ],
+  "language": "eng",
+  "communities": [
+    {
+      "identifier": "zenodo"
+    }
+  ]
+}

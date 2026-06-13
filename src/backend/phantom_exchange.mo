@@ -181,9 +181,10 @@ module {
   // ═══════════════════════════════════════════════════════════════════════════
 
   public func defaultPhantomExchangeState() : PhantomExchangeState {
+    let pairs = defaultTradingPairs();
     {
-      pairs                = defaultTradingPairs();
-      totalPairs           = 26; // 12 sovereign + 4 external + 10 AI pairs
+      pairs                = pairs;
+      totalPairs           = pairs.size();
       orderBooks           = [];
       nextOrderId          = 1;
       totalOrdersPlaced    = 0;
@@ -239,6 +240,31 @@ module {
       mkPair("AIINF_ICP", "AIINF", "ICP", #aiToken, #crypto, 0.0001),
       mkPair("AITRAIN_ICP", "AITRAIN", "ICP", #aiToken, #crypto, 0.0001),
       mkPair("AIDATA_ICP", "AIDATA", "ICP", #aiToken, #crypto, 0.0001),
+      mkPair("AIGPU_ICP", "AIGPU", "ICP", #aiToken, #crypto, 0.0001),
+      mkPair("AITPU_ICP", "AITPU", "ICP", #aiToken, #crypto, 0.0001),
+      mkPair("AIBW_ICP", "AIBW", "ICP", #aiToken, #crypto, 0.0001),
+      mkPair("AIST_ICP", "AIST", "ICP", #aiToken, #crypto, 0.0001),
+      mkPair("AIFT_ICP", "AIFT", "ICP", #aiToken, #crypto, 0.0001),
+      mkPair("AIEMB_ICP", "AIEMB", "ICP", #aiToken, #crypto, 0.0001),
+      mkPair("AIRAG_ICP", "AIRAG", "ICP", #aiToken, #crypto, 0.0001),
+      mkPair("AIAGENT_ICP", "AIAGENT", "ICP", #aiToken, #crypto, 0.0001),
+      mkPair("AIORCH_ICP", "AIORCH", "ICP", #aiToken, #crypto, 0.0001),
+      mkPair("AICHAIN_ICP", "AICHAIN", "ICP", #aiToken, #crypto, 0.0001),
+      mkPair("AIVIS_ICP", "AIVIS", "ICP", #aiToken, #crypto, 0.0001),
+      mkPair("AIAUD_ICP", "AIAUD", "ICP", #aiToken, #crypto, 0.0001),
+      mkPair("AICODE_ICP", "AICODE", "ICP", #aiToken, #crypto, 0.0001),
+      mkPair("AITRANS_ICP", "AITRANS", "ICP", #aiToken, #crypto, 0.0001),
+      mkPair("AISENT_ICP", "AISENT", "ICP", #aiToken, #crypto, 0.0001),
+      mkPair("AIANOM_ICP", "AIANOM", "ICP", #aiToken, #crypto, 0.0001),
+      mkPair("AIPRED_ICP", "AIPRED", "ICP", #aiToken, #crypto, 0.0001),
+      mkPair("AIOPT_ICP", "AIOPT", "ICP", #aiToken, #crypto, 0.0001),
+      mkPair("AISIM_ICP", "AISIM", "ICP", #aiToken, #crypto, 0.0001),
+      mkPair("AIMVOTE_ICP", "AIMVOTE", "ICP", #governanceToken, #crypto, 0.0001),
+      mkPair("AIDVOTE_ICP", "AIDVOTE", "ICP", #governanceToken, #crypto, 0.0001),
+      mkPair("AISAFE_ICP", "AISAFE", "ICP", #governanceToken, #crypto, 0.0001),
+      mkPair("AIRED_ICP", "AIRED", "ICP", #governanceToken, #crypto, 0.0001),
+      mkPair("AIBENCH_ICP", "AIBENCH", "ICP", #governanceToken, #crypto, 0.0001),
+      mkPair("AICERT_ICP", "AICERT", "ICP", #governanceToken, #crypto, 0.0001),
       // AI Artifact pairs (tokenized AI outputs)
       mkPair("AIMDL_MTC", "AIMDL", "MTC", #aiArtifact, #sovereignToken, 0.001),
       mkPair("AIEMB_MTC", "AIEMB", "MTC", #aiArtifact, #sovereignToken, 0.001),
@@ -539,6 +565,7 @@ module {
     tickSize  : Float,
     beat      : Int,
   ) : PhantomExchangeState {
+    if (hasTradingPair(state, pairId)) { return state };
     let pair : TradingPair = {
       pairId        = pairId;
       baseToken     = base;
@@ -558,6 +585,13 @@ module {
       state with
       pairs      = Array.append(state.pairs, [(pairId, pair)]);
       totalPairs = state.totalPairs + 1;
+    }
+  };
+
+  func hasTradingPair(state : PhantomExchangeState, pairId : Text) : Bool {
+    switch (Array.find<(Text, TradingPair)>(state.pairs, func (p) { p.0 == pairId })) {
+      case null { false };
+      case (?_) { true };
     }
   };
 
