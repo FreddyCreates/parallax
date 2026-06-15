@@ -83,6 +83,9 @@ import GovernanceLaws "governance_laws";
 import RuntimeGovernance "runtime_governance";
 import FormalVerification "formal_verification";
 import Homeostat "homeostat";
+import GameTheory "game_theory";
+import QuantModels "quantitative_models";
+import FundManager "fund_manager";
 
 
 
@@ -2991,6 +2994,194 @@ actor PARALLAX {
     );
   };
 
+  // ══════════════════════════════════════════════════════════════════════════
+  // QUANTITATIVE TRADING & GAME THEORY ENDPOINTS
+  // ══════════════════════════════════════════════════════════════════════════
+
+  /// Solve 2x2 Nash equilibrium game (game theory)
+  public func solveTwoPlayerGame(
+    payoff1: [[Float]],
+    payoff2: [[Float]]
+  ) : async {
+    strategy1: [Float];
+    strategy2: [Float];
+    payoff1: Float;
+    payoff2: Float;
+    isPure: Bool;
+  } {
+    let equilibrium = GameTheory.solve2x2Game(payoff1, payoff2);
+    {
+      strategy1 = equilibrium.strategy1;
+      strategy2 = equilibrium.strategy2;
+      payoff1 = equilibrium.payoff1;
+      payoff2 = equilibrium.payoff2;
+      isPure = equilibrium.isPure;
+    }
+  };
+
+  /// Analyze dominated strategies
+  public func analyzeStrategicDominance(
+    payoff1: [[Float]],
+    payoff2: [[Float]]
+  ) : async {
+    playerOneDominated: [Bool];
+    playerTwoDominated: [Bool];
+    playerOneRemaining: [Nat];
+    playerTwoRemaining: [Nat];
+  } {
+    let analysis = GameTheory.eliminateDominatedStrategies(payoff1, payoff2);
+    {
+      playerOneDominated = analysis.playerOneDominated;
+      playerTwoDominated = analysis.playerTwoDominated;
+      playerOneRemaining = analysis.playerOneRemaining;
+      playerTwoRemaining = analysis.playerTwoRemaining;
+    }
+  };
+
+  /// Calculate buyer-seller market equilibrium
+  public func calculateMarketEquilibrium(
+    buyerValuation: Float,
+    sellerCost: Float
+  ) : async {
+    askPrice: Float;
+    bidPrice: Float;
+    spreadWidth: Float;
+  } {
+    let market = GameTheory.buyerSellerEquilibrium(buyerValuation, sellerCost);
+    {
+      askPrice = market.askPrice;
+      bidPrice = market.bidPrice;
+      spreadWidth = market.spreadWidth;
+    }
+  };
+
+  /// Price European option using Black-Scholes
+  public func priceOption(
+    spot: Float,
+    strike: Float,
+    rate: Float,
+    dividend: Float,
+    timeToMaturity: Float,
+    volatility: Float,
+    optionType: Text
+  ) : async {
+    price: Float;
+    delta: Float;
+    gamma: Float;
+    vega: Float;
+    theta: Float;
+    rho: Float;
+  } {
+    let optType = if (optionType == "call") #Call else #Put;
+    let greeks = QuantModels.blackScholesPrice(
+      spot, strike, rate, dividend, timeToMaturity, volatility, optType
+    );
+    {
+      price = greeks.price;
+      delta = greeks.delta;
+      gamma = greeks.gamma;
+      vega = greeks.vega;
+      theta = greeks.theta;
+      rho = greeks.rho;
+    }
+  };
+
+  /// Mean reversion analysis (Ornstein-Uhlenbeck)
+  public func analyzeOrinsteinUhlenbeck(
+    currentPrice: Float,
+    meanLevel: Float,
+    kappa: Float,
+    sigma: Float,
+    timeToMaturity: Float
+  ) : async {
+    expectedPrice: Float;
+    variance: Float;
+  } {
+    let (exp_price, var) = QuantModels.ornsteinUhlenbeck(
+      currentPrice, meanLevel, kappa, sigma, timeToMaturity
+    );
+    {
+      expectedPrice = exp_price;
+      variance = var;
+    }
+  };
+
+  /// Calculate Value at Risk and Conditional Value at Risk
+  public func computeRiskMetrics(
+    returns: [Float]
+  ) : async {
+    var95: Float;
+    var99: Float;
+    cvar95: Float;
+    cvar99: Float;
+  } {
+    let varResult = QuantModels.computeVaR(returns, 0.95);
+    {
+      var95 = varResult.var95;
+      var99 = varResult.var99;
+      cvar95 = varResult.cvar95;
+      cvar99 = varResult.cvar99;
+    }
+  };
+
+  /// Fama-French factor model return prediction
+  public func predictFamaFrench(
+    alpha: Float,
+    betaMarket: Float,
+    betaSize: Float,
+    betaValue: Float,
+    marketReturn: Float,
+    smbReturn: Float,
+    hmlReturn: Float
+  ) : async Float {
+    QuantModels.famaFrenchReturn(
+      alpha, betaMarket, betaSize, betaValue,
+      marketReturn, smbReturn, hmlReturn
+    )
+  };
+
+  /// Kelly Criterion position sizing
+  public func calculateKellyFraction(
+    expectedReturn: Float,
+    variance: Float
+  ) : async Float {
+    QuantModels.kellyCriterion(expectedReturn, variance)
+  };
+
+  /// Fund tracking and performance
+  public func getFundMetrics(
+    totalValue: Float,
+    navHistory: [Float],
+    cashPosition: Float,
+    flowsIn24h: Float,
+    flowsOut24h: Float
+  ) : async {
+    nav: Float;
+    hourlyReturn: Float;
+    dailyReturn: Float;
+    monthlyReturn: Float;
+    flowVelocity: Float;
+  } {
+    let sharesOut = 1000.0; // Placeholder for share count
+    let nav = FundManager.calculateNAV(totalValue, sharesOut);
+    let (hourly, daily, monthly) = FundManager.calculatePerformance(navHistory, 1);
+    let velocity = FundManager.flowVelocity(flowsIn24h, flowsOut24h, totalValue);
+    
+    {
+      nav = nav;
+      hourlyReturn = hourly;
+      dailyReturn = daily;
+      monthlyReturn = monthly;
+      flowVelocity = velocity;
+    }
+  };
+
+  /// Calculate portfolio concentration
+  public func analyzeConcentration(
+    weights: [Float]
+  ) : async Float {
+    FundManager.concentrationIndex(weights)
+  };
 
 
 
