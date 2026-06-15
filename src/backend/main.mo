@@ -82,6 +82,7 @@ import Mathematics "mathematics";
 import GovernanceLaws "governance_laws";
 import RuntimeGovernance "runtime_governance";
 import FormalVerification "formal_verification";
+import Homeostat "homeostat";
 
 
 
@@ -345,6 +346,11 @@ actor PARALLAX {
   // Verifiable proof objects. Private-core / public-proof separation.
   var cryptoReceiptState : CryptoReceipts.CryptographiaReceiptState = CryptoReceipts.defaultCryptographiaReceiptState();
 
+  // ── DOMAIN 35 — HOMEOSTASIS (EXPLORE/EXPLOIT HOMEOSTAT) ──────────────────
+  // Adaptive mechanism for divergence. Tracks awareness, coherence, resonance.
+  // Couples surprise/prediction-error to awareness to drive explore/exploit cycle.
+  var homeostasisState : Homeostat.HomeostasisState = Homeostat.defaultHomeostasisState();
+
   // ══════════════════════════════════════════════════════════════════════
   // CREATOR SUPREMACY LAW — assertCreator gate
   // Alfredo Medina Hernandez | MedinaSITech@outlook.com | Dallas TX USA
@@ -595,6 +601,22 @@ actor PARALLAX {
 
       // ── PHANTOM ENTROPY — Domain 63: information entropy measurement ───────
       phantomEntropyState := PhantomEntropy.tickPhantomEntropy(phantomEntropyState, beat.toInt(), novaCoherence);
+
+      // ── HOMEOSTASIS (EXPLORE/EXPLOIT HOMEOSTAT) — Domain 35 ──────────────────
+      // Adaptive mechanism for divergence. Drives awareness down on prediction error.
+      // Triggers explore/entropy injection when effectiveness drops below φ⁻¹.
+      let (newHomeostasisState, explore_triggered, entropy_to_inject) = 
+        Homeostat.tickHomeostat(homeostasisState, novaCoherence, beat);
+      homeostasisState := newHomeostasisState;
+       
+      // If explore triggered, inject entropy into phantom entropy engine
+      if (explore_triggered) {
+        phantomEntropyState := {
+          phantomEntropyState with
+          compositeEntropy = Float.min(1.0, phantomEntropyState.compositeEntropy + entropy_to_inject);
+          entropyRegime = #complex;
+        };
+      };
 
       // ── PHANTOM TOPOLOGY — Domain 64: topological data analysis ────────────
       phantomTopologyState := PhantomTopology.tickPhantomTopology(phantomTopologyState, beat.toInt(), novaCoherence);
