@@ -1,0 +1,29 @@
+default_profile: dev
+offline_mode: false
+backend:
+  url: https://api.parallax.example/v1/ai/query
+  timeout_seconds: 30
+  stream_timeout_seconds: 300
+  auth:
+    principal: ""
+    delegation_token: ""
+    identity_url: https://identity.ic0.app
+ollama:
+  enabled: true
+  url: http://127.0.0.1:11434
+  model: llama3.1:8b
+cache:
+  enabled: true
+  ttl_seconds: 900
+logging:
+  level: INFO
+  audit_enabled: true
+profiles:
+  dev:
+    backend_model: parallax-dev
+    temperature: 0.3
+    max_tokens: 1200
+  prod:
+    backend_model: parallax-prod
+    temperature: 0.15
+    max_tokens: 2000
