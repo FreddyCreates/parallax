@@ -1,0 +1,98 @@
+name: Build backend
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-backend-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '20'
+  PNPM_VERSION: '10'
+  MOPS_VERSION: '1.11.1'
+
+jobs:
+  build-backend:
+    name: Build Motoko backend
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Cache Motoko and mops dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.mops
+            ~/.cache/mops
+            ~/.motoko
+          key: ${{ runner.os }}-build-backend-${{ hashFiles('mops.lock', 'mops.toml', 'src/backend/**/*.mo') }}
+          restore-keys: |
+            ${{ runner.os }}-build-backend-
+            ${{ runner.os }}-backend-
+
+      - name: Install root dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Install mops
+        run: npm install -g ic-mops@${{ env.MOPS_VERSION }}
+
+      - name: Install backend dependencies
+        working-directory: src/backend
+        run: mops install
+
+      - name: Type check backend
+        working-directory: src/backend
+        run: |
+          set -euo pipefail
+          mops check --fix
+          git diff --exit-code
+
+      - name: Build backend artifacts
+        working-directory: src/backend
+        run: mops build
+
+      - name: Generate frontend bindings
+        run: pnpm bindgen
+
+      - name: Upload backend artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-build-artifacts
+          path: |
+            src/backend/dist
+            src/frontend/src/backend*
+          retention-days: 14
+          if-no-files-found: warn
+
+  notify:
+    name: Notify Slack
+    if: always()
+    needs: [build-backend]
+    uses: ./.github/workflows/notify-slack.yml
+    with:
+      workflow_name: build-backend
+      run_status: ${{ needs.build-backend.result == 'success' && 'success' || 'failure' }}
+      environment: build
+      summary: ${{ format('backend-build={0}', needs.build-backend.result) }}
+      metrics: backend_artifacts=backend-build-artifacts
+    secrets: inherit

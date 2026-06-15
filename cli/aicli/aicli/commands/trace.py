@@ -1,12 +1,11 @@
 from __future__ import annotations
 
-from pathlib import Path
 from typing import Any
 
 import typer
 
 from ..ai.models import AIRequest, TaskType
-from ..utils.formatting import console, emit_call_graph, render_output
+from ..utils.formatting import emit_call_graph, render_output
 
 
 def trace_command(
@@ -54,7 +53,8 @@ def trace_command(
 
 def _build_call_graph(txid: str, canister: str | None, method: str | None, depth: int) -> dict[str, Any]:
     root = f"{canister or 'root-canister'}::{method or 'entrypoint'}"
-    graph: dict[str, Any] = current = {}
+    graph: dict[str, Any] = {}
+    current = graph
     for index in range(depth):
         node_name = f"stage-{index + 1}:{txid[:8]}"
         current[node_name] = {}
@@ -65,17 +65,10 @@ def _build_call_graph(txid: str, canister: str | None, method: str | None, depth
 
 def _text_trace(payload: dict[str, Any]) -> str:
     return (
-        f"Transaction: {payload['txid']}
-"
-        f"Canister: {payload['canister'] or 'n/a'}
-"
-        f"Method: {payload['method'] or 'n/a'}
-"
-        f"Depth: {payload['depth']}
-"
-        f"Confidence: {payload['confidence']}
-
-"
-        f"Analysis:
-{payload['analysis']}"
+        f"Transaction: {payload['txid']}\n"
+        f"Canister: {payload['canister'] or 'n/a'}\n"
+        f"Method: {payload['method'] or 'n/a'}\n"
+        f"Depth: {payload['depth']}\n"
+        f"Confidence: {payload['confidence']}\n\n"
+        f"Analysis:\n{payload['analysis']}"
     )

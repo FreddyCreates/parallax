@@ -1,0 +1,150 @@
+name: End-to-end tests
+
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      target_environment:
+        description: local, staging, or mainnet
+        required: true
+        default: staging
+        type: choice
+        options: [local, staging, mainnet]
+      target_url:
+        description: Optional frontend URL override.
+        required: false
+        type: string
+      backend_url:
+        description: Optional backend URL override.
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: test-e2e-${{ github.ref_name || github.run_id }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '20'
+  PNPM_VERSION: '10'
+  PLAYWRIGHT_VERSION: '1.49.1'
+
+jobs:
+  e2e:
+    name: Playwright browser flow
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      TARGET_ENVIRONMENT: ${{ github.event.inputs.target_environment || 'staging' }}
+      TARGET_URL: ${{ github.event.inputs.target_url || secrets.E2E_BASE_URL || secrets.STAGING_FRONTEND_URL || '' }}
+      BACKEND_URL: ${{ github.event.inputs.backend_url || secrets.E2E_BACKEND_URL || secrets.STAGING_BACKEND_URL || '' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install frontend dependencies
+        working-directory: src/frontend
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Build frontend bundle
+        working-directory: src/frontend
+        run: pnpm build
+
+      - name: Install Playwright browser
+        run: pnpm dlx playwright@${{ env.PLAYWRIGHT_VERSION }} install --with-deps chromium
+
+      - name: Generate Playwright configuration
+        run: |
+          set -euo pipefail
+          mkdir -p .github/e2e-generated
+          cat > .github/e2e-generated/playwright.config.ts <<'EOF'
+          import { defineConfig } from '@playwright/test';
+
+          export default defineConfig({
+            testDir: '.github/e2e-generated',
+            fullyParallel: false,
+            retries: 1,
+            use: {
+              browserName: 'chromium',
+              screenshot: 'only-on-failure',
+              video: 'retain-on-failure',
+              trace: 'retain-on-failure',
+            },
+            reporter: [['list'], ['html', { open: 'never', outputFolder: 'playwright-report' }]],
+          });
+          EOF
+          cat > .github/e2e-generated/smoke.spec.ts <<'EOF'
+          import { expect, test } from '@playwright/test';
+
+          const baseUrl = process.env.TARGET_URL || 'http://127.0.0.1:4173';
+          const backendUrl = process.env.BACKEND_URL || '';
+
+          test('loads the PARALLAX frontend', async ({ page }) => {
+            await page.goto(baseUrl, { waitUntil: 'networkidle' });
+            await expect(page.locator('body')).toBeVisible();
+            await expect(page).toHaveTitle(/PARALLAX|template|caffeine/i);
+          });
+
+          test('serves frontend environment metadata', async ({ request }) => {
+            const response = await request.get(`${baseUrl.replace(/\/$/, '')}/env.json`);
+            expect(response.ok()).toBeTruthy();
+            const body = await response.text();
+            expect(body).toContain('backend');
+          });
+
+          test('checks backend canister reachability when configured', async ({ request }) => {
+            test.skip(!backendUrl, 'No backend URL provided for the run.');
+            const response = await request.get(backendUrl);
+            expect(response.ok()).toBeTruthy();
+          });
+          EOF
+
+      - name: Start local preview server when needed
+        if: env.TARGET_ENVIRONMENT == 'local' || env.TARGET_URL == ''
+        run: |
+          set -euo pipefail
+          python3 -m http.server 4173 --directory src/frontend/dist > e2e-local-server.log 2>&1 &
+          echo "TARGET_URL=http://127.0.0.1:4173" >> "$GITHUB_ENV"
+
+      - name: Run Playwright suite
+        run: pnpm dlx playwright@${{ env.PLAYWRIGHT_VERSION }} test --config=.github/e2e-generated/playwright.config.ts
+
+      - name: Upload Playwright artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-playwright-artifacts
+          path: |
+            playwright-report
+            test-results
+            e2e-local-server.log
+          retention-days: 14
+          if-no-files-found: warn
+
+  notify:
+    name: Notify Slack
+    if: always()
+    needs: [e2e]
+    uses: ./.github/workflows/notify-slack.yml
+    with:
+      workflow_name: test-e2e
+      run_status: ${{ needs.e2e.result == 'success' && 'success' || 'failure' }}
+      environment: ${{ github.event.inputs.target_environment || 'staging' }}
+      summary: ${{ format('playwright={0}', needs.e2e.result) }}
+      metrics: ${{ format('target={0}; report=e2e-playwright-artifacts', github.event.inputs.target_environment || 'staging') }}
+    secrets: inherit

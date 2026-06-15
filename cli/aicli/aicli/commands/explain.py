@@ -22,8 +22,8 @@ def explain_command(
     language = lang or _detect_language(file)
     analysis = _analyze_file(file, language)
     prompt = (
-        f"Explain the {language} file {file.name}. Include architecture, dependencies, logic flow, documentation guidance, "
-        f"and complexity hotspots. Detail level: {detail}."
+        f"Explain the {language} file {file.name}. Include architecture, dependencies, logic flow, "
+        f"documentation guidance, and complexity hotspots. Detail level: {detail}."
     )
     request = AIRequest(
         task=TaskType.EXPLAIN,
@@ -51,8 +51,7 @@ def explain_command(
         "suggestions": response.suggestions,
     }
     if output == "markdown":
-        markdown = _to_markdown(payload)
-        render_output(markdown, "markdown", title="Code Explanation")
+        render_output(_to_markdown(payload), "markdown", title="Code Explanation")
     else:
         render_output(payload if output == "json" else _text_summary(payload), output, title="Code Explanation")
 
@@ -62,7 +61,20 @@ def _analyze_file(file: Path, language: str) -> dict[str, Any]:
     lines = text.splitlines()
     hotspots = _hotspots(lines)
     if language == "python":
-        return _analyze_python(file, text, hotspots)
+        try:
+            return _analyze_python(file, text, hotspots)
+        except SyntaxError:
+            return {
+                "line_count": len(lines),
+                "dependencies": _guess_dependencies(text),
+                "logic_flow": [
+                    "Python parsing failed; falling back to text-level inspection.",
+                    "Inspect imports and branching-heavy lines heuristically.",
+                    "Use routed AI to explain probable behavior and risks.",
+                ],
+                "hotspots": hotspots,
+                "parse_error": "syntax-error",
+            }
     return {
         "line_count": len(lines),
         "dependencies": _guess_dependencies(text),
@@ -87,13 +99,18 @@ def _analyze_python(file: Path, text: str, hotspots: list[dict[str, Any]]) -> di
             module = node.module or ""
             imports.extend(f"{module}.{alias.name}".strip(".") for alias in node.names)
         elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-            branch_nodes = sum(isinstance(child, (ast.If, ast.For, ast.While, ast.Try, ast.Match)) for child in ast.walk(node))
-            functions.append({
-                "name": node.name,
-                "line": getattr(node, "lineno", 0),
-                "branch_points": branch_nodes,
-                "docstring": bool(ast.get_docstring(node)),
-            })
+            branch_nodes = sum(
+                isinstance(child, (ast.If, ast.For, ast.While, ast.Try, ast.Match))
+                for child in ast.walk(node)
+            )
+            functions.append(
+                {
+                    "name": node.name,
+                    "line": getattr(node, "lineno", 0),
+                    "branch_points": branch_nodes,
+                    "docstring": bool(ast.get_docstring(node)),
+                }
+            )
         elif isinstance(node, ast.ClassDef):
             classes.append(node.name)
 
@@ -127,7 +144,7 @@ def _guess_dependencies(text: str) -> list[str]:
         stripped = line.strip()
         if stripped.startswith("import ") or stripped.startswith("from "):
             counter[stripped] += 1
-        elif "require(" in stripped or "from "" in stripped or "from '" in stripped:
+        elif "require(" in stripped or 'from "' in stripped or "from '" in stripped:
             counter[stripped[:120]] += 1
     return list(counter.keys())[:12]
 
@@ -149,48 +166,35 @@ def _detect_language(file: Path) -> str:
 
 def _to_markdown(payload: dict[str, Any]) -> str:
     analysis = payload["analysis"]
-    return f"""# Explanation for `{Path(payload['file']).name}`
-
-**Language:** {payload['language']}  
-**Confidence:** {payload['confidence']}
-
-## Analysis Snapshot
-
-- Line count: {analysis.get('line_count', 'n/a')}
-- Dependencies: {", ".join(analysis.get('dependencies', [])) or 'none detected'}
-- Hotspots: {len(analysis.get('hotspots', []))}
-
-## Logic Flow
-
-""" + "
-".join(f"- {step}" for step in analysis.get("logic_flow", [])) + f"""
-
-## AI Explanation
-
-{payload['explanation']}
-
-## Complexity Hotspots
-
-""" + "
-".join(
-        f"- Line {item['line']} (score {item['score']}): `{item['preview']}`" for item in analysis.get("hotspots", [])
+    logic_flow = "\n".join(f"- {step}" for step in analysis.get("logic_flow", []))
+    hotspots = "\n".join(
+        f"- Line {item['line']} (score {item['score']}): `{item['preview']}`"
+        for item in analysis.get("hotspots", [])
+    ) or "- none detected"
+    return (
+        f"# Explanation for `{Path(payload['file']).name}`\n\n"
+        f"**Language:** {payload['language']}  \n"
+        f"**Confidence:** {payload['confidence']}\n\n"
+        "## Analysis Snapshot\n\n"
+        f"- Line count: {analysis.get('line_count', 'n/a')}\n"
+        f"- Dependencies: {', '.join(analysis.get('dependencies', [])) or 'none detected'}\n"
+        f"- Hotspots: {len(analysis.get('hotspots', []))}\n\n"
+        "## Logic Flow\n\n"
+        f"{logic_flow}\n\n"
+        "## AI Explanation\n\n"
+        f"{payload['explanation']}\n\n"
+        "## Complexity Hotspots\n\n"
+        f"{hotspots}"
     )
 
 
 def _text_summary(payload: dict[str, Any]) -> str:
     analysis = payload["analysis"]
     return (
-        f"File: {payload['file']}
-"
-        f"Language: {payload['language']}
-"
-        f"Confidence: {payload['confidence']}
-"
-        f"Dependencies: {', '.join(analysis.get('dependencies', [])) or 'none detected'}
-"
-        f"Hotspots: {len(analysis.get('hotspots', []))}
-
-"
-        f"Explanation:
-{payload['explanation']}"
+        f"File: {payload['file']}\n"
+        f"Language: {payload['language']}\n"
+        f"Confidence: {payload['confidence']}\n"
+        f"Dependencies: {', '.join(analysis.get('dependencies', [])) or 'none detected'}\n"
+        f"Hotspots: {len(analysis.get('hotspots', []))}\n\n"
+        f"Explanation:\n{payload['explanation']}"
     )

@@ -8,42 +8,57 @@ from ..ai.models import AIRequest, TaskType
 from ..utils.formatting import console, emit_syntax
 
 TEMPLATES = {
-    "test": ("py", "import pytest
+    "test": (
+        "py",
+        """import pytest
 
 
 def test_{name}():
     assert True
-"),
-    "script": ("py", "def main() -> None:
-    print("hello from {name}")
+""",
+    ),
+    "script": (
+        "py",
+        """def main() -> None:
+    print(\"hello from {name}\")
 
 
-if __name__ == "__main__":
+if __name__ == \"__main__\":
     main()
-"),
-    "docs": ("md", "# {name}
+""",
+    ),
+    "docs": (
+        "md",
+        """# {name}
 
 ## Overview
 
 Describe the purpose of `{name}` here.
-"),
-    "handler": ("py", "from fastapi import APIRouter
+""",
+    ),
+    "handler": (
+        "py",
+        """from fastapi import APIRouter
 
 router = APIRouter()
 
 
-@router.get("/{name}")
+@router.get(\"/{name}\")
 def get_{safe_name}() -> dict[str, str]:
-    return {"status": "ok", "handler": "{name}"}
-"),
-    "component": ("tsx", "type {component_name}Props = {
+    return {{\"status\": \"ok\", \"handler\": \"{name}\"}}
+""",
+    ),
+    "component": (
+        "tsx",
+        """type {component_name}Props = {{
   title?: string;
-};
+}};
 
-export function {component_name}({{ title = "{component_name}" }}: {component_name}Props) {{
-  return <section>{'{'}title{'}'}</section>;
+export function {component_name}({{ title = \"{component_name}\" }}: {component_name}Props) {{
+  return <section>{{title}}</section>;
 }}
-"),
+""",
+    ),
 }
 
 
@@ -73,7 +88,7 @@ def generate_command(
         profile=app.profile,
     )
     response = app.router.query(request)
-    final_output = response.text if response.provider != "offline" and response.text.strip() else generated
+    final_output = generated if response.provider == "offline" or not response.text.strip() else response.text
 
     emit_syntax(final_output, _syntax_lang(ext))
     if dry_run:

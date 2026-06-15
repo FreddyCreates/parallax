@@ -38,6 +38,14 @@ func (e SuggestionError) Error() string {
 	return fmt.Sprintf("%s\nSuggestion: %s", e.Message, e.Suggestion)
 }
 
+const (
+	accentColorHex  = "12"
+	successColorHex = "10"
+	warningColorHex = "11"
+	errorColorHex   = "9"
+	mutedColorHex   = "8"
+)
+
 var (
 	verbose    bool
 	jsonOutput bool
@@ -59,15 +67,15 @@ func style(hex string) lipgloss.Style {
 	return lipgloss.NewStyle().Foreground(lipgloss.Color(hex)).Bold(true)
 }
 
-func accent(text string) string  { return style("12").Render(text) }
-func success(text string) string { return style("10").Render(text) }
-func warning(text string) string { return style("11").Render(text) }
-func failure(text string) string { return style("9").Render(text) }
+func accent(text string) string  { return style(accentColorHex).Render(text) }
+func success(text string) string { return style(successColorHex).Render(text) }
+func warning(text string) string { return style(warningColorHex).Render(text) }
+func failure(text string) string { return style(errorColorHex).Render(text) }
 func muted(text string) string {
 	if noColor {
 		return text
 	}
-	return lipgloss.NewStyle().Foreground(lipgloss.Color("8")).Render(text)
+	return lipgloss.NewStyle().Foreground(lipgloss.Color(mutedColorHex)).Render(text)
 }
 
 func Info(message string) string    { return accent("→ " + message) }

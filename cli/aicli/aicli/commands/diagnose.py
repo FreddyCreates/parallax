@@ -43,14 +43,42 @@ def _run_checks(config: dict[str, Any], config_file: Path, *, deep: bool) -> dic
     issues: list[DiagnosticIssue] = []
     backend_url = config.get("backend", {}).get("url")
     if not config_file.exists():
-        issues.append(DiagnosticIssue("high", "missing-config", "Config file does not exist.", "Run any aicli command once to bootstrap ~/.aicli/config.yaml."))
+        issues.append(
+            DiagnosticIssue(
+                "high",
+                "missing-config",
+                "Config file does not exist.",
+                "Run any aicli command once to bootstrap ~/.aicli/config.yaml.",
+            )
+        )
     if not shutil.which("python"):
-        issues.append(DiagnosticIssue("critical", "missing-python", "Python executable not found in PATH.", "Install Python 3.10+ and re-run diagnostics."))
+        issues.append(
+            DiagnosticIssue(
+                "critical",
+                "missing-python",
+                "Python executable not found in PATH.",
+                "Install Python 3.10+ and re-run diagnostics.",
+            )
+        )
     auth = config.get("backend", {}).get("auth", {})
     if not auth.get("principal"):
-        issues.append(DiagnosticIssue("medium", "missing-principal", "ICP principal is not configured.", "Set PARALLAX_AI_PRINCIPAL or backend.auth.principal for authenticated requests."))
+        issues.append(
+            DiagnosticIssue(
+                "medium",
+                "missing-principal",
+                "ICP principal is not configured.",
+                "Set PARALLAX_AI_PRINCIPAL or backend.auth.principal for authenticated requests.",
+            )
+        )
     if config.get("offline_mode"):
-        issues.append(DiagnosticIssue("info", "offline-mode", "Offline mode is enabled.", "Disable offline mode to restore remote PARALLAX calls."))
+        issues.append(
+            DiagnosticIssue(
+                "info",
+                "offline-mode",
+                "Offline mode is enabled.",
+                "Disable offline mode to restore remote PARALLAX calls.",
+            )
+        )
 
     checks = {
         "python_version": platform.python_version(),
@@ -69,9 +97,23 @@ def _run_checks(config: dict[str, Any], config_file: Path, *, deep: bool) -> dic
     }
 
     if backend_url and not health["backend_reachable"] and not config.get("offline_mode"):
-        issues.append(DiagnosticIssue("high", "backend-unreachable", "PARALLAX backend did not respond.", "Check backend.url, network access, or use local Ollama fallback."))
+        issues.append(
+            DiagnosticIssue(
+                "high",
+                "backend-unreachable",
+                "PARALLAX backend did not respond.",
+                "Check backend.url, network access, or use local Ollama fallback.",
+            )
+        )
     if deep and not health["ollama_reachable"]:
-        issues.append(DiagnosticIssue("medium", "ollama-unreachable", "Ollama endpoint is not reachable.", "Start Ollama locally or disable the fallback in config."))
+        issues.append(
+            DiagnosticIssue(
+                "medium",
+                "ollama-unreachable",
+                "Ollama endpoint is not reachable.",
+                "Start Ollama locally or disable the fallback in config.",
+            )
+        )
 
     return {
         "checks": checks,
@@ -100,19 +142,15 @@ def _text_report(payload: dict[str, Any]) -> str:
     ]
     for key, value in payload["checks"].items():
         lines.append(f"- {key}: {value}")
-    lines.append("
-Health:")
+    lines.append("\nHealth:")
     for key, value in payload["health"].items():
         lines.append(f"- {key}: {value}")
-    lines.append("
-Issues:")
+    lines.append("\nIssues:")
     if payload["issues"]:
         for issue in payload["issues"]:
             lines.append(f"- [{issue['severity']}] {issue['code']}: {issue['message']} -> {issue['suggestion']}")
     else:
         lines.append("- none")
-    lines.append("
-AI Summary:")
+    lines.append("\nAI Summary:")
     lines.append(payload["ai_summary"])
-    return "
-".join(lines)
+    return "\n".join(lines)

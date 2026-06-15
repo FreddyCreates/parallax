@@ -43,7 +43,11 @@ def _analyze_component(component: Path) -> dict[str, Any]:
     if component.is_file():
         files = [component]
     else:
-        files = [path for path in component.rglob("*") if path.is_file()][:100]
+        files = [
+            path
+            for path in component.rglob("*")
+            if path.is_file() and "__pycache__" not in path.parts and path.suffix not in {".pyc", ".pyo"}
+        ][:100]
     total_lines = 0
     total_bytes = 0
     largest_file = None
@@ -71,33 +75,41 @@ def _analyze_component(component: Path) -> dict[str, Any]:
 def _fallback_suggestions(analysis: dict[str, Any], target: str) -> list[dict[str, Any]]:
     suggestions: list[dict[str, Any]] = []
     if analysis.get("average_lines_per_file", 0) > 250:
-        suggestions.append({
-            "title": "Split oversized modules",
-            "impact": "medium",
-            "target": target,
-            "reason": "Large files often hide mixed responsibilities and inhibit focused optimization.",
-        })
+        suggestions.append(
+            {
+                "title": "Split oversized modules",
+                "impact": "medium",
+                "target": target,
+                "reason": "Large files often hide mixed responsibilities and inhibit focused optimization.",
+            }
+        )
     if target == "speed":
-        suggestions.append({
-            "title": "Cache repeated expensive computations",
-            "impact": "high",
-            "target": target,
-            "reason": "Memoization or result caching can reduce recomputation cost in hot code paths.",
-        })
+        suggestions.append(
+            {
+                "title": "Cache repeated expensive computations",
+                "impact": "high",
+                "target": target,
+                "reason": "Memoization or result caching can reduce recomputation cost in hot code paths.",
+            }
+        )
     elif target == "memory":
-        suggestions.append({
-            "title": "Prefer streaming over eager materialization",
-            "impact": "high",
-            "target": target,
-            "reason": "Generators, iterators, and chunked processing lower peak memory usage.",
-        })
+        suggestions.append(
+            {
+                "title": "Prefer streaming over eager materialization",
+                "impact": "high",
+                "target": target,
+                "reason": "Generators, iterators, and chunked processing lower peak memory usage.",
+            }
+        )
     else:
-        suggestions.append({
-            "title": "Reduce model and network round trips",
-            "impact": "high",
-            "target": target,
-            "reason": "Batching and caching are usually the fastest path to lower AI execution cost.",
-        })
+        suggestions.append(
+            {
+                "title": "Reduce model and network round trips",
+                "impact": "high",
+                "target": target,
+                "reason": "Batching and caching are usually the fastest path to lower AI execution cost.",
+            }
+        )
     return suggestions
 
 
@@ -114,8 +126,9 @@ def _text_output(payload: dict[str, Any]) -> str:
     ]
     for suggestion in payload["suggestions"]:
         if isinstance(suggestion, dict):
-            lines.append(f"- {suggestion.get('title', 'Suggestion')} ({suggestion.get('impact', 'n/a')}): {suggestion.get('reason', '')}")
+            lines.append(
+                f"- {suggestion.get('title', 'Suggestion')} ({suggestion.get('impact', 'n/a')}): {suggestion.get('reason', '')}"
+            )
         else:
             lines.append(f"- {suggestion}")
-    return "
-".join(lines)
+    return "\n".join(lines)

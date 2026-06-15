@@ -32,10 +32,7 @@ def query_model_command(
         context={"format": format},
     )
 
-    chunks: list[str] = []
-
     def _on_chunk(chunk: str) -> None:
-        chunks.append(chunk)
         if format == "text":
             console.print(chunk, end="")
 
@@ -45,8 +42,9 @@ def query_model_command(
             console.print()
         else:
             console.print(response.text)
-        console.print(f"
-[dim]provider={response.provider} model={response.model} confidence={response.confidence} cached={response.cached}[/dim]")
+        console.print(
+            f"\n[dim]provider={response.provider} model={response.model} confidence={response.confidence} cached={response.cached}[/dim]"
+        )
         return
 
     payload = {
@@ -57,12 +55,8 @@ def query_model_command(
     if format == "json":
         emit_json(payload)
     elif format == "markdown":
-        emit_markdown(f"# Query Result
-
-{response.text}
-
-- Provider: {response.provider}
-- Model: {response.model}
-- Confidence: {response.confidence}")
+        emit_markdown(
+            f"# Query Result\n\n{response.text}\n\n- Provider: {response.provider}\n- Model: {response.model}\n- Confidence: {response.confidence}"
+        )
     else:
         console.print(export_payload(payload, format))

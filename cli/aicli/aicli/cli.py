@@ -19,7 +19,12 @@ from .utils.config import ConfigManager
 from .utils.formatting import console
 from .utils.logging import AuditLogger, setup_logging
 
-app = typer.Typer(add_completion=False, no_args_is_help=True, pretty_exceptions_show_locals=False)
+app = typer.Typer(
+    add_completion=False,
+    no_args_is_help=True,
+    invoke_without_command=True,
+    pretty_exceptions_show_locals=False,
+)
 _PLUGIN_LOADED = False
 
 
@@ -39,7 +44,7 @@ def callback(
     config: Path | None = typer.Option(None, "--config", help="Override config file path."),
     offline: bool = typer.Option(False, "--offline", help="Force offline mode where possible."),
     verbose: bool = typer.Option(False, "--verbose", help="Enable verbose CLI logging."),
-    version: bool = typer.Option(False, "--version", help="Show version and exit."),
+    version: bool = typer.Option(False, "--version", help="Show version and exit.", is_eager=True),
 ) -> None:
     if version:
         console.print(f"aicli {__version__}")

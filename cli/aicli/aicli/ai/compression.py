@@ -30,17 +30,13 @@ class ThoughtCompressor:
         seen: set[str] = set()
         for line in text.splitlines():
             stripped = line.strip()
-            if not stripped:
-                continue
-            if stripped in seen:
+            if not stripped or stripped in seen:
                 continue
             seen.add(stripped)
             clean_lines.append(line[:240])
             if len(clean_lines) >= max_lines:
                 break
-        summary = "
-".join(clean_lines)
-        summary = summary[:max_chars]
+        summary = "\n".join(clean_lines)[:max_chars]
         return CompressionResult(
             original_tokens=self.estimate_tokens(text),
             compressed_tokens=self.estimate_tokens(summary),
@@ -49,8 +45,5 @@ class ThoughtCompressor:
         )
 
     def compress_context(self, context: dict[str, object]) -> CompressionResult:
-        flattened = []
-        for key, value in context.items():
-            flattened.append(f"[{key}] {value}")
-        return self.compress_text("
-".join(flattened))
+        flattened = [f"[{key}] {value}" for key, value in context.items()]
+        return self.compress_text("\n".join(flattened))

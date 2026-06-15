@@ -1,0 +1,195 @@
+name: Deploy canary
+
+on:
+  workflow_dispatch:
+    inputs:
+      operation:
+        description: Deploy a new canary or roll back to a known ref.
+        required: true
+        default: deploy
+        type: choice
+        options: [deploy, rollback]
+      release_ref:
+        description: Git ref to deploy for a new canary release.
+        required: false
+        default: main
+        type: string
+      rollback_ref:
+        description: Git ref, tag, or SHA to deploy when operation is rollback.
+        required: false
+        default: ''
+        type: string
+
+permissions:
+  contents: read
+  deployments: write
+
+concurrency:
+  group: deploy-canary
+  cancel-in-progress: false
+
+env:
+  NODE_VERSION: '20'
+  PNPM_VERSION: '10'
+  MOPS_VERSION: '1.11.1'
+  ICP_CLI_VERSION: '0.1.0-beta.3'
+
+jobs:
+  build-artifacts:
+    name: Build canary artifacts
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - name: Checkout selected ref
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.operation == 'rollback' && github.event.inputs.rollback_ref || github.event.inputs.release_ref }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Cache Motoko and mops dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.mops
+            ~/.cache/mops
+            ~/.motoko
+          key: ${{ runner.os }}-deploy-canary-${{ hashFiles('mops.lock', 'mops.toml', 'src/backend/**/*.mo') }}
+          restore-keys: |
+            ${{ runner.os }}-deploy-canary-
+            ${{ runner.os }}-backend-
+
+      - name: Install root dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Install mops
+        run: npm install -g ic-mops@${{ env.MOPS_VERSION }}
+
+      - name: Build backend and bindings
+        run: |
+          set -euo pipefail
+          (cd src/backend && mops install && mops check --fix && mops build)
+          git diff --exit-code
+          pnpm bindgen
+
+      - name: Build frontend
+        working-directory: src/frontend
+        run: |
+          set -euo pipefail
+          pnpm install --frozen-lockfile --prefer-offline
+          if pnpm run | grep -q '^  build:skip-bindings'; then
+            pnpm run build:skip-bindings
+          else
+            pnpm build
+          fi
+
+      - name: Upload canary artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: canary-artifacts
+          path: |
+            src/backend/dist
+            src/frontend/dist
+          retention-days: 14
+          if-no-files-found: error
+
+  deploy-canary:
+    name: Deploy to canary infrastructure
+    runs-on: ubuntu-latest
+    needs: [build-artifacts]
+    environment: canary
+    outputs:
+      release_ref: ${{ steps.meta.outputs.release_ref }}
+    steps:
+      - name: Checkout selected ref
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.operation == 'rollback' && github.event.inputs.rollback_ref || github.event.inputs.release_ref }}
+
+      - name: Download canary artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: canary-artifacts
+          path: canary-bundle
+
+      - name: Set deployment metadata
+        id: meta
+        run: echo "release_ref=${{ github.event.inputs.operation == 'rollback' && github.event.inputs.rollback_ref || github.event.inputs.release_ref }}" >> "$GITHUB_OUTPUT"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install ICP CLI
+        run: |
+          set -euo pipefail
+          curl --proto '=https' --tlsv1.2 -LsSf https://github.com/dfinity/icp-cli/releases/download/v${{ env.ICP_CLI_VERSION }}/icp-cli-installer.sh | sh
+          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+
+      - name: Configure ICP identity
+        env:
+          ICP_IDENTITY_PEM: ${{ secrets.ICP_CANARY_IDENTITY_PEM }}
+        run: |
+          set -euo pipefail
+          test -n "${ICP_IDENTITY_PEM:-}"
+          mkdir -p ~/.config/icp
+          printf '%s' "$ICP_IDENTITY_PEM" > ~/.config/icp/identity.pem
+          chmod 600 ~/.config/icp/identity.pem
+
+      - name: Deploy selected release to canary
+        run: |
+          set -euo pipefail
+          icp canister install --environment canary --wasm canary-bundle/src/backend/dist/backend.wasm --mode upgrade backend
+          icp canister install --environment canary --mode upgrade frontend
+
+  smoke-tests:
+    name: Run canary smoke tests
+    runs-on: ubuntu-latest
+    needs: [deploy-canary]
+    steps:
+      - name: Probe canary endpoints
+        env:
+          FRONTEND_URL: ${{ secrets.CANARY_FRONTEND_URL || format('https://{0}.icp0.io', secrets.CANARY_FRONTEND_CANISTER_ID) }}
+          BACKEND_URL: ${{ secrets.CANARY_BACKEND_URL || format('https://{0}.raw.icp0.io', secrets.CANARY_BACKEND_CANISTER_ID) }}
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error "$FRONTEND_URL" > /dev/null
+          curl --fail --silent --show-error "$BACKEND_URL" > /dev/null
+          mkdir -p canary-metrics
+          {
+            echo "frontend_url=$FRONTEND_URL"
+            echo "backend_url=$BACKEND_URL"
+            echo "release_ref=${{ needs.deploy-canary.outputs.release_ref }}"
+          } > canary-metrics/smoke-test.txt
+
+      - name: Upload smoke test report
+        uses: actions/upload-artifact@v4
+        with:
+          name: canary-smoke-report
+          path: canary-metrics
+          retention-days: 14
+          if-no-files-found: error
+
+  notify:
+    name: Notify Slack
+    if: always()
+    needs: [build-artifacts, deploy-canary, smoke-tests]
+    uses: ./.github/workflows/notify-slack.yml
+    with:
+      workflow_name: deploy-canary
+      run_status: ${{ needs.deploy-canary.result == 'success' && needs.smoke-tests.result == 'success' && 'success' || 'failure' }}
+      environment: canary
+      summary: ${{ format('operation={0}, build={1}, deploy={2}, smoke={3}', github.event.inputs.operation, needs.build-artifacts.result, needs.deploy-canary.result, needs.smoke-tests.result) }}
+      metrics: ${{ format('release_ref={0}; rollback_ref={1}', github.event.inputs.release_ref || 'main', github.event.inputs.rollback_ref || 'n/a') }}
+    secrets: inherit

@@ -1,0 +1,230 @@
+name: Integration test suite
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: Optional PR number to update with integration results.
+        required: false
+        type: string
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: test-integration-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '20'
+  PNPM_VERSION: '10'
+  PYTHON_VERSION: '3.11'
+  MOPS_VERSION: '1.11.1'
+  DATABASE_URL: mysql2://root:test@127.0.0.1:3306/parralax_test
+  REDIS_URL: redis://127.0.0.1:6379
+  RAILS_ENV: test
+
+jobs:
+  integration-tests:
+    name: Cross-service integration tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: test
+          MYSQL_DATABASE: parralax_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: |
+            services/ai-service/pyproject.toml
+            python/pyproject.toml
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: true
+          working-directory: services/rails-api
+
+      - name: Cache Motoko and mops dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.mops
+            ~/.cache/mops
+            ~/.motoko
+          key: ${{ runner.os }}-integration-motoko-${{ hashFiles('mops.lock', 'mops.toml', 'src/backend/**/*.mo') }}
+          restore-keys: |
+            ${{ runner.os }}-integration-motoko-
+            ${{ runner.os }}-backend-
+
+      - name: Install root dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Install mops
+        run: npm install -g ic-mops@${{ env.MOPS_VERSION }}
+
+      - name: Build backend and bindings
+        run: |
+          set -euo pipefail
+          (cd src/backend && mops install && mops check --fix && mops build)
+          git diff --exit-code
+          pnpm bindgen
+
+      - name: Build frontend bundle
+        working-directory: src/frontend
+        run: |
+          set -euo pipefail
+          pnpm install --frozen-lockfile --prefer-offline
+          pnpm typecheck
+          pnpm build
+
+      - name: Install AI service dependencies
+        working-directory: services/ai-service
+        run: pip install -e ".[dev]"
+
+      - name: Install Python trading dependencies
+        working-directory: python
+        run: pip install -e ".[dev]"
+
+      - name: Prepare Rails database
+        working-directory: services/rails-api
+        env:
+          DATABASE_URL: ${{ env.DATABASE_URL }}
+          REDIS_URL: ${{ env.REDIS_URL }}
+          RAILS_ENV: ${{ env.RAILS_ENV }}
+        run: bundle exec rails db:create db:migrate
+
+      - name: Run AI service integration tests
+        working-directory: services/ai-service
+        env:
+          DATABASE_URL: ${{ env.DATABASE_URL }}
+          REDIS_URL: ${{ env.REDIS_URL }}
+        run: |
+          set -euo pipefail
+          mkdir -p integration-results
+          pytest tests/integration/ -v --tb=short --junitxml=integration-results/junit.xml
+
+      - name: Verify service configuration
+        run: |
+          set -euo pipefail
+          mkdir -p integration-results
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          env = json.loads(Path('src/frontend/env.json').read_text(encoding='utf-8'))
+          required = ['backend_host', 'backend_canister_id', 'project_id']
+          missing = [key for key in required if not env.get(key)]
+          if missing:
+              raise SystemExit(f'Missing frontend env keys: {missing}')
+          Path('integration-results/config-check.txt').write_text('Configuration check passed.\n', encoding='utf-8')
+          PY
+
+      - name: Upload integration test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-test-results
+          path: |
+            services/ai-service/integration-results
+            integration-results
+          retention-days: 21
+          if-no-files-found: warn
+
+  report-pr:
+    name: Report results to PR
+    if: always()
+    needs: [integration-tests]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Find related pull request
+        id: pr
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const inputNumber = '${{ github.event.inputs.pr_number || '' }}'.trim();
+            if (inputNumber) {
+              core.setOutput('number', inputNumber);
+              return;
+            }
+            const response = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: context.sha,
+            });
+            const pull = response.data.find((item) => item.state === 'open') || response.data[0];
+            core.setOutput('number', pull ? String(pull.number) : '');
+
+      - name: Comment on pull request
+        if: steps.pr.outputs.number != ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = [
+              '## Integration workflow result',
+              '',
+              `- Status: **${{ needs.integration-tests.result }}**`,
+              `- Run: ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+              '- Services: MySQL 8.4, Redis 7, Motoko backend build, React frontend build, AI service integration tests',
+            ].join('\n');
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: Number('${{ steps.pr.outputs.number }}'),
+              body,
+            });
+
+  notify:
+    name: Notify Slack
+    if: always()
+    needs: [integration-tests, report-pr]
+    uses: ./.github/workflows/notify-slack.yml
+    with:
+      workflow_name: test-integration
+      run_status: ${{ needs.integration-tests.result == 'success' && 'success' || 'failure' }}
+      environment: ci
+      summary: ${{ format('integration={0}, pr-report={1}', needs.integration-tests.result, needs.report-pr.result) }}
+      metrics: ${{ format('mysql=8.4; redis=7; sha={0}', github.sha) }}
+    secrets: inherit

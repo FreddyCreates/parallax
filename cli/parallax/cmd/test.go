@@ -11,6 +11,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+const durationPrecision = 10 * time.Millisecond
+
 type testSuiteResult struct {
 	Suite    string        `json:"suite"`
 	Success  bool          `json:"success"`
@@ -69,7 +71,7 @@ func init() {
 					if !result.Success {
 						status = utils.Error("failed")
 					}
-					rows = append(rows, []string{result.Suite, status, result.Duration.Round(10_000_000).String()})
+					rows = append(rows, []string{result.Suite, status, result.Duration.Round(durationPrecision).String()})
 				}
 				fmt.Println(utils.Info("Test results"))
 				utils.RenderTable([]string{"Suite", "Status", "Duration"}, rows)

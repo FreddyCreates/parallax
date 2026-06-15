@@ -1,0 +1,164 @@
+name: Dependency security and freshness
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  pull_request:
+    paths:
+      - '**/package.json'
+      - 'pnpm-lock.yaml'
+      - '**/Cargo.toml'
+      - '**/pyproject.toml'
+      - 'mops.toml'
+      - 'mops.lock'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: security-deps-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '20'
+  PNPM_VERSION: '10'
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  dependency-review:
+    name: Dependency review
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Review dependency changes
+        uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: high
+          license-check: true
+          vulnerability-check: true
+
+  dependabot-automation:
+    name: Dependabot automation
+    if: github.event_name == 'pull_request' && github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Fetch Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Auto-approve safe Dependabot updates
+        if: contains(fromJson('["patch","minor"]'), steps.metadata.outputs.update-type)
+        run: gh pr review --approve "$PR_URL"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+
+      - name: Enable auto-merge for safe Dependabot updates
+        if: contains(fromJson('["patch","minor"]'), steps.metadata.outputs.update-type)
+        run: gh pr merge --auto --squash "$PR_URL"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+
+  outdated-packages:
+    name: Outdated package report
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: |
+            services/ai-service/pyproject.toml
+            python/pyproject.toml
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Cargo registry
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: |
+            services/rust-engine
+            rust/execution-engine
+
+      - name: Install root dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Install frontend dependencies
+        working-directory: src/frontend
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Install Python dependency sets
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip
+          (cd services/ai-service && pip install -e ".[dev]")
+          (cd python && pip install -e ".[dev]")
+          pip install pip-licenses
+
+      - name: Install Rust reporting tools
+        run: |
+          set -euo pipefail
+          cargo install cargo-outdated --locked
+          cargo install cargo-license --locked
+
+      - name: Generate outdated and license reports
+        run: |
+          set -euo pipefail
+          mkdir -p dependency-reports
+          pnpm outdated --recursive > dependency-reports/pnpm-outdated.txt || true
+          (cd src/frontend && pnpm outdated > ../../dependency-reports/frontend-outdated.txt) || true
+          cargo outdated --manifest-path services/rust-engine/Cargo.toml --root-deps-only > dependency-reports/rust-engine-outdated.txt || true
+          cargo outdated --manifest-path rust/execution-engine/Cargo.toml --root-deps-only > dependency-reports/execution-engine-outdated.txt || true
+          cargo license --manifest-path services/rust-engine/Cargo.toml > dependency-reports/rust-engine-licenses.txt
+          cargo license --manifest-path rust/execution-engine/Cargo.toml > dependency-reports/execution-engine-licenses.txt
+          pip list --outdated > dependency-reports/python-outdated.txt || true
+          pip-licenses --format=markdown > dependency-reports/python-licenses.md
+
+      - name: Upload dependency reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-reports
+          path: dependency-reports
+          retention-days: 30
+          if-no-files-found: error
+
+  notify:
+    name: Notify Slack
+    if: always()
+    needs: [dependency-review, dependabot-automation, outdated-packages]
+    uses: ./.github/workflows/notify-slack.yml
+    with:
+      workflow_name: security-deps
+      run_status: ${{ needs.outdated-packages.result == 'success' && (needs.dependency-review.result == 'success' || needs.dependency-review.result == 'skipped') && (needs.dependabot-automation.result == 'success' || needs.dependabot-automation.result == 'skipped') && 'success' || 'failure' }}
+      environment: dependency-management
+      summary: ${{ format('review={0}, dependabot={1}, outdated={2}', needs.dependency-review.result, needs.dependabot-automation.result, needs.outdated-packages.result) }}
+      metrics: dependency_reports=uploaded
+    secrets: inherit

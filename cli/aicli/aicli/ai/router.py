@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from dataclasses import asdict
 from datetime import datetime, timezone
 from hashlib import sha256
 import json
@@ -38,11 +37,13 @@ class ConversationStore:
 
     def append(self, conversation_id: str, role: str, content: str) -> None:
         messages = self.load(conversation_id)
-        messages.append({
-            "role": role,
-            "content": content,
-            "timestamp": datetime.now(timezone.utc).isoformat(),
-        })
+        messages.append(
+            {
+                "role": role,
+                "content": content[:800],
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+            }
+        )
         (self.sessions_dir / f"{conversation_id}.json").write_text(
             json.dumps(messages, indent=2), encoding="utf-8"
         )
@@ -85,11 +86,10 @@ class QueryCache:
     def set(self, cache_key: str, response: AIResponse) -> None:
         if not self.enabled:
             return
-        payload = response.to_dict()
         with sqlite3.connect(self.database) as conn:
             conn.execute(
                 "REPLACE INTO cache(cache_key, response_json, created_at) VALUES (?, ?, ?)",
-                (cache_key, json.dumps(payload), time.time()),
+                (cache_key, json.dumps(response.to_dict()), time.time()),
             )
             conn.commit()
 
@@ -111,7 +111,11 @@ class ModelRouter:
 
     def query(self, request: AIRequest, on_chunk: ChunkCallback | None = None) -> AIResponse:
         started = time.perf_counter()
-        cache_key = self._cache_key(request)
+        conversation_history: list[dict[str, Any]] = []
+        if request.conversation_id:
+            self.conversations.append(request.conversation_id, "user", request.prompt)
+            conversation_history = self.conversations.load(request.conversation_id)[-8:]
+        cache_key = self._cache_key(request, conversation_history)
         cached = self.cache.get(cache_key)
         if cached:
             if on_chunk:
@@ -119,30 +123,26 @@ class ModelRouter:
                     on_chunk(chunk)
             return cached
 
-        if request.conversation_id:
-            self.conversations.append(request.conversation_id, "user", request.prompt)
-
         reasoning = self.reasoning_engine.build_steps(request.task, request.context)
         compressed = self.compressor.compress_context(request.context)
         fallback_used = False
+
         try:
-            provider, model = self._route(request)
+            provider, _model = self._route(request)
             if provider == "parallax":
-                response = self._query_parallax(request, compressed.summary, reasoning, on_chunk)
+                response = self._query_parallax(request, compressed.summary, reasoning, conversation_history, on_chunk)
             elif provider == "ollama":
-                response = self._query_ollama(request, compressed.summary, reasoning, on_chunk)
+                response = self._query_ollama(request, compressed.summary, reasoning, conversation_history, on_chunk)
             else:
-                response = self._offline_response(request, compressed.summary, reasoning, on_chunk)
-        except AIBackendError:
-            if self.config.get("offline_mode"):
-                response = self._offline_response(request, compressed.summary, reasoning, on_chunk)
-                fallback_used = True
-            else:
-                fallback_used = True
-                response = self._fallback_query(request, compressed.summary, reasoning, on_chunk)
+                response = self._offline_response(request, compressed.summary, reasoning, conversation_history, on_chunk)
+        except AIBackendError as exc:
+            fallback_used = True
+            response = self._fallback_query(request, compressed.summary, reasoning, conversation_history, on_chunk, error=str(exc))
+            if exc.suggestion:
+                response.suggestions.append(exc.suggestion)
         except requests.RequestException as exc:
             fallback_used = True
-            response = self._fallback_query(request, compressed.summary, reasoning, on_chunk, error=str(exc))
+            response = self._fallback_query(request, compressed.summary, reasoning, conversation_history, on_chunk, error=str(exc))
 
         response.confidence = self.reasoning_engine.confidence(
             completeness=0.82 if response.text else 0.35,
@@ -153,7 +153,9 @@ class ModelRouter:
         response.latency_ms = round((time.perf_counter() - started) * 1000, 2)
 
         if request.conversation_id:
-            self.conversations.append(request.conversation_id, "assistant", response.text)
+            summary_lines = [line.strip() for line in response.text.splitlines() if line.strip()][:2]
+            assistant_excerpt = "\n".join(summary_lines)[:300]
+            self.conversations.append(request.conversation_id, "assistant", assistant_excerpt)
 
         self.cache.set(cache_key, response)
         self.audit_logger.log(
@@ -172,52 +174,65 @@ class ModelRouter:
         self.conversations.clear(conversation_id)
 
     def _route(self, request: AIRequest) -> tuple[str, str]:
-        model = request.model or self.config.get("profiles", {}).get(request.profile, {}).get("backend_model", "parallax-dev")
+        profiles = self.config.get("profiles", {})
+        profile_cfg = profiles.get(request.profile, {})
+        model = request.model or profile_cfg.get("backend_model", "parallax-dev")
         if self.config.get("offline_mode"):
             return ("ollama" if self.config.get("ollama", {}).get("enabled", True) else "offline", model)
         if request.model and request.model.startswith("ollama/"):
             return ("ollama", request.model.split("/", 1)[1])
-        if request.task in {TaskType.EXPLAIN, TaskType.OPTIMIZE, TaskType.TRACE, TaskType.QUERY}:
-            return ("parallax", model)
         return ("parallax", model)
 
-    def _build_prompt(self, request: AIRequest, compressed_context: str, reasoning: list[str]) -> str:
+    def _build_prompt(
+        self,
+        request: AIRequest,
+        compressed_context: str,
+        reasoning: list[str],
+        conversation_history: list[dict[str, Any]],
+    ) -> str:
         context_block = compressed_context.strip() or "No additional context provided."
+        history_block = "\n".join(
+            f"- {item.get('role', 'unknown')}: {str(item.get('content', ''))[:300]}"
+            for item in conversation_history[-6:]
+        )
+        history_prefix = f"Conversation history:\n{history_block}\n\n" if history_block else ""
         return (
-            f"Task: {request.task.value}
-"
-            f"Profile: {request.profile}
-"
-            f"Reasoning plan:
-- " + "
-- ".join(reasoning) + "
-
-"
-            f"Context summary:
-{context_block}
-
-"
-            f"User prompt:
-{request.prompt}
-"
+            f"Task: {request.task.value}\n"
+            f"Profile: {request.profile}\n"
+            f"Reasoning plan:\n- "
+            + "\n- ".join(reasoning)
+            + "\n\n"
+            + history_prefix
+            + f"Context summary:\n{context_block}\n\n"
+            + f"User prompt:\n{request.prompt}\n"
         )
 
     def _parallax_headers(self) -> dict[str, str]:
         auth = self.config.get("backend", {}).get("auth", {})
         headers = {"Content-Type": "application/json"}
         if auth.get("delegation_token"):
-            headers["Authorization"] = f"******'delegation_token']}"
+            headers["Authorization"] = "Bearer " + auth["delegation_token"]
         if auth.get("principal"):
             headers["X-ICP-Principal"] = auth["principal"]
         return headers
 
-    def _query_parallax(self, request: AIRequest, compressed_context: str, reasoning: list[str], on_chunk: ChunkCallback | None) -> AIResponse:
+    def _query_parallax(
+        self,
+        request: AIRequest,
+        compressed_context: str,
+        reasoning: list[str],
+        conversation_history: list[dict[str, Any]],
+        on_chunk: ChunkCallback | None,
+    ) -> AIResponse:
         endpoint = self.config.get("backend", {}).get("url")
         if not endpoint:
-            raise AIBackendError("PARALLAX backend URL is not configured.", "Set backend.url in ~/.aicli/config.yaml.")
+            raise AIBackendError(
+                "PARALLAX backend URL is not configured.",
+                "Set backend.url in ~/.aicli/config.yaml.",
+            )
         payload = {
             "task": request.task.value,
-            "prompt": self._build_prompt(request, compressed_context, reasoning),
+            "prompt": self._build_prompt(request, compressed_context, reasoning, conversation_history),
             "context": request.context,
             "model": request.model,
             "temperature": request.temperature,
@@ -253,13 +268,24 @@ class ModelRouter:
             citations=body.get("citations", []),
         )
 
-    def _query_ollama(self, request: AIRequest, compressed_context: str, reasoning: list[str], on_chunk: ChunkCallback | None) -> AIResponse:
+    def _query_ollama(
+        self,
+        request: AIRequest,
+        compressed_context: str,
+        reasoning: list[str],
+        conversation_history: list[dict[str, Any]],
+        on_chunk: ChunkCallback | None,
+    ) -> AIResponse:
         ollama_cfg = self.config.get("ollama", {})
         url = ollama_cfg.get("url", "http://127.0.0.1:11434").rstrip("/") + "/api/generate"
-        model = request.model.split("/", 1)[1] if request.model and request.model.startswith("ollama/") else request.model or ollama_cfg.get("model", "llama3.1:8b")
+        model = (
+            request.model.split("/", 1)[1]
+            if request.model and request.model.startswith("ollama/")
+            else request.model or ollama_cfg.get("model", "llama3.1:8b")
+        )
         payload = {
             "model": model,
-            "prompt": self._build_prompt(request, compressed_context, reasoning),
+            "prompt": self._build_prompt(request, compressed_context, reasoning, conversation_history),
             "stream": bool(on_chunk),
             "options": {
                 "temperature": request.temperature,
@@ -267,7 +293,12 @@ class ModelRouter:
             },
         }
         if on_chunk:
-            resp = requests.post(url, json=payload, timeout=self.config.get("backend", {}).get("stream_timeout_seconds", 300), stream=True)
+            resp = requests.post(
+                url,
+                json=payload,
+                timeout=self.config.get("backend", {}).get("stream_timeout_seconds", 300),
+                stream=True,
+            )
             resp.raise_for_status()
             parts: list[str] = []
             for line in resp.iter_lines():
@@ -280,7 +311,11 @@ class ModelRouter:
                     on_chunk(chunk)
             text = "".join(parts)
         else:
-            resp = requests.post(url, json=payload, timeout=self.config.get("backend", {}).get("timeout_seconds", 30))
+            resp = requests.post(
+                url,
+                json=payload,
+                timeout=self.config.get("backend", {}).get("timeout_seconds", 30),
+            )
             resp.raise_for_status()
             body = resp.json()
             text = body.get("response", "")
@@ -293,21 +328,25 @@ class ModelRouter:
             suggestions=["Verify Ollama model quality before applying generated changes."],
         )
 
-    def _offline_response(self, request: AIRequest, compressed_context: str, reasoning: list[str], on_chunk: ChunkCallback | None) -> AIResponse:
+    def _offline_response(
+        self,
+        request: AIRequest,
+        compressed_context: str,
+        reasoning: list[str],
+        conversation_history: list[dict[str, Any]],
+        on_chunk: ChunkCallback | None,
+    ) -> AIResponse:
+        history_block = "\n".join(
+            f"- {item.get('role', 'unknown')}: {str(item.get('content', ''))[:300]}"
+            for item in conversation_history[-6:]
+        )
         text = (
-            f"Offline {request.task.value} analysis
-
-"
-            f"Prompt: {request.prompt}
-
-"
-            f"Compressed context:
-{compressed_context or 'No context provided.'}
-
-"
-            f"Recommended reasoning path:
-- " + "
-- ".join(reasoning)
+            f"Offline {request.task.value} analysis\n\n"
+            f"Prompt: {request.prompt}\n\n"
+            + (f"Conversation history:\n{history_block}\n\n" if history_block else "")
+            + f"Compressed context:\n{compressed_context or 'No context provided.'}\n\n"
+            + f"Recommended reasoning path:\n- "
+            + "\n- ".join(reasoning)
         )
         if on_chunk:
             for chunk in self._chunk(text):
@@ -321,20 +360,34 @@ class ModelRouter:
             suggestions=["Reconnect to PARALLAX backend or start Ollama for richer answers."],
         )
 
-    def _fallback_query(self, request: AIRequest, compressed_context: str, reasoning: list[str], on_chunk: ChunkCallback | None, error: str | None = None) -> AIResponse:
+    def _fallback_query(
+        self,
+        request: AIRequest,
+        compressed_context: str,
+        reasoning: list[str],
+        conversation_history: list[dict[str, Any]],
+        on_chunk: ChunkCallback | None,
+        error: str | None = None,
+    ) -> AIResponse:
         if self.config.get("ollama", {}).get("enabled", True):
             try:
-                return self._query_ollama(request, compressed_context, reasoning, on_chunk)
+                response = self._query_ollama(request, compressed_context, reasoning, conversation_history, on_chunk)
+                if error:
+                    response.suggestions.append(f"Original backend error: {error}")
+                return response
             except requests.RequestException:
                 pass
-        response = self._offline_response(request, compressed_context, reasoning, on_chunk)
+        response = self._offline_response(request, compressed_context, reasoning, conversation_history, on_chunk)
         if error:
             response.suggestions.append(f"Original backend error: {error}")
         return response
 
-    def _cache_key(self, request: AIRequest) -> str:
-        payload = json.dumps(request.to_cache_key(), sort_keys=True, default=str)
-        return sha256(payload.encode("utf-8")).hexdigest()
+    def _cache_key(self, request: AIRequest, conversation_history: list[dict[str, Any]]) -> str:
+        payload = request.to_cache_key()
+        if conversation_history:
+            payload["conversation_history"] = conversation_history[-6:]
+        serialized = json.dumps(payload, sort_keys=True, default=str)
+        return sha256(serialized.encode("utf-8")).hexdigest()
 
     @staticmethod
     def _chunk(text: str, size: int = 120) -> list[str]:

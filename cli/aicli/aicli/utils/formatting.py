@@ -88,6 +88,8 @@ def render_output(payload: Any, output_format: str, title: str = "Result") -> No
         emit_json(payload)
     elif normalized == "markdown":
         emit_markdown(payload if isinstance(payload, str) else _dict_to_markdown(payload))
+    elif normalized in {"csv", "html"}:
+        console.print(export_payload(payload, normalized))
     else:
         emit_text(title, export_payload(payload, normalized))
 
@@ -103,8 +105,7 @@ def _dict_to_markdown(payload: Any) -> str:
             else:
                 lines.append(_stringify(value))
             lines.append("")
-        return "
-".join(lines).strip()
+        return "\n".join(lines).strip()
     return _stringify(payload)
 
 
@@ -127,8 +128,10 @@ def _to_csv(payload: Any) -> str:
 def _to_html(payload: Any) -> str:
     body = escape(json.dumps(payload, indent=2, default=str)) if not isinstance(payload, str) else payload
     return (
-        "<html><head><style>body{font-family:Arial;margin:2rem;}pre{background:#111;color:#f5f5f5;padding:1rem;border-radius:8px;}"
-        "</style></head><body><pre>" + body + "</pre></body></html>"
+        "<html><head><style>body{font-family:Arial;margin:2rem;}pre{background:#111;color:#f5f5f5;"
+        "padding:1rem;border-radius:8px;}</style></head><body><pre>"
+        + body
+        + "</pre></body></html>"
     )
 
 

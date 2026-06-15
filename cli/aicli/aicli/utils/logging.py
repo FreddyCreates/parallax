@@ -40,5 +40,4 @@ class AuditLogger:
             "payload": payload,
         }
         with self.audit_log.open("a", encoding="utf-8") as handle:
-            handle.write(json.dumps(record, default=str) + "
-")
+            handle.write(json.dumps(record, default=str) + "\n")
