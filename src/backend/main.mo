@@ -43,6 +43,11 @@ import IntelligenceCoupling "intelligence_coupling";
 import Charter "charter";
 import TokenomicsMeasurement "tokenomics_measurement";
 import AiNode "ai_node";
+import QuantitativeFinance "quantitative_finance";
+import GameTheory "game_theory";
+import NeuralSynapses "neural_synapses";
+import QuantitativeTrading "quantitative_trading";
+import FundManagement "fund_management";
 
 
 
@@ -160,6 +165,36 @@ actor PARALLAX {
   // artifact creation, doctrine validation, performance metrics tracking.
   // Produces tradeable cognitive artifacts for the organism's intelligence layer.
   var aiNodeState : AiNode.AiNodeState = AiNode.defaultAiNodeState();
+
+  // ── DOMAIN 41 — QUANTITATIVE_FINANCE_STATE ───────────────────────────────
+  // Production quantitative finance engine: Black-Scholes, GBM, Monte Carlo,
+  // portfolio optimization (Markowitz), VaR/CVaR risk management, stochastic
+  // processes. All math real, no placeholders. Phi-derived parameters.
+  var quantitativeFinanceState : QuantitativeFinance.QuantitativeFinanceState = QuantitativeFinance.initQuantitativeFinanceState();
+
+  // ── DOMAIN 42 — GAME_THEORY_STATE ────────────────────────────────────────
+  // Game theory engine: Nash equilibrium solvers (pure/mixed strategies),
+  // evolutionary games (ESS, replicator dynamics), auction theory (Vickrey),
+  // cooperative games (Shapley values), market microstructure (Kyle model).
+  var gameTheoryState : GameTheory.GameTheoryState = GameTheory.initGameTheoryState();
+
+  // ── DOMAIN 43 — NEURAL_SYNAPSES_STATE ────────────────────────────────────
+  // Neural network substrate: feedforward nets, backpropagation, activation
+  // functions (ReLU, GELU, Swish, etc.), optimizers (SGD, Adam, RMSProp),
+  // loss functions (MSE, cross-entropy). Real deep learning infrastructure.
+  var neuralSynapsesState : NeuralSynapses.NeuralSynapsesState = NeuralSynapses.initNeuralSynapsesState();
+
+  // ── DOMAIN 44 — QUANTITATIVE_TRADING_STATE ───────────────────────────────
+  // Quantitative trading strategies: momentum, mean reversion (Bollinger Bands),
+  // trend following (MA crossovers), pairs trading, statistical arbitrage,
+  // market making. Signal generation with phi-gated execution.
+  var quantitativeTradingState : QuantitativeTrading.QuantitativeTradingState = QuantitativeTrading.initQuantitativeTradingState();
+
+  // ── DOMAIN 45 — FUND_MANAGEMENT_STATE ────────────────────────────────────
+  // Fund management system: NAV calculation, performance metrics (Sharpe, Sortino),
+  // risk parity allocation, fee calculation (management/performance), investor
+  // operations (subscriptions/redemptions), multi-strategy portfolio construction.
+  var fundManagementState : FundManagement.FundManagementState = FundManagement.initFundManagementState();
 
 
   // ══════════════════════════════════════════════════════════════════════
