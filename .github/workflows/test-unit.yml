@@ -1,0 +1,166 @@
+name: Unit test suite
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: test-unit-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '20'
+  PNPM_VERSION: '10'
+  MOPS_VERSION: '1.11.1'
+
+jobs:
+  backend-unit:
+    name: Backend unit validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Cache Motoko and mops dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.mops
+            ~/.cache/mops
+            ~/.motoko
+          key: ${{ runner.os }}-backend-unit-${{ hashFiles('mops.lock', 'mops.toml', 'src/backend/**/*.mo') }}
+          restore-keys: |
+            ${{ runner.os }}-backend-unit-
+            ${{ runner.os }}-backend-
+
+      - name: Install root dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Install mops
+        run: npm install -g ic-mops@${{ env.MOPS_VERSION }}
+
+      - name: Install backend dependencies
+        working-directory: src/backend
+        run: mops install
+
+      - name: Type check backend
+        working-directory: src/backend
+        run: |
+          set -euo pipefail
+          mops check --fix
+          git diff --exit-code
+
+      - name: Build backend canister
+        working-directory: src/backend
+        run: mops build
+
+      - name: Generate frontend bindings
+        run: pnpm bindgen
+
+      - name: Create backend coverage placeholder
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/backend-coverage
+          printf '%s\n' \
+            'Backend coverage is not generated yet because the Motoko backend currently has no unit-test harness in the repository.' \
+            'This artifact captures the validated backend build outputs and indicates where coverage should be published once backend tests are added.' \
+            > artifacts/backend-coverage/README.txt
+          find src/backend/dist -maxdepth 2 -type f | sort > artifacts/backend-coverage/dist-files.txt
+
+      - name: Upload backend build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-unit-build
+          path: src/backend/dist
+          retention-days: 14
+          if-no-files-found: error
+
+      - name: Upload backend coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-unit-coverage
+          path: artifacts/backend-coverage
+          retention-days: 14
+          if-no-files-found: error
+
+  frontend-unit:
+    name: Frontend unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install frontend dependencies
+        working-directory: src/frontend
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Type check frontend
+        working-directory: src/frontend
+        run: pnpm typecheck
+
+      - name: Run frontend tests with coverage fallback
+        working-directory: src/frontend
+        run: |
+          set -euo pipefail
+          mkdir -p coverage
+          if pnpm exec vitest run --coverage.enabled true --coverage.provider=v8 --coverage.reporter=lcov --coverage.reporter=json-summary --coverage.reporter=text; then
+            echo "Generated Vitest coverage outputs."
+          else
+            echo "Coverage provider unavailable; rerunning tests without coverage." >&2
+            pnpm test
+            printf '%s\n' \
+              'Frontend unit tests passed, but coverage could not be generated with the current dependency set.' \
+              'Install a Vitest coverage provider (for example @vitest/coverage-v8) to enable native coverage output.' \
+              > coverage/README.txt
+          fi
+
+      - name: Upload frontend coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-unit-coverage
+          path: src/frontend/coverage
+          retention-days: 14
+          if-no-files-found: error
+
+  notify:
+    name: Notify Slack
+    if: always()
+    needs: [backend-unit, frontend-unit]
+    uses: ./.github/workflows/notify-slack.yml
+    with:
+      workflow_name: test-unit
+      run_status: ${{ needs.backend-unit.result == 'success' && needs.frontend-unit.result == 'success' && 'success' || 'failure' }}
+      environment: ci
+      summary: ${{ format('backend={0}, frontend={1}', needs.backend-unit.result, needs.frontend-unit.result) }}
+      metrics: ${{ format('backend_artifact=backend-unit-build; frontend_artifact=frontend-unit-coverage; sha={0}', github.sha) }}
+    secrets: inherit

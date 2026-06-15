@@ -1,0 +1,149 @@
+name: Monitoring and health checks
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: staging, mainnet, or all
+        required: true
+        default: all
+        type: choice
+        options: [all, staging, mainnet]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: monitoring-health
+  cancel-in-progress: false
+
+env:
+  ICP_CLI_VERSION: '0.1.0-beta.3'
+
+jobs:
+  staging-health:
+    name: Staging canister health
+    if: github.event_name == 'schedule' || github.event.inputs.environment == 'all' || github.event.inputs.environment == 'staging'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install ICP CLI when credentials are available
+        env:
+          ICP_IDENTITY_PEM: ${{ secrets.ICP_STAGING_IDENTITY_PEM }}
+        run: |
+          set -euo pipefail
+          if [ -z "${ICP_IDENTITY_PEM:-}" ]; then
+            echo "No staging ICP identity configured; skipping ICP CLI setup."
+            exit 0
+          fi
+          curl --proto '=https' --tlsv1.2 -LsSf https://github.com/dfinity/icp-cli/releases/download/v${{ env.ICP_CLI_VERSION }}/icp-cli-installer.sh | sh
+          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+          mkdir -p ~/.config/icp
+          printf '%s' "$ICP_IDENTITY_PEM" > ~/.config/icp/identity.pem
+          chmod 600 ~/.config/icp/identity.pem
+
+      - name: Run staging health checks
+        env:
+          FRONTEND_URL: ${{ secrets.STAGING_FRONTEND_URL || format('https://{0}.icp0.io', secrets.STAGING_FRONTEND_CANISTER_ID) }}
+          BACKEND_URL: ${{ secrets.STAGING_BACKEND_URL || format('https://{0}.raw.icp0.io', secrets.STAGING_BACKEND_CANISTER_ID) }}
+          MONITORING_INGEST_URL: ${{ secrets.MONITORING_INGEST_URL }}
+        run: |
+          set -euo pipefail
+          mkdir -p monitoring
+          curl --fail --silent --show-error "$FRONTEND_URL" > /dev/null
+          curl --fail --silent --show-error "$BACKEND_URL" > /dev/null
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          payload = {
+              'environment': 'staging',
+              'frontend_url': os.environ['FRONTEND_URL'],
+              'backend_url': os.environ['BACKEND_URL'],
+          }
+          Path('monitoring/staging-metrics.json').write_text(json.dumps(payload, indent=2), encoding='utf-8')
+          PY
+          if [ -n "${MONITORING_INGEST_URL:-}" ]; then
+            curl --fail --silent --show-error -H 'Content-Type: application/json' --data @monitoring/staging-metrics.json "$MONITORING_INGEST_URL"
+          fi
+
+      - name: Upload staging metrics
+        uses: actions/upload-artifact@v4
+        with:
+          name: staging-monitoring-metrics
+          path: monitoring
+          retention-days: 14
+          if-no-files-found: error
+
+  mainnet-health:
+    name: Mainnet canister health
+    if: github.event_name == 'schedule' || github.event.inputs.environment == 'all' || github.event.inputs.environment == 'mainnet'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install ICP CLI when credentials are available
+        env:
+          ICP_IDENTITY_PEM: ${{ secrets.ICP_IDENTITY_PEM }}
+        run: |
+          set -euo pipefail
+          if [ -z "${ICP_IDENTITY_PEM:-}" ]; then
+            echo "No mainnet ICP identity configured; skipping ICP CLI setup."
+            exit 0
+          fi
+          curl --proto '=https' --tlsv1.2 -LsSf https://github.com/dfinity/icp-cli/releases/download/v${{ env.ICP_CLI_VERSION }}/icp-cli-installer.sh | sh
+          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+          mkdir -p ~/.config/icp
+          printf '%s' "$ICP_IDENTITY_PEM" > ~/.config/icp/identity.pem
+          chmod 600 ~/.config/icp/identity.pem
+
+      - name: Run mainnet health checks
+        env:
+          FRONTEND_URL: ${{ secrets.MAINNET_FRONTEND_URL || format('https://{0}.icp0.io', secrets.FRONTEND_CANISTER_ID) }}
+          BACKEND_URL: ${{ secrets.MAINNET_BACKEND_URL || format('https://{0}.raw.icp0.io', secrets.BACKEND_CANISTER_ID) }}
+          MONITORING_INGEST_URL: ${{ secrets.MONITORING_INGEST_URL }}
+        run: |
+          set -euo pipefail
+          mkdir -p monitoring
+          curl --fail --silent --show-error "$FRONTEND_URL" > /dev/null
+          curl --fail --silent --show-error "$BACKEND_URL" > /dev/null
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          payload = {
+              'environment': 'mainnet',
+              'frontend_url': os.environ['FRONTEND_URL'],
+              'backend_url': os.environ['BACKEND_URL'],
+          }
+          Path('monitoring/mainnet-metrics.json').write_text(json.dumps(payload, indent=2), encoding='utf-8')
+          PY
+          if [ -n "${MONITORING_INGEST_URL:-}" ]; then
+            curl --fail --silent --show-error -H 'Content-Type: application/json' --data @monitoring/mainnet-metrics.json "$MONITORING_INGEST_URL"
+          fi
+
+      - name: Upload mainnet metrics
+        uses: actions/upload-artifact@v4
+        with:
+          name: mainnet-monitoring-metrics
+          path: monitoring
+          retention-days: 14
+          if-no-files-found: error
+
+  notify:
+    name: Notify Slack
+    if: always()
+    needs: [staging-health, mainnet-health]
+    uses: ./.github/workflows/notify-slack.yml
+    with:
+      workflow_name: monitoring-health
+      run_status: ${{ (needs.staging-health.result == 'success' || needs.staging-health.result == 'skipped') && (needs.mainnet-health.result == 'success' || needs.mainnet-health.result == 'skipped') && 'success' || 'failure' }}
+      environment: monitoring
+      summary: ${{ format('staging={0}, mainnet={1}', needs.staging-health.result, needs.mainnet-health.result) }}
+      metrics: health_checks=completed
+    secrets: inherit

@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aicli"
+version = "0.1.0"
+description = "Production-quality AI CLI for PARRALAX backend and local LLM workflows."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+  { name = "ItsNotAILABS" }
+]
+dependencies = [
+  "typer>=0.12.5,<0.13",
+  "rich>=13.7.1,<14",
+  "PyYAML>=6.0.2,<7",
+  "requests>=2.32.3,<3"
+]
+keywords = ["ai", "cli", "parallax", "ollama", "developer-tools"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Software Development :: Code Generators",
+  "Topic :: Utilities"
+]
+
+[project.scripts]
+aicli = "aicli.cli:main"
+
+[project.entry-points."aicli.plugins"]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["aicli*"]
+
+[tool.setuptools.package-data]
+aicli = ["config.yaml"]

@@ -3,6 +3,8 @@ import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import environment from "vite-plugin-environment";
 
+const isProduction = process.env.DFX_NETWORK === "ic" || process.env.NODE_ENV === "production";
+
 const ii_url =
   process.env.DFX_NETWORK === "local"
     ? `http://rdmx6-jaaaa-aaaaa-aaadq-cai.localhost:8081/`
@@ -16,8 +18,8 @@ export default defineConfig({
   logLevel: "error",
   build: {
     emptyOutDir: true,
-    sourcemap: false,
-    minify: false,
+    sourcemap: !isProduction,
+    minify: isProduction ? "esbuild" : false,
   },
   css: {
     postcss: "./postcss.config.js",

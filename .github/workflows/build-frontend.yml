@@ -1,0 +1,77 @@
+name: Build frontend
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-frontend-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '20'
+  PNPM_VERSION: '10'
+
+jobs:
+  build-frontend:
+    name: Build React frontend
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install frontend dependencies
+        working-directory: src/frontend
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Type check frontend
+        working-directory: src/frontend
+        run: pnpm typecheck
+
+      - name: Run build:skip-bindings when available
+        working-directory: src/frontend
+        run: |
+          set -euo pipefail
+          if pnpm run | grep -q '^  build:skip-bindings'; then
+            pnpm run build:skip-bindings
+          else
+            pnpm build
+          fi
+
+      - name: Upload frontend artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: src/frontend/dist
+          retention-days: 14
+          if-no-files-found: error
+
+  notify:
+    name: Notify Slack
+    if: always()
+    needs: [build-frontend]
+    uses: ./.github/workflows/notify-slack.yml
+    with:
+      workflow_name: build-frontend
+      run_status: ${{ needs.build-frontend.result == 'success' && 'success' || 'failure' }}
+      environment: build
+      summary: ${{ format('frontend-build={0}', needs.build-frontend.result) }}
+      metrics: frontend_artifacts=frontend-dist
+    secrets: inherit

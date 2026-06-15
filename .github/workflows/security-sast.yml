@@ -1,0 +1,141 @@
+name: Security SAST
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+  security-events: write
+
+concurrency:
+  group: security-sast-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '20'
+  PNPM_VERSION: '10'
+
+jobs:
+  sonarqube-sast:
+    name: SonarQube SAST
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect SonarQube configuration
+        id: sonar
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        run: |
+          set -euo pipefail
+          if [ -n "${SONAR_TOKEN:-}" ] && [ -n "${SONAR_HOST_URL:-}" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: SonarQube scan
+        if: steps.sonar.outputs.enabled == 'true'
+        uses: SonarSource/sonarqube-scan-action@v4.1.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+      - name: Skip SonarQube scan when secrets are absent
+        if: steps.sonar.outputs.enabled != 'true'
+        run: echo "SONAR_TOKEN or SONAR_HOST_URL is not configured; skipping SonarQube scan."
+
+  npm-audit:
+    name: npm audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          cache-dependency-path: pnpm-lock.yaml
+
+      - name: Install root dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Install frontend dependencies
+        working-directory: src/frontend
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Audit Node dependencies
+        run: |
+          set -euo pipefail
+          pnpm audit --audit-level high
+          (cd src/frontend && pnpm audit --audit-level high)
+
+  cargo-audit:
+    name: Cargo audit (${{ matrix.manifest }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        manifest:
+          - services/rust-engine/Cargo.toml
+          - rust/execution-engine/Cargo.toml
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Cargo registry
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: ${{ matrix.manifest }} -> target
+
+      - name: Install cargo-audit
+        run: cargo install cargo-audit --locked
+
+      - name: Run cargo audit
+        run: cargo audit --deny warnings --manifest-path ${{ matrix.manifest }}
+
+  trivy-scan:
+    name: Trivy repository scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Trivy filesystem scan
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          scan-type: fs
+          scan-ref: .
+          severity: CRITICAL,HIGH
+          ignore-unfixed: true
+          exit-code: '1'
+          format: table
+
+  notify:
+    name: Notify Slack
+    if: always()
+    needs: [sonarqube-sast, npm-audit, cargo-audit, trivy-scan]
+    uses: ./.github/workflows/notify-slack.yml
+    with:
+      workflow_name: security-sast
+      run_status: ${{ needs.npm-audit.result == 'success' && needs.cargo-audit.result == 'success' && needs.trivy-scan.result == 'success' && (needs.sonarqube-sast.result == 'success' || needs.sonarqube-sast.result == 'skipped') && 'success' || 'failure' }}
+      environment: security
+      summary: ${{ format('sonarqube={0}, npm={1}, cargo={2}, trivy={3}', needs.sonarqube-sast.result, needs.npm-audit.result, needs.cargo-audit.result, needs.trivy-scan.result) }}
+      metrics: ${{ format('severity=CRITICAL,HIGH; sha={0}', github.sha) }}
+    secrets: inherit
