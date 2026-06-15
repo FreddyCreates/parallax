@@ -182,18 +182,39 @@ function analyzeMainMo() {
     }
 
     // ─ Check domain initializations ─
+    // Count var declarations in SovereignState record and separate var declarations
+    const varCount = (content.match(/var \w+\s*:/g) || []).length;
+    
+    // More comprehensive domain pattern matching
     const domainPatterns = [
-      { id: 1, pattern: /SovereignDB|sovereign_db/ },
-      { id: 2, pattern: /GenesisAct|genesis/ },
-      { id: 3, pattern: /SchoolReg|school/ },
-      { id: 4, pattern: /Nodus|nodus/ },
-      { id: 5, pattern: /Aegis|aegis/ },
-      { id: 6, pattern: /AgiScripts|agi/ },
-      { id: 7, pattern: /ArtifactFeedback|artifact_feedback/ },
-      { id: 8, pattern: /BeatTime|beat_time/ },
-      { id: 19, pattern: /PhantomIntel|phantom_intelligence/ },
-      { id: 20, pattern: /PhantomExchange|phantom_exchange/ },
-      { id: 24, pattern: /TokenomicsMeasurement|tokenomics_measurement/ },
+      { id: 1, pattern: /SovereignDB|sovereign_db|import SovereignDB/ },
+      { id: 2, pattern: /GenesisAct|genesis|import.*GenesisAct/ },
+      { id: 3, pattern: /SchoolReg|school|import.*SchoolReg/ },
+      { id: 4, pattern: /Nodus|nodus|import.*Nodus/ },
+      { id: 5, pattern: /Aegis|aegis|import.*Aegis/ },
+      { id: 6, pattern: /AgiScripts|agi|import.*AgiScripts/ },
+      { id: 7, pattern: /ArtifactFeedback|artifact_feedback|import.*Feedback/ },
+      { id: 8, pattern: /BeatTime|beat_time|import.*BeatTime/ },
+      { id: 9, pattern: /BirthAi|birth_ai|import.*Birth/ },
+      { id: 10, pattern: /BuilderSdk|builder_sdk|import.*BuilderSdk/ },
+      { id: 11, pattern: /CanisterRegistry|canister_registry|import.*CanisterRegistry/ },
+      { id: 12, pattern: /Charter|charter|import.*Charter/ },
+      { id: 13, pattern: /CognitionLayer|cognition_layer|import.*Cognition/ },
+      { id: 14, pattern: /DeepCrypto|deep_crypto|import.*DeepCrypto/ },
+      { id: 15, pattern: /DogonSubstrate|dogon_substrate|import.*Dogon/ },
+      { id: 16, pattern: /AiEngines|ai_engines|import.*Engines/ },
+      { id: 17, pattern: /IntelligenceRouting|intelligence_routing|import.*Routing/ },
+      { id: 18, pattern: /AiArtifactRegistry|artifact_registry|import.*ArtifactRegistry/ },
+      { id: 19, pattern: /PhantomIntel|phantom_intelligence|import.*PhantomIntel/ },
+      { id: 20, pattern: /PhantomExchange|phantom_exchange|import.*PhantomExchange/ },
+      { id: 21, pattern: /PhantomClearinghouse|phantom_clearinghouse|import.*Clearinghouse/ },
+      { id: 22, pattern: /ProductionEngines|production_engines|import.*ProductionEngines/ },
+      { id: 23, pattern: /IntelligenceContracts|intelligence_contracts|import.*Contracts/ },
+      { id: 24, pattern: /TokenomicsMeasurement|tokenomics_measurement|import.*TokenomicsMeasurement/ },
+      { id: 25, pattern: /ModelRegistry|model_registry|import.*ModelRegistry/ },
+      { id: 26, pattern: /ContextRouter|context_router|import.*ContextRouter/ },
+      { id: 27, pattern: /NovaRuntime|nova_runtime|import.*NovaRuntime/ },
+      { id: 28, pattern: /AiNode|ai_node|import.*AiNode/ },
     ];
 
     domainPatterns.forEach((d) => {

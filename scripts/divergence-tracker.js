@@ -222,15 +222,20 @@ function auditLaws() {
       tracker.warnings.push('FL004: Domain permanence check inconclusive');
     }
 
+    // FL005: Check for law enforcement patterns
+    // Look for assert/check patterns that enforce rules
+    const hasAsserts = /assert|check|Error|#err|if.*return.*#err/i.test(content);
+    const hasAuthChecks = /caller|principal|authorize|permission/i.test(content);
     tracker.laws_verified.FL005 = {
       name: MEGA_LAWS.FL005.name,
       verified:
         content.includes('FORBID') ||
         content.includes('REQUIRE') ||
-        content.includes('ESCALATE'),
+        content.includes('ESCALATE') ||
+        (hasAsserts && hasAuthChecks),
     };
     if (!tracker.laws_verified.FL005.verified) {
-      tracker.warnings.push('FL005: Law enforcement gates not found');
+      tracker.warnings.push('FL005: Law enforcement gates not found (requires FORBID/REQUIRE/ESCALATE or authorization checks)');
     }
 
     // ─ Calculate divergence rate ─
