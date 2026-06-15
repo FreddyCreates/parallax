@@ -42,6 +42,7 @@ import IntelligenceExtensions "intelligence_extensions";
 import IntelligenceCoupling "intelligence_coupling";
 import Charter "charter";
 import TokenomicsMeasurement "tokenomics_measurement";
+import AiNode "ai_node";
 
 
 
@@ -154,6 +155,12 @@ actor PARALLAX {
   // Efficiency, Benchmark Tasks, Runtime Loop, Evaluation Criteria, Hypotheses.
   var tokenomicsMeasurementState : TokenomicsMeasurement.TokenomicsMeasurementState = TokenomicsMeasurement.defaultTokenomicsMeasurementState();
 
+  // ── DOMAIN 40 — AI_NODE_STATE ────────────────────────────────────────────
+  // Sovereign AI Reasoning Engine: multi-path inference, knowledge management,
+  // artifact creation, doctrine validation, performance metrics tracking.
+  // Produces tradeable cognitive artifacts for the organism's intelligence layer.
+  var aiNodeState : AiNode.AiNodeState = AiNode.defaultAiNodeState();
+
 
   // ══════════════════════════════════════════════════════════════════════
   // CREATOR SUPREMACY LAW — assertCreator gate
@@ -261,6 +268,11 @@ actor PARALLAX {
       // Advance the 11-step Runtime Measurement Loop by one step per beat.
       // Salience scoring, budget allocation, compression audit, CRPT tracking.
       tokenomicsMeasurementState := TokenomicsMeasurement.tick(tokenomicsMeasurementState, Nat64.toNat(beat));
+
+      // ── AI NODE — Domain 40: autonomous reasoning metrics update ──────────
+      // Heartbeat tick: update performance metrics, decay old reasoning paths,
+      // track coherence alignment with main organism, advance artifact validation.
+      aiNodeState := AiNode.tickBeat(aiNodeState, beat.toInt());
 
       // ── BANKING SSU beat increment — Domain 17 ───────────────────────────
       // PIL loop: upregulate weakest monitoring domain each beat
@@ -2524,6 +2536,89 @@ actor PARALLAX {
     };
     tokenomicsMeasurementState := TokenomicsMeasurement.recordBenchmark(
       tokenomicsMeasurementState, taskClass, taskLabel, compA, tokensA, compB, tokensB
+    );
+  };
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // AI NODE — Domain 40 public endpoints
+  // Sovereign AI reasoning engine: inference, knowledge, artifacts, metrics
+  // ══════════════════════════════════════════════════════════════════════════
+
+  /// getAiNodeState — full AI node snapshot
+  public query func getAiNodeState() : async AiNode.AiNodeState {
+    aiNodeState
+  };
+
+  /// queryAiNode — search knowledge graph by topic
+  public query func queryAiNode(topic : Text) : async [AiNode.KnowledgeEmbedding] {
+    AiNode.queryKnowledge(aiNodeState, topic)
+  };
+
+  /// reasonAbout — execute AI reasoning on a query
+  public shared(_msg) func reasonAbout(query : Text) : async AiNode.ReasoningPath {
+    let beat = SovereignDB.getBeatCount(db);
+    let (newState, path) = AiNode.reason(aiNodeState, query, beat.toInt());
+    aiNodeState := newState;
+    path
+  };
+
+  /// createAiArtifact — generate a tradeable cognitive output
+  public shared(_msg) func createAiArtifact(
+    content : Text,
+    artifactType : AiNode.ArtifactType,
+    reasoningId : Text,
+    confidence : Float,
+  ) : async AiNode.AiArtifact {
+    let beat = SovereignDB.getBeatCount(db);
+    let (newState, artifact) = AiNode.createArtifact(
+      aiNodeState,
+      content,
+      artifactType,
+      reasoningId,
+      confidence,
+      beat.toInt()
+    );
+    aiNodeState := newState;
+    artifact
+  };
+
+  /// validateArtifactDoctrine — mark artifact as doctrine-validated
+  public shared(msg) func validateArtifactDoctrine(artifactId : Text) : async () {
+    assertCreator(msg.caller);
+    aiNodeState := AiNode.validateArtifactDoctrine(aiNodeState, artifactId);
+  };
+
+  /// getAiReasoningPaths — retrieve recent reasoning paths
+  public query func getAiReasoningPaths(limit : Nat) : async [AiNode.ReasoningPath] {
+    AiNode.queryRecentReasoningPaths(aiNodeState, limit)
+  };
+
+  /// getAiArtifacts — retrieve created AI artifacts
+  public query func getAiArtifacts() : async [AiNode.AiArtifact] {
+    AiNode.getCreatedArtifacts(aiNodeState)
+  };
+
+  /// getAiMetrics — retrieve AI node performance metrics
+  public query func getAiMetrics() : async AiNode.PerformanceMetrics {
+    AiNode.getMetrics(aiNodeState)
+  };
+
+  /// addKnowledgeEmbedding — register a new knowledge embedding
+  public shared(msg) func addKnowledgeEmbedding(
+    topic : Text,
+    vectorHash : Text,
+    dimensionality : Nat,
+    magnitude : Float,
+  ) : async () {
+    assertCreator(msg.caller);
+    let beat = SovereignDB.getBeatCount(db);
+    aiNodeState := AiNode.addKnowledgeEmbedding(
+      aiNodeState,
+      topic,
+      vectorHash,
+      dimensionality,
+      magnitude,
+      beat.toInt()
     );
   };
 
