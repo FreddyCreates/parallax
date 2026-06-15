@@ -852,6 +852,14 @@ actor PARALLAX {
     SovereignDB.getKuramotoR(db)
   };
 
+  public query func getHomeostasisState() : async Homeostat.HomeostasisState {
+    homeostasisState
+  };
+
+  public query func getHomeostasisMetrics() : async Homeostat.EffectivenessMetrics {
+    Homeostat.getMetrics(homeostasisState, SovereignDB.getKuramotoR(db))
+  };
+
   public query func getIcpBalance() : async Float {
     SovereignDB.getIcpBalance(db)
   };
@@ -2964,6 +2972,23 @@ actor PARALLAX {
     assertCreator(msg.caller);
     let nowNs = Time.now();
     charterState := Charter.vacateOffice(charterState, officeId, nowNs);
+  };
+
+  /// procesPercept — feed sensory percept into homeostat for pattern matching
+  /// Couples surprise/prediction-error to awareness, driving it down on mismatch
+  public func procesPercept(
+    percept_value: Float,
+    pattern_id: Text
+  ) : async () {
+    let beat = SovereignDB.getBeatCount(db);
+    let coherence = SovereignDB.getKuramotoR(db);
+    homeostasisState := Homeostat.procesPercept(
+      homeostasisState,
+      percept_value,
+      pattern_id,
+      coherence,
+      beat
+    );
   };
 
 
