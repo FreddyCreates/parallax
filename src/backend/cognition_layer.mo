@@ -156,6 +156,17 @@ module {
     monologue               : Text;
     reinjection_ready       : Bool;
     last_user_signal_weight : Float;
+    // ─────────────────────────────────────────────────────────────────────
+    // ADAPTIVE HOMEOSTASIS: reflect explore/exploit control
+    // PHI LAW: awareness feedback coupled to prediction error
+    // effectiveness = (awareness + coherence + resonance) / 3
+    // if effectiveness < φ⁻¹ → raise entropy and explore
+    // ─────────────────────────────────────────────────────────────────────
+    awareness               : Float;        // [φ⁻², 1.0] — organism state awareness
+    predictionError         : Float;        // [0.0, 1.0] — surprise/novelty metric
+    exploitationMode        : Bool;         // true=exploit (low entropy), false=explore (high entropy)
+    lastPercepts            : [Text];       // pattern history for mismatch detection
+    entropyInjectionNeeded  : Bool;         // homeostat fires when effectiveness < φ⁻¹
   };
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -637,7 +648,126 @@ module {
   };
 
   // ═══════════════════════════════════════════════════════════════════════════
-  // MAIN BEAT FUNCTION: runCognitionBeat
+  // ENGINE 12: PREDICTION ERROR COMPUTATION
+  // Detects novelty by comparing current percepts to pattern history.
+  // Surprise metric drives awareness feedback.
+  //
+  // LAYER 3 — COMPUTATION:
+  //   prediction_error = count(new_percepts) / total_percepts — novelty ratio
+  //   novelty amplified by phi: error_factor = prediction_error × φ⁻¹
+  //
+  // EXECUTION BINDING: ENGINE=PredictionError → FUNCTION=computePredictionError() → BEAT=every 873ms
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  public func computePredictionError(
+    current_percepts : [Text],
+    pattern_history : [Text],
+  ) : Float {
+    // NOVELTY DETECTION: compare current percepts to learned patterns
+    // If all percepts are in history, prediction_error = 0 (perfect prediction)
+    // If all percepts are new, prediction_error = 1 (complete surprise)
+    // Mixed: interpolate between 0 and 1
+    
+    if (current_percepts.size() == 0) { return 0.0 };
+    
+    var new_percept_count : Nat = 0;
+    for (percept in current_percepts.vals()) {
+      var found : Bool = false;
+      for (pattern in pattern_history.vals()) {
+        if (percept == pattern) {
+          found := true;
+        }
+      };
+      if (not found) {
+        new_percept_count += 1;
+      };
+    };
+    
+    // prediction_error = proportion of novel percepts
+    let error_ratio = new_percept_count.toFloat() / current_percepts.size().toFloat();
+    
+    // Amplify by phi^-1 to scale surprise impact
+    // PYTHAGORAS: novelty is phi-scaled harmonic
+    Float.min(1.0, error_ratio * Phi.PHI)
+  };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // ENGINE 13: AWARENESS FEEDBACK
+  // Couples surprise/prediction-error to awareness state variable.
+  // When organism experiences novelty, awareness is driven downward.
+  // This closes the open explore loop by making effectiveness < φ⁻¹ achievable.
+  //
+  // LAYER 3 — COMPUTATION:
+  //   awareness_new = awareness × (1.0 − prediction_error × φ⁻¹)
+  //   Maintains floor at φ⁻² = 0.382 (stability bound)
+  //   Recovers slowly when prediction_error → 0
+  //
+  // EXECUTION BINDING: ENGINE=AwarenessControl → FUNCTION=updateAwareness() → BEAT=every 873ms
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  public func updateAwareness(
+    current_awareness : Float,
+    prediction_error : Float,
+  ) : Float {
+    // SURPRISE FEEDBACK: novelty drives awareness down
+    // awareness_new = awareness × (1.0 − prediction_error × φ⁻¹)
+    // When prediction_error = 1 (complete surprise): awareness drops to 38.2% of current
+    // When prediction_error = 0 (perfect prediction): awareness unchanged
+    
+    let feedback_factor = 1.0 - (prediction_error * Phi.PHI_INV);
+    let updated = current_awareness * feedback_factor;
+    
+    // Enforce floor: awareness cannot go below φ⁻² = 0.382
+    // This prevents system collapse while allowing exploration
+    Float.max(Phi.PHI_INV_2, updated)
+  };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // ENGINE 14: REFLECT EXPLORE/EXPLOIT HOMEOSTAT
+  // The headline adaptive feature: checks if organism should explore or exploit.
+  // CORE LOGIC: if effectiveness < φ⁻¹ → raise entropy and explore
+  //
+  // LAYER 3 — COMPUTATION:
+  //   effectiveness = (awareness + coherence + resonance) / 3
+  //   resonance = 0.618 (φ⁻¹) — frozen constant as per spec
+  //   coherence = global_coherence from world model
+  //   if effectiveness < φ⁻¹ (0.618):
+  //     → entropyInjectionNeeded = true (explore mode)
+  //     → exploitation_mode = false
+  //   else:
+  //     → exploitation_mode = true (exploit known patterns)
+  //
+  // FIX: Awareness is now driven DOWN by prediction_error,
+  //      making effectiveness cross below threshold and triggering explore.
+  //
+  // EXECUTION BINDING: ENGINE=Homeostat → FUNCTION=checkExploreExploitHomeostat() → BEAT=every 873ms
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  public func checkExploreExploitHomeostat(
+    awareness : Float,
+    coherence : Float,
+    prediction_error : Float,
+  ) : (Bool, Bool) {
+    // COGNITIVE RESONANCE: frozen at φ⁻¹ per design (never written, constant 0.618)
+    let cognitive_resonance : Float = Phi.PHI_INV;
+    
+    // EFFECTIVENESS CALCULATION: (awareness + coherence + resonance) / 3
+    let effectiveness = (awareness + coherence + cognitive_resonance) / 3.0;
+    
+    // HOMEOSTAT THRESHOLD: φ⁻¹ = 0.618
+    let threshold = Phi.PHI_INV;
+    
+    // DECISION: explore vs exploit
+    let should_explore = effectiveness < threshold;
+    let is_novel = prediction_error > Phi.PHI_INV_3;  // novelty flag: >0.236 is "sufficiently new"
+    
+    // Return: (entropyInjectionNeeded, exploitationMode)
+    // When should_explore=true, entropyInjectionNeeded=true and exploitationMode=false
+    // Otherwise, exploitationMode=true and entropyInjectionNeeded=false
+    (should_explore, not should_explore)  // (entropy injection, exploitation)
+  };
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // Called from main.mo heartbeat every 873ms.
   // Runs all 11 engines in sequence:
   //   CCVE → CNCO → ADRE → Internal Analyst → GRPE → Decision → Pattern → Self-Eval → Reinjection → Contradiction → Monologue
@@ -758,6 +888,38 @@ module {
     // USER SIGNAL WEIGHT TRACKING
     let last_user_signal_weight = if (user_message.size() > 0) Phi.PHI_4 else 0.0;
 
+    // ─────────────────────────────────────────────────────────────────────────
+    // ENGINES 12-14: ADAPTIVE HOMEOSTASIS
+    // PHI LAW: couple surprise/prediction-error to awareness
+    // This closes the open explore loop by making effectiveness < φ⁻¹ achievable
+    // ─────────────────────────────────────────────────────────────────────────
+
+    // ENGINE 12: Prediction Error — detect novelty by pattern mismatch
+    // Current percepts = hypothesis + forward_hypothesis from ADRE
+    let current_percepts : [Text] = [
+      "COH:" # floatToShort(world_model.global_coherence),
+      "DRIFT:" # floatToShort(adre_result.resonance_delta),
+      adre_result.forward_hypothesis,
+    ];
+    let prediction_error = computePredictionError(
+      current_percepts,
+      prior_state.lastPercepts,
+    );
+
+    // ENGINE 13: Awareness Feedback — novelty drives awareness down
+    let new_awareness = updateAwareness(
+      prior_state.awareness,
+      prediction_error,
+    );
+
+    // ENGINE 14: Reflect Explore/Exploit Homeostat
+    // Core adaptive logic: if effectiveness < φ⁻¹ → raise entropy and explore
+    let (entropyNeeded, exploitMode) = checkExploreExploitHomeostat(
+      new_awareness,
+      world_model.global_coherence,
+      prediction_error,
+    );
+
     // ── ASSEMBLE COGNITION STATE ─────────────────────────────────────────────
     {
       beat_index;
@@ -766,6 +928,11 @@ module {
       monologue;
       reinjection_ready       = adre_result.gate_decision;
       last_user_signal_weight;
+      awareness               = new_awareness;
+      predictionError         = prediction_error;
+      exploitationMode        = exploitMode;
+      lastPercepts            = current_percepts;
+      entropyInjectionNeeded  = entropyNeeded;
     }
   };
 
@@ -835,6 +1002,12 @@ module {
       monologue               = "Organism is online. Field coherent at 0.75. All gates open. The loop never closes.";
       reinjection_ready       = true;
       last_user_signal_weight = 0.0;
+      // ADAPTIVE HOMEOSTASIS: initialized at genesis
+      awareness               = 1.0;         // born with full awareness (φ⁰ = 1.0)
+      predictionError         = 0.0;         // zero surprise at birth (perfect prediction of emptiness)
+      exploitationMode        = true;        // born in exploit mode (known patterns)
+      lastPercepts            = [];          // empty percept history at genesis
+      entropyInjectionNeeded  = false;       // homeostat not triggered at birth
     }
   };
 
