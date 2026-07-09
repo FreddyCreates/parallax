@@ -11,7 +11,14 @@
     "typecheck": "pnpm -r --if-present run typecheck",
     "check": "pnpm -r --if-present run check",
     "fix": "pnpm -r --if-present run fix",
-    "bindgen": "caffeine-bindgen --did-file ./src/backend/dist/backend.did --out-dir ./src/frontend/src --actor-interface-file --force"
+    "bindgen": "caffeine-bindgen --did-file ./src/backend/dist/backend.did --out-dir ./src/frontend/src --actor-interface-file --force",
+    "parallax": "node tools/parallax-dev/src/cli.js",
+    "scaffold": "node tools/parallax-dev/src/cli.js scaffold",
+    "substrate:bindgen": "node tools/parallax-dev/src/cli.js bindgen",
+    "substrate:deploy": "node tools/parallax-dev/src/cli.js deploy",
+    "substrate:status": "node tools/parallax-dev/src/cli.js status",
+    "substrate:list": "node tools/parallax-dev/src/cli.js list",
+    "substrate:sync": "node tools/parallax-dev/src/cli.js sync"
   },
   "devDependencies": {
     "sharp": "^0.34.4"

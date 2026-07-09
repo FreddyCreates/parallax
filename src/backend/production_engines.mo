@@ -39,6 +39,9 @@ import Array "mo:core/Array";
 import Int "mo:core/Int";
 import Nat "mo:core/Nat";
 import Nat32 "mo:core/Nat32";
+import GameTheory "game_theory";
+import PortfolioQuant "portfolio_quant";
+import PricingModels "pricing_models";
 
 module {
 
@@ -161,6 +164,12 @@ module {
     averageCoherence      : Float;
     lastGlobalBeat        : Int;
     systemEntropy         : Float;   // H = -Σ pᵢ log pᵢ (information entropy)
+  };
+
+  public type DomainStrategicEquilibrium = {
+    game             : GameTheory.TwoPlayerGame;
+    pureEquilibria   : [GameTheory.PureStrategyEquilibrium];
+    mixedEquilibrium : GameTheory.MixedStrategyEquilibrium;
   };
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -661,6 +670,109 @@ module {
   };
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // GAME THEORY INTEGRATION — production engines as strategic players
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  func averageModelAccuracy(engine : ProductionEngine) : Float {
+    if (engine.aiModels.size() == 0) { return 0.0 };
+    var total : Float = 0.0;
+    for (model in engine.aiModels.vals()) {
+      total += model.accuracy;
+    };
+    total / Float.fromInt(engine.aiModels.size())
+  };
+
+  func outputOverlap(left : [ProductionOutputType], right : [ProductionOutputType]) : Float {
+    if (left.size() == 0 or right.size() == 0) { return 0.0 };
+    var overlapCount : Nat = 0;
+    for (l in left.vals()) {
+      for (r in right.vals()) {
+        if (l == r) { overlapCount += 1 };
+      };
+    };
+    let denom = left.size() + right.size() - overlapCount;
+    Float.fromInt(overlapCount.toInt()) / Float.fromInt(denom.toInt())
+  };
+
+  func engineStrategicStrength(engine : ProductionEngine) : Float {
+    engine.productionRate + engine.phiConstant + averageModelAccuracy(engine) + Float.fromInt(engine.outputTypes.size()) * Phi.PHI_INV_5
+  };
+
+  func pairwiseStrategicPayoff(row : ProductionEngine, column : ProductionEngine) : { row : Float; column : Float } {
+    let rowStrength = engineStrategicStrength(row);
+    let columnStrength = engineStrategicStrength(column);
+    let synergy = outputOverlap(row.outputTypes, column.outputTypes) * Phi.PHI_INV;
+    let coherenceBonus = if (row.coherenceGate >= Phi.PHI_INV and column.coherenceGate >= Phi.PHI_INV) { Phi.PHI_INV_3 } else { 0.0 };
+    {
+      row = rowStrength - columnStrength * Phi.PHI_INV_2 + synergy + coherenceBonus;
+      column = columnStrength - rowStrength * Phi.PHI_INV_2 + synergy + coherenceBonus;
+    }
+  };
+
+  public func deriveDomainCompetitionGame(
+    state : ProductionEngineState,
+    rowDomain : EngineDomain,
+    columnDomain : EngineDomain
+  ) : GameTheory.TwoPlayerGame {
+    let rowEngines = listByDomain(state, rowDomain);
+    let columnEngines = listByDomain(state, columnDomain);
+    {
+      rowStrategies = Array.map<ProductionEngine, Text>(rowEngines, func(engine) { engine.latinOfficialName });
+      columnStrategies = Array.map<ProductionEngine, Text>(columnEngines, func(engine) { engine.latinOfficialName });
+      rowPayoffs = Array.tabulate<[Float]>(rowEngines.size(), func(i) {
+        Array.tabulate<Float>(columnEngines.size(), func(j) {
+          pairwiseStrategicPayoff(rowEngines[i], columnEngines[j]).row
+        })
+      });
+      columnPayoffs = Array.tabulate<[Float]>(rowEngines.size(), func(i) {
+        Array.tabulate<Float>(columnEngines.size(), func(j) {
+          pairwiseStrategicPayoff(rowEngines[i], columnEngines[j]).column
+        })
+      });
+    }
+  };
+
+  public func solveDomainCompetition(
+    state : ProductionEngineState,
+    rowDomain : EngineDomain,
+    columnDomain : EngineDomain
+  ) : DomainStrategicEquilibrium {
+    let game = deriveDomainCompetitionGame(state, rowDomain, columnDomain);
+    let mixed = if (game.rowStrategies.size() == 0 or game.columnStrategies.size() == 0) {
+      {
+        rowProbabilities = [];
+        columnProbabilities = [];
+        rowSupport = [];
+        columnSupport = [];
+        expectedRowPayoff = 0.0;
+        expectedColumnPayoff = 0.0;
+        maxRegret = 0.0;
+        converged = true;
+        iterations = 0;
+        method = "empty-domain";
+      }
+    } else {
+      GameTheory.solveMixedStrategyNash(game, GameTheory.DEFAULT_ITERATIONS)
+    };
+    {
+      game = game;
+      pureEquilibria = GameTheory.solvePureStrategyNash(game);
+      mixedEquilibrium = mixed;
+    }
+  };
+
+  public func detectArbitrageOpportunities(
+    state : ProductionEngineState,
+    quotes : [GameTheory.MarketQuote]
+  ) : [GameTheory.ArbitrageOpportunity] {
+    if (not checkGlobalCoherence(state) or listByDomain(state, #arbitrium).size() == 0) {
+      []
+    } else {
+      GameTheory.detectStrategicArbitrage(quotes)
+    }
+  };
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // PUBLIC API — Engine access and query functions
   // ═══════════════════════════════════════════════════════════════════════════
 
@@ -728,6 +840,109 @@ module {
   // ═══════════════════════════════════════════════════════════════════════════
   // PRODUCTION METRICS — aggregate statistics
   // ═══════════════════════════════════════════════════════════════════════════
+
+
+  public type PortfolioQuantBinding = {
+    optimizerEngine : ProductionEngine;
+    riskEngine : ProductionEngine;
+  };
+
+  public func getPortfolioQuantBinding(state : ProductionEngineState) : ?PortfolioQuantBinding {
+    switch (getEngine(state, "PE-006"), getEngine(state, "PE-003")) {
+      case (?optimizer, ?risk) {
+        ?{ optimizerEngine = optimizer; riskEngine = risk }
+      };
+      case _ { null };
+    }
+  };
+
+  public func computePortfolioQuantBundle(
+    state : ProductionEngineState,
+    expectedReturns : [Float],
+    covariance : PortfolioQuant.Matrix,
+    marketWeights : [Float],
+    views : [PortfolioQuant.BlackLittermanView],
+    riskFreeRate : Float,
+    portfolioReturns : [Float],
+    assetReturns : PortfolioQuant.Matrix,
+    confidence : Float,
+    horizon : Float,
+    portfolioValue : Float,
+    frontierPoints : Nat,
+    simulations : Nat,
+    seed : Nat,
+    constraints : PortfolioQuant.OptimizationConstraints,
+  ) : ?PortfolioQuant.PortfolioOptimizationBundle {
+    if (not checkGlobalCoherence(state)) { return null };
+    switch (getPortfolioQuantBinding(state)) {
+      case null { null };
+      case (?_) {
+        ?PortfolioQuant.buildPortfolioOptimizationBundle(
+          expectedReturns,
+          covariance,
+          marketWeights,
+          views,
+          riskFreeRate,
+          portfolioReturns,
+          assetReturns,
+          confidence,
+          horizon,
+          portfolioValue,
+          frontierPoints,
+          simulations,
+          seed,
+          constraints,
+        )
+      };
+    }
+  };
+
+  public func defaultPortfolioQuantConstraints() : PortfolioQuant.OptimizationConstraints {
+    PortfolioQuant.defaultOptimizationConstraints()
+  };
+
+  public type PricingInput = PricingModels.PricingInput;
+  public type PricingAnalytics = PricingModels.PricingAnalytics;
+  public type CompositePrice = PricingModels.CompositePrice;
+
+  public type PricingModelBinding = {
+    dynamicPricingEngine : ProductionEngine;
+    equilibriumEngine : ProductionEngine;
+    consensusEngine : ProductionEngine;
+  };
+
+  public func defaultPricingInput() : PricingInput {
+    PricingModels.defaultPricingInput()
+  };
+
+  public func getPricingModelBinding(state : ProductionEngineState) : ?PricingModelBinding {
+    switch (getEngine(state, "PE-001"), getEngine(state, "PE-021"), getEngine(state, "PE-024")) {
+      case (?dynamicPricingEngine, ?equilibriumEngine, ?consensusEngine) {
+        ?{
+          dynamicPricingEngine = dynamicPricingEngine;
+          equilibriumEngine = equilibriumEngine;
+          consensusEngine = consensusEngine;
+        }
+      };
+      case _ { null };
+    }
+  };
+
+  public func computePricingAnalytics(state : ProductionEngineState, input : PricingInput) : ?PricingAnalytics {
+    if (not checkGlobalCoherence(state)) { return null };
+    switch (getPricingModelBinding(state)) {
+      case null { null };
+      case (?_) { ?PricingModels.computePricingAnalytics(input) };
+    }
+  };
+
+  public func computeProductionAwarePrice(state : ProductionEngineState, input : PricingInput) : ?CompositePrice {
+    if (not checkGlobalCoherence(state)) { return null };
+    switch (getPricingModelBinding(state)) {
+      case null { null };
+      case (?_) { ?PricingModels.computeCompositePrice(input) };
+    }
+  };
 
   public func getProductionMetrics(state : ProductionEngineState) : {
     engineCount : Nat;

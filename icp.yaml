@@ -1,4 +1,13 @@
 # yaml-language-server: $schema=https://github.com/dfinity/icp-cli/raw/refs/heads/main/docs/schemas/icp-yaml-schema.json
+# Auto-synced by PARALLAX Dev — 9 substrates
+# Run: parallax sync
 canisters:
   - src/frontend
   - src/backend
+  - src/alpha_conductor
+  - src/alpha_orchestrator
+  - src/brain
+  - src/chrono
+  - src/flux
+  - src/resonex
+  - src/veritas

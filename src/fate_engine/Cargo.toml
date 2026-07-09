@@ -1,0 +1,18 @@
+[package]
+name = "fate_engine"
+version = "0.1.0"
+edition = "2021"
+authors = ["Alfredo Medina Hernandez <architect@parallax.sovereign>"]
+description = "The Sovereign Fate Oracle Engine — Temporal field perception, deterministic prediction, and master orchestration for PARALLAX Exchange Clearinghouse"
+license = "PARALLAX-Sovereign-1.0"
+repository = "https://github.com/ItsNotAILABS/PARALLAX-Exchange-Clearinghouse"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+[features]
+default = ["full-oracle"]
+full-oracle = []
+temporal-only = []
+clearing-only = []

@@ -1,0 +1,372 @@
+{
+  "phi_powers": [
+    {
+      "power": -10,
+      "phi_to_power": 0.008130618755783,
+      "system_use": ""
+    },
+    {
+      "power": -9,
+      "phi_to_power": 0.013155617496425,
+      "system_use": ""
+    },
+    {
+      "power": -8,
+      "phi_to_power": 0.021286236252208,
+      "system_use": ""
+    },
+    {
+      "power": -7,
+      "phi_to_power": 0.034441853748633,
+      "system_use": ""
+    },
+    {
+      "power": -6,
+      "phi_to_power": 0.055728090000841,
+      "system_use": ""
+    },
+    {
+      "power": -5,
+      "phi_to_power": 0.090169943749474,
+      "system_use": "entanglement death threshold"
+    },
+    {
+      "power": -4,
+      "phi_to_power": 0.145898033750315,
+      "system_use": "weight decay"
+    },
+    {
+      "power": -3,
+      "phi_to_power": 0.23606797749979,
+      "system_use": "Hebbian penalty/reward"
+    },
+    {
+      "power": -2,
+      "phi_to_power": 0.381966011250105,
+      "system_use": "minimum reliability"
+    },
+    {
+      "power": -1,
+      "phi_to_power": 0.618033988749895,
+      "system_use": "coherence gate (0.618)"
+    },
+    {
+      "power": 0,
+      "phi_to_power": 1.0,
+      "system_use": "unity"
+    },
+    {
+      "power": 1,
+      "phi_to_power": 1.618033988749895,
+      "system_use": "golden ratio \u03c6"
+    },
+    {
+      "power": 2,
+      "phi_to_power": 2.618033988749895,
+      "system_use": "\u03c6\u00b2 = \u03c6+1"
+    },
+    {
+      "power": 3,
+      "phi_to_power": 4.23606797749979,
+      "system_use": "\u03c6\u00b3 = 2\u03c6+1"
+    },
+    {
+      "power": 4,
+      "phi_to_power": 6.854101966249686,
+      "system_use": "heartbeat derivation"
+    },
+    {
+      "power": 5,
+      "phi_to_power": 11.090169943749476,
+      "system_use": ""
+    },
+    {
+      "power": 6,
+      "phi_to_power": 17.944271909999163,
+      "system_use": ""
+    },
+    {
+      "power": 7,
+      "phi_to_power": 29.03444185374864,
+      "system_use": ""
+    },
+    {
+      "power": 8,
+      "phi_to_power": 46.978713763747805,
+      "system_use": ""
+    },
+    {
+      "power": 9,
+      "phi_to_power": 76.01315561749645,
+      "system_use": ""
+    },
+    {
+      "power": 10,
+      "phi_to_power": 122.99186938124426,
+      "system_use": ""
+    }
+  ],
+  "fibonacci_sequence": [
+    {
+      "index": 0,
+      "fibonacci_number": 1,
+      "ratio_to_previous": null,
+      "phi_convergence_error": null,
+      "system_use": ""
+    },
+    {
+      "index": 1,
+      "fibonacci_number": 1,
+      "ratio_to_previous": 1.0,
+      "phi_convergence_error": 0.6180339887,
+      "system_use": ""
+    },
+    {
+      "index": 2,
+      "fibonacci_number": 2,
+      "ratio_to_previous": 2.0,
+      "phi_convergence_error": 0.3819660113,
+      "system_use": ""
+    },
+    {
+      "index": 3,
+      "fibonacci_number": 3,
+      "ratio_to_previous": 1.5,
+      "phi_convergence_error": 0.1180339887,
+      "system_use": ""
+    },
+    {
+      "index": 4,
+      "fibonacci_number": 5,
+      "ratio_to_previous": 1.6666666667,
+      "phi_convergence_error": 0.0486326779,
+      "system_use": "F(4)=3 sync interval beats"
+    },
+    {
+      "index": 5,
+      "fibonacci_number": 8,
+      "ratio_to_previous": 1.6,
+      "phi_convergence_error": 0.0180339887,
+      "system_use": "F(5)=5 health check interval"
+    },
+    {
+      "index": 6,
+      "fibonacci_number": 13,
+      "ratio_to_previous": 1.625,
+      "phi_convergence_error": 0.0069660113,
+      "system_use": "F(6)=8 netting cycle beats"
+    },
+    {
+      "index": 7,
+      "fibonacci_number": 21,
+      "ratio_to_previous": 1.6153846154,
+      "phi_convergence_error": 0.0026493734,
+      "system_use": "F(7)=13 model timeout beats"
+    },
+    {
+      "index": 8,
+      "fibonacci_number": 34,
+      "ratio_to_previous": 1.619047619,
+      "phi_convergence_error": 0.0010136303,
+      "system_use": "F(8)=21 max models"
+    },
+    {
+      "index": 9,
+      "fibonacci_number": 55,
+      "ratio_to_previous": 1.6176470588,
+      "phi_convergence_error": 0.0003869299,
+      "system_use": "F(9)=34 result history"
+    },
+    {
+      "index": 10,
+      "fibonacci_number": 89,
+      "ratio_to_previous": 1.6181818182,
+      "phi_convergence_error": 0.0001478294,
+      "system_use": ""
+    },
+    {
+      "index": 11,
+      "fibonacci_number": 144,
+      "ratio_to_previous": 1.6179775281,
+      "phi_convergence_error": 5.64607e-05,
+      "system_use": ""
+    },
+    {
+      "index": 12,
+      "fibonacci_number": 233,
+      "ratio_to_previous": 1.6180555556,
+      "phi_convergence_error": 2.15668e-05,
+      "system_use": "F(12)=144 max engines"
+    },
+    {
+      "index": 13,
+      "fibonacci_number": 377,
+      "ratio_to_previous": 1.6180257511,
+      "phi_convergence_error": 8.2377e-06,
+      "system_use": ""
+    },
+    {
+      "index": 14,
+      "fibonacci_number": 610,
+      "ratio_to_previous": 1.6180371353,
+      "phi_convergence_error": 3.1465e-06,
+      "system_use": ""
+    },
+    {
+      "index": 15,
+      "fibonacci_number": 987,
+      "ratio_to_previous": 1.6180327869,
+      "phi_convergence_error": 1.2019e-06,
+      "system_use": ""
+    },
+    {
+      "index": 16,
+      "fibonacci_number": 1597,
+      "ratio_to_previous": 1.6180344478,
+      "phi_convergence_error": 4.591e-07,
+      "system_use": ""
+    },
+    {
+      "index": 17,
+      "fibonacci_number": 2584,
+      "ratio_to_previous": 1.6180338134,
+      "phi_convergence_error": 1.753e-07,
+      "system_use": ""
+    },
+    {
+      "index": 18,
+      "fibonacci_number": 4181,
+      "ratio_to_previous": 1.6180340557,
+      "phi_convergence_error": 6.7e-08,
+      "system_use": ""
+    },
+    {
+      "index": 19,
+      "fibonacci_number": 6765,
+      "ratio_to_previous": 1.6180339632,
+      "phi_convergence_error": 2.56e-08,
+      "system_use": ""
+    },
+    {
+      "index": 20,
+      "fibonacci_number": 10946,
+      "ratio_to_previous": 1.6180339985,
+      "phi_convergence_error": 9.8e-09,
+      "system_use": ""
+    },
+    {
+      "index": 21,
+      "fibonacci_number": 17711,
+      "ratio_to_previous": 1.618033985,
+      "phi_convergence_error": 3.7e-09,
+      "system_use": ""
+    },
+    {
+      "index": 22,
+      "fibonacci_number": 28657,
+      "ratio_to_previous": 1.6180339902,
+      "phi_convergence_error": 1.4e-09,
+      "system_use": ""
+    },
+    {
+      "index": 23,
+      "fibonacci_number": 46368,
+      "ratio_to_previous": 1.6180339882,
+      "phi_convergence_error": 5e-10,
+      "system_use": ""
+    },
+    {
+      "index": 24,
+      "fibonacci_number": 75025,
+      "ratio_to_previous": 1.618033989,
+      "phi_convergence_error": 2e-10,
+      "system_use": ""
+    },
+    {
+      "index": 25,
+      "fibonacci_number": 121393,
+      "ratio_to_previous": 1.6180339887,
+      "phi_convergence_error": 1e-10,
+      "system_use": ""
+    },
+    {
+      "index": 26,
+      "fibonacci_number": 196418,
+      "ratio_to_previous": 1.6180339888,
+      "phi_convergence_error": 0.0,
+      "system_use": ""
+    },
+    {
+      "index": 27,
+      "fibonacci_number": 317811,
+      "ratio_to_previous": 1.6180339887,
+      "phi_convergence_error": 0.0,
+      "system_use": ""
+    },
+    {
+      "index": 28,
+      "fibonacci_number": 514229,
+      "ratio_to_previous": 1.6180339888,
+      "phi_convergence_error": 0.0,
+      "system_use": ""
+    },
+    {
+      "index": 29,
+      "fibonacci_number": 832040,
+      "ratio_to_previous": 1.6180339887,
+      "phi_convergence_error": 0.0,
+      "system_use": ""
+    }
+  ],
+  "schumann_harmonics": [
+    {
+      "mode": 1,
+      "frequency_hz": 7.83,
+      "period_ms": 127.7139,
+      "heartbeats_per_period": 0.146293
+    },
+    {
+      "mode": 2,
+      "frequency_hz": 13.562,
+      "period_ms": 73.7357,
+      "heartbeats_per_period": 0.084462
+    },
+    {
+      "mode": 3,
+      "frequency_hz": 19.1795,
+      "period_ms": 52.139,
+      "heartbeats_per_period": 0.059724
+    },
+    {
+      "mode": 4,
+      "frequency_hz": 24.7606,
+      "period_ms": 40.3867,
+      "heartbeats_per_period": 0.046262
+    },
+    {
+      "mode": 5,
+      "frequency_hz": 30.3255,
+      "period_ms": 32.9756,
+      "heartbeats_per_period": 0.037773
+    },
+    {
+      "mode": 6,
+      "frequency_hz": 35.8816,
+      "period_ms": 27.8695,
+      "heartbeats_per_period": 0.031924
+    },
+    {
+      "mode": 7,
+      "frequency_hz": 41.4325,
+      "period_ms": 24.1357,
+      "heartbeats_per_period": 0.027647
+    }
+  ],
+  "heartbeat_derivation": {
+    "formula": "heartbeat_ms = \u03c6\u2074 \u00d7 1000 / Schumann(7.83Hz)",
+    "phi_4": 6.854101966249686,
+    "schumann_hz": 7.83,
+    "result_ms": 875.3642,
+    "protocol_value_ms": 873
+  }
+}

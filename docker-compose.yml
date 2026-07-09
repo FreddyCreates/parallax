@@ -1,0 +1,82 @@
+# PARALLAX Exchange Clearinghouse — One-Command Local Development
+#
+# Usage:
+#   docker compose up
+#
+# This spins up:
+#   1. Local ICP replica (dfx network)
+#   2. Backend canister deployment
+#   3. Frontend dev server
+#
+# Access:
+#   - Frontend: http://localhost:5173
+#   - ICP Replica: http://localhost:8000
+#   - Storage Gateway: http://localhost:6188
+
+services:
+  # ─────────────────────────────────────────────────────────────────
+  # ICP Replica — Local Internet Computer network
+  # ─────────────────────────────────────────────────────────────────
+  icp-replica:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    entrypoint: ["bash", "-c", "icp network start && sleep infinity"]
+    ports:
+      - "8000:8000"
+      - "6188:6188"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v2/status"]
+      interval: 5s
+      timeout: 10s
+      retries: 30
+      start_period: 15s
+    volumes:
+      - icp-state:/home/ubuntu/.local/share/icp
+
+  # ─────────────────────────────────────────────────────────────────
+  # Backend — Deploy Motoko canisters to local replica
+  # ─────────────────────────────────────────────────────────────────
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    entrypoint: >
+      bash -c "
+        echo 'Waiting for ICP replica...' &&
+        until curl -sf http://icp-replica:8000/api/v2/status > /dev/null 2>&1; do
+          sleep 2
+        done &&
+        echo '✅ ICP replica ready' &&
+        icp canister create --environment local backend --network http://icp-replica:8000 &&
+        icp deploy --environment local backend --network http://icp-replica:8000 &&
+        echo '✅ Backend canister deployed' &&
+        echo \"BACKEND_CANISTER_ID=\$(icp canister settings show --environment local --id-only backend)\" &&
+        sleep infinity
+      "
+    depends_on:
+      icp-replica:
+        condition: service_healthy
+    environment:
+      - ICP_NETWORK_URL=http://icp-replica:8000
+
+  # ─────────────────────────────────────────────────────────────────
+  # Frontend — Vite dev server with hot reload
+  # ─────────────────────────────────────────────────────────────────
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      backend:
+        condition: service_started
+    environment:
+      - VITE_ICP_URL=http://localhost:8000
+    volumes:
+      - ./src/frontend/src:/app/src
+    command: pnpm dev --host 0.0.0.0
+
+volumes:
+  icp-state:

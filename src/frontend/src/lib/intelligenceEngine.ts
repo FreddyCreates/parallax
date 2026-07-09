@@ -736,3 +736,153 @@ export function computeSchumannCouplingDisplay(
     phaseDelta,
   };
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ── MACD (Moving Average Convergence Divergence) ─────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface MACDResult {
+  macdLine: number[];
+  signalLine: number[];
+  histogram: number[];
+}
+
+export function macd(
+  prices: number[],
+  fastPeriod = 12,
+  slowPeriod = 26,
+  signalPeriod = 9,
+): MACDResult {
+  if (prices.length === 0) {
+    return { macdLine: [], signalLine: [], histogram: [] };
+  }
+  const fastEma = ema(prices, fastPeriod);
+  const slowEma = ema(prices, slowPeriod);
+  const macdLine = fastEma.map((f, i) => f - (slowEma[i] ?? 0));
+  const signalLine = ema(macdLine, signalPeriod);
+  const histogram = macdLine.map((m, i) => m - (signalLine[i] ?? 0));
+  return { macdLine, signalLine, histogram };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ── RSI (Relative Strength Index) ────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+
+export function rsi(prices: number[], period = 14): number[] {
+  if (prices.length < 2) return [];
+
+  const result: number[] = [];
+  let avgGain = 0;
+  let avgLoss = 0;
+
+  // Calculate initial average gain/loss over the first `period` changes
+  const firstWindow = Math.min(period, prices.length - 1);
+  for (let i = 1; i <= firstWindow; i++) {
+    const change = (prices[i] ?? 0) - (prices[i - 1] ?? 0);
+    if (change > 0) avgGain += change;
+    else avgLoss += Math.abs(change);
+  }
+  avgGain /= period;
+  avgLoss /= period;
+
+  // RSI for the first window
+  const firstRs = avgLoss === 0 ? 100 : avgGain / avgLoss;
+  result.push(avgLoss === 0 ? 100 : 100 - 100 / (1 + firstRs));
+
+  // Smoothed RSI for subsequent values
+  for (let i = firstWindow + 1; i < prices.length; i++) {
+    const change = (prices[i] ?? 0) - (prices[i - 1] ?? 0);
+    const gain = change > 0 ? change : 0;
+    const loss = change < 0 ? Math.abs(change) : 0;
+    avgGain = (avgGain * (period - 1) + gain) / period;
+    avgLoss = (avgLoss * (period - 1) + loss) / period;
+    const rs = avgLoss === 0 ? 100 : avgGain / avgLoss;
+    result.push(avgLoss === 0 ? 100 : 100 - 100 / (1 + rs));
+  }
+
+  return result;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ── Average True Range (ATR) ─────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+
+export function atr(
+  highs: number[],
+  lows: number[],
+  closes: number[],
+  period = 14,
+): number[] {
+  const len = Math.min(highs.length, lows.length, closes.length);
+  if (len < 2) return [];
+
+  const trueRanges: number[] = [];
+  for (let i = 0; i < len; i++) {
+    if (i === 0) {
+      trueRanges.push((highs[i] ?? 0) - (lows[i] ?? 0));
+    } else {
+      const hl = (highs[i] ?? 0) - (lows[i] ?? 0);
+      const hc = Math.abs((highs[i] ?? 0) - (closes[i - 1] ?? 0));
+      const lc = Math.abs((lows[i] ?? 0) - (closes[i - 1] ?? 0));
+      trueRanges.push(Math.max(hl, hc, lc));
+    }
+  }
+
+  // Smoothed ATR using Wilder's method (EMA with period)
+  const result: number[] = [];
+  let currentAtr =
+    trueRanges.slice(0, period).reduce((a, b) => a + b, 0) / period;
+  result.push(currentAtr);
+
+  for (let i = period; i < trueRanges.length; i++) {
+    currentAtr = (currentAtr * (period - 1) + (trueRanges[i] ?? 0)) / period;
+    result.push(currentAtr);
+  }
+
+  return result;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ── Sharpe Ratio ─────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+
+export function sharpeRatio(returns: number[], riskFreeRate = 0): number {
+  if (returns.length < 2) return 0;
+  const mean = returns.reduce((a, b) => a + b, 0) / returns.length;
+  const excessMean = mean - riskFreeRate;
+  const variance =
+    returns.reduce((a, r) => a + (r - mean) ** 2, 0) / (returns.length - 1);
+  const std = Math.sqrt(variance);
+  if (std === 0) return 0;
+  return excessMean / std;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ── Drawdown Calculator ──────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface DrawdownResult {
+  maxDrawdown: number;
+  currentDrawdown: number;
+  drawdownSeries: number[];
+}
+
+export function computeDrawdown(prices: number[]): DrawdownResult {
+  if (prices.length === 0) {
+    return { maxDrawdown: 0, currentDrawdown: 0, drawdownSeries: [] };
+  }
+
+  let peak = prices[0] ?? 0;
+  let maxDrawdown = 0;
+  const drawdownSeries: number[] = [];
+
+  for (const price of prices) {
+    if (price > peak) peak = price;
+    const dd = peak > 0 ? (peak - price) / peak : 0;
+    drawdownSeries.push(dd);
+    if (dd > maxDrawdown) maxDrawdown = dd;
+  }
+
+  const currentDrawdown = drawdownSeries[drawdownSeries.length - 1] ?? 0;
+  return { maxDrawdown, currentDrawdown, drawdownSeries };
+}

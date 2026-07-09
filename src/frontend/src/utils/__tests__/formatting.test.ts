@@ -1,5 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { formatRelativeTime, formatTime, truncate } from "../formatting";
+import {
+  formatCompact,
+  formatPercent,
+  formatPrice,
+  formatRelativeTime,
+  formatTime,
+  formatTokenBalance,
+  truncate,
+} from "../formatting";
 
 describe("truncate", () => {
   it("returns the string unchanged if within max length", () => {
@@ -84,5 +92,105 @@ describe("formatTime", () => {
     const result = formatTime(0n);
     // Should still produce a time string (epoch time)
     expect(result).toMatch(/\d{2}:\d{2}/);
+  });
+});
+
+describe("formatPrice", () => {
+  it("returns '——' for null", () => {
+    expect(formatPrice(null)).toBe("——");
+  });
+
+  it("returns '——' for undefined", () => {
+    expect(formatPrice(undefined)).toBe("——");
+  });
+
+  it("returns '——' for NaN", () => {
+    expect(formatPrice(NaN)).toBe("——");
+  });
+
+  it("formats a number with default 2 decimals", () => {
+    expect(formatPrice(1234.5)).toBe("1,234.50");
+  });
+
+  it("formats with custom decimal places", () => {
+    expect(formatPrice(1234.5678, 4)).toBe("1,234.5678");
+  });
+
+  it("formats zero correctly", () => {
+    expect(formatPrice(0)).toBe("0.00");
+  });
+});
+
+describe("formatCompact", () => {
+  it("returns '——' for null", () => {
+    expect(formatCompact(null)).toBe("——");
+  });
+
+  it("returns '——' for NaN", () => {
+    expect(formatCompact(NaN)).toBe("——");
+  });
+
+  it("formats billions", () => {
+    expect(formatCompact(1_500_000_000)).toBe("1.50B");
+  });
+
+  it("formats millions", () => {
+    expect(formatCompact(2_300_000)).toBe("2.30M");
+  });
+
+  it("formats thousands", () => {
+    expect(formatCompact(45_000)).toBe("45.00K");
+  });
+
+  it("formats small numbers directly", () => {
+    expect(formatCompact(123)).toBe("123.00");
+  });
+
+  it("handles negative billions", () => {
+    expect(formatCompact(-2_000_000_000)).toBe("-2.00B");
+  });
+});
+
+describe("formatPercent", () => {
+  it("returns '——' for null", () => {
+    expect(formatPercent(null)).toBe("——");
+  });
+
+  it("adds + sign for positive values", () => {
+    expect(formatPercent(5.5)).toBe("+5.50%");
+  });
+
+  it("shows negative values without extra sign", () => {
+    expect(formatPercent(-3.2)).toBe("-3.20%");
+  });
+
+  it("shows zero without sign", () => {
+    expect(formatPercent(0)).toBe("0.00%");
+  });
+
+  it("respects custom decimals", () => {
+    expect(formatPercent(12.3456, 1)).toBe("+12.3%");
+  });
+});
+
+describe("formatTokenBalance", () => {
+  it("formats zero balance", () => {
+    expect(formatTokenBalance(0n)).toBe("0");
+  });
+
+  it("formats whole number balance", () => {
+    expect(formatTokenBalance(100_000_000n)).toBe("1");
+  });
+
+  it("formats fractional balance", () => {
+    expect(formatTokenBalance(150_000_000n)).toBe("1.5");
+  });
+
+  it("formats large balance with commas", () => {
+    expect(formatTokenBalance(1_000_000_000_000n)).toBe("10,000");
+  });
+
+  it("trims trailing zeros in fractional part", () => {
+    expect(formatTokenBalance(123_400_000n)).toBe("1.234");
   });
 });

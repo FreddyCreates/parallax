@@ -1,0 +1,64 @@
+{
+  "tokens": [
+    {
+      "token_id": "parallax.icp.utility",
+      "symbol": "PXICP",
+      "ledger": "icp",
+      "custody_mode": "canister_vault",
+      "supply_policy": {
+        "mode": "phi_capped",
+        "max_supply": "1618033988",
+        "mint_authority": "motoko-token-factory"
+      },
+      "risk_tier": "genesis"
+    },
+    {
+      "token_id": "parallax.ai.artifact",
+      "symbol": "PXAI",
+      "ledger": "icp",
+      "custody_mode": "canister_vault",
+      "supply_policy": {
+        "mode": "mint_authorized",
+        "max_supply": null,
+        "mint_authority": "ai-artifact-registry"
+      },
+      "risk_tier": "genesis"
+    },
+    {
+      "token_id": "parallax.compute.gpu",
+      "symbol": "PXGPU",
+      "ledger": "bridge_accounting",
+      "custody_mode": "adapter_escrow",
+      "supply_policy": {
+        "mode": "mint_authorized",
+        "max_supply": null,
+        "mint_authority": "compute-adapter"
+      },
+      "risk_tier": "experimental"
+    },
+    {
+      "token_id": "parallax.usd.accounting",
+      "symbol": "PXUSD",
+      "ledger": "bridge_accounting",
+      "custody_mode": "adapter_escrow",
+      "supply_policy": {
+        "mode": "external_wrapped",
+        "max_supply": null,
+        "mint_authority": "reserve-adapter"
+      },
+      "risk_tier": "adapter"
+    },
+    {
+      "token_id": "parallax.eth.adapter",
+      "symbol": "PXETH",
+      "ledger": "ethereum",
+      "custody_mode": "observed_only",
+      "supply_policy": {
+        "mode": "external_wrapped",
+        "max_supply": null,
+        "mint_authority": "ethereum-adapter"
+      },
+      "risk_tier": "adapter"
+    }
+  ]
+}
