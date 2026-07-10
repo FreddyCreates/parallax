@@ -200,20 +200,37 @@ Full actuary suite, trading strategies, financial language engines (FIX, FpML, S
 ---
 <div align="center">
 
-# 🌌 PARALLAX Exchange Clearinghouse
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/parallax-logo.svg">
+  <source media="(prefers-color-scheme: light)" srcset="assets/parallax-logo-dark.svg">
+  <img alt="PARALLAX Exchange Clearinghouse" src="assets/parallax-logo.svg" width="680">
+</picture>
 
-### *The AI-First Sovereign Exchange — Zero Gas Fees, Instant Settlement*
+<br />
 
-[![Built on ICP](https://img.shields.io/badge/Built_on-Internet_Computer-29abe2?style=for-the-badge&logo=dfinity&logoColor=white)](https://internetcomputer.org/)
-[![License: Sovereign](https://img.shields.io/badge/License-PARALLAX_Sovereign-red.svg?style=for-the-badge)](LICENSE)
-[![Motoko](https://img.shields.io/badge/Language-Motoko-purple?style=for-the-badge)](https://internetcomputer.org/docs/current/motoko/main/motoko)
+[![CI](https://github.com/ItsNotAILABS/PARALLAX-Exchange-Clearinghouse/actions/workflows/ci.yml/badge.svg)](https://github.com/ItsNotAILABS/PARALLAX-Exchange-Clearinghouse/actions/workflows/ci.yml)
+[![ICP](https://img.shields.io/badge/ICP-Motoko-29abe2?style=flat-square)](https://internetcomputer.org/)
+[![Ethereum](https://img.shields.io/badge/Ethereum-Solidity-627EEA?style=flat-square)](contracts/)
+[![React](https://img.shields.io/badge/Frontend-React_19-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/Language-TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Cloudflare](https://img.shields.io/badge/Cloudflare-Edge_Gateway-F38020?style=flat-square&logo=cloudflare&logoColor=white)](docs/CLOUDFLARE_EDGE_RUNWAY.md)
+[![Native](https://img.shields.io/badge/C%2FC%2B%2B-Native_Interface-F97316?style=flat-square)](docs/NATIVE_CPP_INTERFACE.md)
+[![Alpha](https://img.shields.io/badge/Alpha-Service_Gated-22C55E?style=flat-square)](docs/ALPHA_SERVICE_RUNWAY.md)
+[![AI Wallet](https://img.shields.io/badge/AI_Wallet-Policy_Gated-38BDF8?style=flat-square)](docs/AI_WALLET_ALPHA.md)
+[![Research](https://img.shields.io/badge/Research-Receipts_+_Charters-8B5CF6?style=flat-square)](research/)
 
-**Trade everything. Pay nothing. Settle instantly.**
+# PARALLAX
 
-[Explore Docs](#architecture) • [Key Features](#-key-features) • [Get Started](#-getting-started)
+### AI-native financial infrastructure for multi-ledger agents, token economics, trading, clearing, settlement receipts, and governed edge execution.
+
+[Platform Blueprint](docs/PARALLAX_PLATFORM_SURFACE.md) · [Cloudflare Edge](docs/CLOUDFLARE_EDGE_RUNWAY.md) · [Multi-Ledger Ecosystem](docs/MULTI_LEDGER_ECOSYSTEM.md) · [Agent Token Economics](docs/AGENT_TOKEN_ECONOMICS.md) · [Showcase Gate](docs/PRODUCT_SHOWCASE_GATE.md) · [Native C/C++ Interface](docs/NATIVE_CPP_INTERFACE.md)
+
+</div>
 
 ---
 
+<div align="center">
+  <img alt="PARALLAX Platform Architecture" src="assets/parallax-platform-infographic.svg" width="100%">
 </div>
 
 ## 🚀 What is PARALLAX?

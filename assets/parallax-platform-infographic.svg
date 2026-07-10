@@ -1,0 +1,93 @@
+<svg width="1600" height="900" viewBox="0 0 1600 900" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">PARALLAX Platform Architecture</title>
+  <desc id="desc">A professional dark-mode product architecture diagram for the PARALLAX AI-native financial operating system.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1600" y2="900" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#030712"/>
+      <stop offset="0.45" stop-color="#07162A"/>
+      <stop offset="1" stop-color="#020617"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#38BDF8"/>
+      <stop offset="1" stop-color="#2563EB"/>
+    </linearGradient>
+    <linearGradient id="violet" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#A78BFA"/>
+      <stop offset="1" stop-color="#4F46E5"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <style>
+      .h1{font:700 54px Inter,Segoe UI,Arial,sans-serif;letter-spacing:8px;fill:#F8FAFC}.h2{font:700 25px Inter,Segoe UI,Arial,sans-serif;fill:#E0F2FE}.h3{font:700 18px Inter,Segoe UI,Arial,sans-serif;fill:#BAE6FD}.p{font:500 15px Inter,Segoe UI,Arial,sans-serif;fill:#CBD5E1}.small{font:500 12px Inter,Segoe UI,Arial,sans-serif;fill:#94A3B8}.label{font:700 13px Inter,Segoe UI,Arial,sans-serif;fill:#E2E8F0;letter-spacing:.5px}.line{stroke:#1D4ED8;stroke-width:1.2;opacity:.55}.box{fill:#071426;stroke:#1E40AF;stroke-width:1.2}.box2{fill:#0B1024;stroke:#334155;stroke-width:1}.pill{fill:#0F172A;stroke:#38BDF8;stroke-width:1;opacity:.95}.ok{fill:#22C55E}.warn{fill:#F59E0B}.risk{fill:#EF4444}
+    </style>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <g opacity="0.35">
+    <path d="M0 740 C260 620 420 880 680 720 S1100 560 1600 700" stroke="#2563EB" stroke-width="2"/>
+    <path d="M0 170 C280 80 520 270 790 170 S1250 10 1600 120" stroke="#38BDF8" stroke-width="1.4"/>
+    <circle cx="1210" cy="170" r="180" stroke="#1E3A8A"/>
+    <circle cx="1210" cy="170" r="250" stroke="#172554"/>
+  </g>
+  <g transform="translate(54 48)">
+    <path d="M0 40 C0 18 18 0 40 0 H87 C118 0 143 25 143 56 C143 87 118 112 87 112 H42 V170 H0 V40Z" fill="url(#blue)" filter="url(#glow)"/>
+    <path d="M42 35 H83 C94 35 103 44 103 56 C103 68 94 77 83 77 H42 V35Z" fill="#07162A"/>
+    <text x="178" y="56" class="h1">PARALLAX</text>
+    <text x="181" y="95" class="h2">AI-NATIVE FINANCIAL INFRASTRUCTURE</text>
+    <text x="181" y="126" class="p">Wallets, trading, clearing, settlement receipts, research minting, and governed multi-ledger execution.</text>
+  </g>
+  <g transform="translate(54 220)">
+    <rect width="355" height="275" rx="18" class="box"/>
+    <text x="26" y="42" class="h2">Product Surfaces</text>
+    <g transform="translate(26 70)">
+      <rect width="138" height="46" rx="12" class="pill"/><text x="18" y="29" class="label">Wallet</text>
+      <rect x="170" width="138" height="46" rx="12" class="pill"/><text x="188" y="29" class="label">Payments</text>
+      <rect y="64" width="138" height="46" rx="12" class="pill"/><text x="18" y="93" class="label">Trading</text>
+      <rect x="170" y="64" width="138" height="46" rx="12" class="pill"/><text x="188" y="93" class="label">Clearing</text>
+      <rect y="128" width="138" height="46" rx="12" class="pill"/><text x="18" y="157" class="label">AI Signals</text>
+      <rect x="170" y="128" width="138" height="46" rx="12" class="pill"/><text x="188" y="157" class="label">Proof Room</text>
+    </g>
+    <text x="26" y="250" class="small">First release posture: paper/testnet execution before live capital.</text>
+  </g>
+  <g transform="translate(447 184)">
+    <rect width="706" height="395" rx="20" class="box"/>
+    <text x="254" y="42" class="h2">Platform Architecture</text>
+    <g transform="translate(42 72)">
+      <rect width="622" height="52" rx="12" class="box2"/><text x="24" y="33" class="label">Apps: Web Control Tower · Mobile Wallet · Desktop Operator · Developer API</text>
+      <rect y="70" width="622" height="52" rx="12" class="box2"/><text x="24" y="103" class="label">Services: Wallet · Trade · Pay · Portfolio · Compliance · Notifications</text>
+      <rect y="140" width="622" height="52" rx="12" class="box2"/><text x="24" y="173" class="label">Core: Order Matching · Risk Gate · Clearinghouse · Receipt Ledger</text>
+      <rect y="210" width="622" height="52" rx="12" class="box2"/><text x="24" y="243" class="label">Ledgers: ICP Canisters · Ethereum Contracts · Chain Adapters · Oracles</text>
+      <rect y="280" width="622" height="52" rx="12" class="box2"/><text x="24" y="313" class="label">Proof: Merkle Receipts · Audit Exports · Benchmarks · Release Manifests</text>
+      <path d="M311 52 V70 M311 122 V140 M311 192 V210 M311 262 V280" class="line"/>
+    </g>
+  </g>
+  <g transform="translate(1190 184)">
+    <rect width="356" height="395" rx="20" class="box"/>
+    <text x="28" y="42" class="h2">Operator Console</text>
+    <rect x="28" y="70" width="300" height="118" rx="14" fill="#020617" stroke="#075985"/>
+    <polyline points="48,155 80,138 112,146 144,104 176,122 208,88 240,96 292,72" stroke="#22C55E" stroke-width="4" fill="none"/>
+    <polyline points="48,164 80,170 112,162 144,176 176,158 208,178 240,166 292,184" stroke="#38BDF8" stroke-width="2" fill="none" opacity=".6"/>
+    <g transform="translate(28 212)">
+      <rect width="142" height="48" rx="12" fill="#052E16" stroke="#22C55E"/><text x="37" y="30" class="label">Buy</text>
+      <rect x="158" width="142" height="48" rx="12" fill="#450A0A" stroke="#EF4444"/><text x="196" y="30" class="label">Sell</text>
+      <rect y="70" width="300" height="78" rx="14" fill="#0F172A" stroke="#334155"/>
+      <circle cx="24" cy="99" r="6" class="ok"/><text x="42" y="104" class="p">Risk gate: active</text>
+      <circle cx="24" cy="125" r="6" class="warn"/><text x="42" y="130" class="p">Paper mode: enforced</text>
+    </g>
+  </g>
+  <g transform="translate(54 625)">
+    <rect width="1492" height="210" rx="20" class="box"/>
+    <text x="28" y="42" class="h2">First Vertical Slice</text>
+    <g transform="translate(28 75)">
+      <rect width="190" height="70" rx="14" class="pill"/><text x="35" y="30" class="label">1. Wallet Login</text><text x="35" y="52" class="small">Internet Identity</text>
+      <rect x="225" width="190" height="70" rx="14" class="pill"/><text x="258" y="30" class="label">2. Paper Order</text><text x="258" y="52" class="small">Order command</text>
+      <rect x="450" width="190" height="70" rx="14" class="pill"/><text x="486" y="30" class="label">3. Risk Gate</text><text x="486" y="52" class="small">Accept/reject</text>
+      <rect x="675" width="190" height="70" rx="14" class="pill"/><text x="708" y="30" class="label">4. Match</text><text x="708" y="52" class="small">Order book fill</text>
+      <rect x="900" width="190" height="70" rx="14" class="pill"/><text x="934" y="30" class="label">5. Settle</text><text x="934" y="52" class="small">Paper ledger</text>
+      <rect x="1125" width="190" height="70" rx="14" class="pill"/><text x="1157" y="30" class="label">6. Receipt</text><text x="1157" y="52" class="small">Proof log</text>
+      <path d="M190 35 H225 M415 35 H450 M640 35 H675 M865 35 H900 M1090 35 H1125" class="line"/>
+    </g>
+    <text x="28" y="180" class="small">Build proof before live claims: every order, transfer, halt, and settlement emits a queryable receipt.</text>
+  </g>
+</svg>

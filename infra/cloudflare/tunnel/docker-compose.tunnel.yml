@@ -1,0 +1,10 @@
+services:
+  parallax-cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: parallax-cloudflared
+    restart: unless-stopped
+    command: tunnel --config /etc/cloudflared/config.yml run
+    volumes:
+      - ./config.yml:/etc/cloudflared/config.yml:ro
+      - ./credentials:/etc/cloudflared:ro
+    network_mode: host

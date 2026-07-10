@@ -1,19 +1,20 @@
 {
-  "title": "PARALLAX Exchange Clearinghouse: AI-First Sovereign Decentralized Exchange",
-  "description": "<p>PARALLAX is a next-generation AI-native decentralized exchange built on the Internet Computer Protocol (ICP). Unlike traditional DEXs, PARALLAX operates as a sovereign organism — an autonomous system where intelligence IS the infrastructure.</p>\n\n<h3>Key Features</h3>\n<ul>\n<li><strong>Zero Gas Fees</strong> — The organism pays all costs via ICP canister cycles</li>\n<li><strong>873ms Instant Settlement</strong> — Heartbeat-driven cryptographic finality derived from φ⁴ × (1000/7.83Hz)</li>\n<li><strong>AI-First Architecture</strong> — Phantom Intelligence Engine reasons about all trades</li>\n<li><strong>Real-Time Clearinghouse</strong> — Multi-asset netting, cross-chain settlement (ICP ↔ ckBTC ↔ ckETH)</li>\n<li><strong>24 Production Engines</strong> — Latin-named AI production engines with 93 model instances</li>\n<li><strong>Universal Token Trading</strong> — Crypto, AI tokens, AI artifacts, creator tokens, stablecoins, RWAs</li>\n</ul>\n\n<h3>Mathematical Foundation</h3>\n<p>All system parameters are derived from the Golden Ratio (φ = 1.6180339887...) and Schumann Resonance (7.83 Hz), ensuring harmonic operation grounded in natural mathematical constants.</p>\n\n<h3>Technology Stack</h3>\n<ul>\n<li><strong>Backend:</strong> Motoko on Internet Computer Protocol</li>\n<li><strong>Frontend:</strong> React + TypeScript + Tailwind CSS + Vite</li>\n<li><strong>Infrastructure:</strong> ICP Canisters with orthogonal persistence</li>\n<li><strong>AI Models:</strong> Multi-architecture ensembles (Transformer, Diffusion, GNN, RL, Bayesian)</li>\n</ul>",
-  "upload_type": "software",
+  "title": "PARALLAX Exchange Clearinghouse: AI-First Sovereign Decentralized Exchange — Research Dataset & Software",
+  "description": "<p>PARALLAX is a next-generation AI-native decentralized exchange built on the Internet Computer Protocol (ICP). This release includes both the software platform and comprehensive research datasets covering all major subsystems.</p>\n\n<h3>Research Dataset (dataset/)</h3>\n<p>10 structured datasets totaling 12,000+ records across:</p>\n<ul>\n<li><strong>Clearinghouse Netting</strong> — 1,000 multilateral netting cycles with efficiency metrics</li>\n<li><strong>Kuramoto Coherence</strong> — 5,000 phase synchronization time-series measurements</li>\n<li><strong>Multi-Model Orchestration</strong> — 500 ensemble runs across 7 strategies with 21 AI models</li>\n<li><strong>AI Artifact Tokenization</strong> — 200 cognitive resonance evaluations</li>\n<li><strong>Heartbeat Settlement</strong> — 2,000 timing measurements with drift analysis</li>\n<li><strong>Production Engines</strong> — 2,400 performance records for 24 Latin-named engines</li>\n<li><strong>Cross-Chain Bridges</strong> — 300 ICP↔ckBTC↔ckETH operations</li>\n<li><strong>Adversarial Detection</strong> — 500 labeled market manipulation samples</li>\n<li><strong>Provenance Chains</strong> — 10 cryptographic compute receipt chains</li>\n<li><strong>Mathematical Foundations</strong> — Golden ratio, Fibonacci, Schumann reference tables</li>\n</ul>\n\n<h3>Zenodo Community Scientific Dataset (dataset/zenodo_community/)</h3>\n<p>6 additional datasets (3,600 records) designed specifically for the scientific community:</p>\n<ul>\n<li><strong>Computational Reproducibility Benchmarks</strong> — 500 algorithm benchmarks across 10 methods and 3 precisions</li>\n<li><strong>Coupled Oscillator Experiments</strong> — 1,000 Kuramoto experiments with 6 topologies and finite-size scaling</li>\n<li><strong>ML Evaluation Benchmarks</strong> — 800 multi-model evaluations with calibration, fairness, and robustness metrics</li>\n<li><strong>Network Topology Analysis</strong> — 600 graph analyses with systemic risk indicators and spectral properties</li>\n<li><strong>Statistical Validation Methods</strong> — 400 hypothesis tests with power analysis and Bayesian alternatives</li>\n<li><strong>Energy Sustainability Metrics</strong> — 300 per-operation energy and carbon footprint measurements</li>\n</ul>\n\n<h3>Key Features</h3>\n<ul>\n<li><strong>Zero Gas Fees</strong> — The organism pays all costs via ICP canister cycles</li>\n<li><strong>873ms Instant Settlement</strong> — Heartbeat-driven cryptographic finality derived from φ⁴ × (1000/7.83Hz)</li>\n<li><strong>AI-First Architecture</strong> — Phantom Intelligence Engine reasons about all trades</li>\n<li><strong>Real-Time Clearinghouse</strong> — Multi-asset netting, cross-chain settlement (ICP ↔ ckBTC ↔ ckETH)</li>\n<li><strong>24 Production Engines</strong> — Latin-named AI production engines with 93 model instances</li>\n<li><strong>Universal Token Trading</strong> — Crypto, AI tokens, AI artifacts, creator tokens, stablecoins, RWAs</li>\n</ul>\n\n<h3>Mathematical Foundation</h3>\n<p>All system parameters are derived from the Golden Ratio (φ = 1.6180339887...) and Schumann Resonance (7.83 Hz), ensuring harmonic operation grounded in natural mathematical constants.</p>\n\n<h3>Technology Stack</h3>\n<ul>\n<li><strong>Backend:</strong> Motoko on Internet Computer Protocol</li>\n<li><strong>Frontend:</strong> React + TypeScript + Tailwind CSS + Vite</li>\n<li><strong>Infrastructure:</strong> ICP Canisters with orthogonal persistence</li>\n<li><strong>AI Models:</strong> Multi-architecture ensembles (Transformer, Diffusion, GNN, RL, Bayesian)</li>\n<li><strong>Python SDK:</strong> Complete SDK for clearinghouse, coherence, heartbeat, provenance, tokenization</li>\n</ul>",
+  "upload_type": "dataset",
   "publication_type": "softwaredocumentation",
   "creators": [
     {
-      "name": "ItsNotAILABS",
-      "affiliation": "PARALLAX Sovereign Organism"
+      "name": "Medina Hernandez, Alfredo",
+      "affiliation": "PARALLAX Sovereign Organism",
+      "orcid": ""
     },
     {
-      "name": "Medina Hernandez, Alfredo",
+      "name": "ItsNotAILABS",
       "affiliation": "PARALLAX Sovereign Organism"
     }
   ],
-  "version": "0.1.0",
+  "version": "1.0.0",
   "access_right": "open",
   "license": "other-open",
   "keywords": [
@@ -30,19 +31,48 @@
     "phi",
     "Kuramoto synchronization",
     "multi-model AI",
+    "multi-model orchestration",
     "production engines",
     "clearinghouse",
+    "multilateral netting",
     "zero gas fees",
     "real-time settlement",
     "token factory",
     "AI artifacts",
-    "sovereign organism"
+    "sovereign organism",
+    "adversarial detection",
+    "market manipulation",
+    "phase synchronization",
+    "coupled oscillators",
+    "Schumann resonance",
+    "Fibonacci",
+    "provenance",
+    "cross-chain bridge",
+    "cognitive resonance",
+    "research dataset",
+    "computational reproducibility",
+    "coupled oscillators",
+    "network topology",
+    "statistical validation",
+    "energy efficiency",
+    "ML evaluation",
+    "model calibration",
+    "fairness metrics",
+    "systemic risk",
+    "green computing",
+    "sustainability"
   ],
-  "notes": "This software is released under the PARALLAX Sovereign License v1.0. Commercial use requires a separate license agreement.",
+  "notes": "This dataset is released under the PARALLAX Sovereign License v1.0. All data is synthetically generated with seed=42 for full reproducibility. Commercial use requires a separate license agreement. See dataset/DATASHEET.md for full documentation following the Datasheets for Datasets framework.",
   "related_identifiers": [
     {
       "identifier": "https://github.com/ItsNotAILABS/PARALLAX-Exchange-Clearinghouse",
       "relation": "isSupplementTo",
+      "resource_type": "software",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://zenodo.org/records/20370721",
+      "relation": "isNewVersionOf",
       "resource_type": "software",
       "scheme": "url"
     }
@@ -62,12 +92,39 @@
       "term": "Blockchain",
       "identifier": "https://id.loc.gov/authorities/subjects/sh2016002315",
       "scheme": "url"
+    },
+    {
+      "term": "Machine Learning",
+      "identifier": "https://id.loc.gov/authorities/subjects/sh85079324",
+      "scheme": "url"
+    },
+    {
+      "term": "Financial Engineering",
+      "identifier": "https://id.loc.gov/authorities/subjects/sh91001489",
+      "scheme": "url"
     }
   ],
   "language": "eng",
   "communities": [
     {
       "identifier": "zenodo"
+    },
+    {
+      "identifier": "computational-science"
+    },
+    {
+      "identifier": "machine-learning"
+    },
+    {
+      "identifier": "complex-systems"
+    },
+    {
+      "identifier": "open-science"
     }
+  ],
+  "references": [
+    "Kuramoto, Y. (1984). Chemical Oscillations, Waves, and Turbulence. Springer.",
+    "Gebru, T. et al. (2021). Datasheets for Datasets. Communications of the ACM, 64(12), 86-92.",
+    "DFINITY Foundation. (2021). The Internet Computer for Geeks. https://internetcomputer.org/whitepaper.pdf"
   ]
 }

@@ -1,0 +1,82 @@
+{
+  "schema": "parallax.ai-wallet.service.v1",
+  "service": {
+    "id": "ai-wallet-service",
+    "name": "AI Wallet Service",
+    "plane": "ledger",
+    "status": "alpha_required",
+    "owner": "wallet-ai",
+    "purpose": "Create and govern wallets owned by AI agents for paper/testnet trading, internal transfers, and research minting.",
+    "package": "@parallax/ai-wallet",
+    "entrypoint": "src/ai-wallet/src/index.ts",
+    "validation_command": "pnpm alpha:wallet",
+    "contracts": [
+      "AiWallet",
+      "AiWalletPolicy",
+      "AiWalletScope",
+      "AiWalletCommand",
+      "AiWalletPolicyEvaluation",
+      "AiWalletReceipt",
+      "AiWalletDailyUsage"
+    ],
+    "alpha_capabilities": [
+      "deterministic_ai_wallet_creation",
+      "paper_and_testnet_modes",
+      "policy_gated_commands",
+      "human_approval_thresholds",
+      "daily_notional_limits",
+      "asset_allowlists",
+      "counterparty_allowlists",
+      "receipt_chain_creation",
+      "live_mode_blocking"
+    ],
+    "dependencies": [
+      "identity-authority",
+      "wallet-service",
+      "risk-policy-gate",
+      "receipt-ledger",
+      "ai-signal-service",
+      "research-mint-service"
+    ],
+    "exposes": [
+      "createAiWallet",
+      "createAiWalletCommand",
+      "createPaperOrderCommand",
+      "createInternalTransferCommand",
+      "createResearchMintCommand",
+      "evaluateAiWalletCommand",
+      "createAiWalletCreatedReceipt",
+      "createAiWalletEvaluationReceipt",
+      "verifyAiWalletReceiptChain"
+    ],
+    "must_not_do": [
+      "custody_private_keys",
+      "route_live_orders",
+      "move_real_user_money",
+      "allow_ai_self_approval_above_threshold",
+      "execute_live_without_operator",
+      "skip_receipts",
+      "hide_live_mode_blocking"
+    ]
+  },
+  "alpha_policy": {
+    "allowed_modes": ["paper", "testnet"],
+    "blocked_modes": ["restricted_live", "live"],
+    "default_assets": ["PXUSD", "PXICP", "PXAI", "PXGPU", "PXETH"],
+    "default_counterparties": ["internal", "paper-market", "research-mint", "operator"],
+    "default_max_command_notional": 10000,
+    "default_daily_notional_limit": 50000,
+    "default_human_approval_threshold": 2500
+  },
+  "readiness": {
+    "level": 4,
+    "meaning": "domain package, policy engine, command builders, receipts, and unit tests are present; backend canister integration and frontend AI wallet tab remain next gates",
+    "next_gates": [
+      "persist_ai_wallets_in_canister",
+      "wire_ai_wallet_service_to_wallet_tab",
+      "emit_receipts_into_global_receipt_ledger",
+      "show_ai_wallets_in_alpha_ops",
+      "connect_ai_signals_to_human_approved_paper_orders"
+    ]
+  }
+}

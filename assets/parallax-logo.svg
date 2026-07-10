@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 200" fill="none">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0D1117;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#161B22;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#58A6FF;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#BC8CFF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#F778BA;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#58A6FF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#BC8CFF;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="200" rx="12" fill="url(#grad1)"/>
+  
+  <!-- Parallax lines effect -->
+  <g opacity="0.15" stroke="url(#grad2)" stroke-width="0.5">
+    <line x1="0" y1="40" x2="800" y2="60"/>
+    <line x1="0" y1="80" x2="800" y2="90"/>
+    <line x1="0" y1="120" x2="800" y2="110"/>
+    <line x1="0" y1="160" x2="800" y2="140"/>
+  </g>
+  
+  <!-- Icon: Phi spiral / exchange symbol -->
+  <g transform="translate(60, 30)" filter="url(#glow)">
+    <!-- Outer ring -->
+    <circle cx="70" cy="70" r="55" stroke="url(#grad3)" stroke-width="2.5" fill="none" opacity="0.8"/>
+    <!-- Inner phi spiral approximation -->
+    <path d="M 70 15 A 55 55 0 0 1 125 70 A 34 34 0 0 1 70 104 A 21 21 0 0 1 49 70 A 13 13 0 0 1 70 57 A 8 8 0 0 1 78 70" 
+          stroke="url(#grad2)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <!-- Exchange arrows -->
+    <path d="M 40 55 L 100 55" stroke="#58A6FF" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+    <path d="M 95 50 L 100 55 L 95 60" stroke="#58A6FF" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.7"/>
+    <path d="M 100 85 L 40 85" stroke="#F778BA" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+    <path d="M 45 80 L 40 85 L 45 90" stroke="#F778BA" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.7"/>
+    <!-- Center dot -->
+    <circle cx="70" cy="70" r="4" fill="url(#grad2)"/>
+  </g>
+  
+  <!-- Main text: PARALLAX -->
+  <text x="220" y="105" font-family="'SF Pro Display', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif" font-size="56" font-weight="700" letter-spacing="6" fill="url(#grad2)">PARALLAX</text>
+  
+  <!-- Subtitle -->
+  <text x="222" y="140" font-family="'SF Pro Display', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif" font-size="16" font-weight="400" letter-spacing="4" fill="#8B949E">EXCHANGE CLEARINGHOUSE</text>
+  
+  <!-- Tagline -->
+  <text x="222" y="170" font-family="'SF Pro Display', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif" font-size="12" font-weight="300" letter-spacing="2" fill="#58A6FF" opacity="0.8">AI-FIRST · ZERO FEES · INSTANT SETTLEMENT</text>
+</svg>

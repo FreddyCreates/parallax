@@ -1,0 +1,149 @@
+{
+  "schema": "parallax.multiledger.ecosystem.v1",
+  "platform": "PARALLAX",
+  "mode": "alpha",
+  "public_posture": "paper_testnet_first",
+  "generated_at": "2026-07-10",
+  "planes": [
+    "agent_identity",
+    "ledger",
+    "token_economics",
+    "settlement",
+    "proof",
+    "governance",
+    "edge_gateway",
+    "tunnel"
+  ],
+  "network_modes": [
+    {
+      "id": "paper",
+      "description": "Local or hosted simulated balances and receipts only.",
+      "live_value": false,
+      "default_enabled": true
+    },
+    {
+      "id": "testnet",
+      "description": "Public test networks and ICP local/test canisters only.",
+      "live_value": false,
+      "default_enabled": true
+    },
+    {
+      "id": "restricted_live",
+      "description": "Future gated mode for limited regulated/custody-reviewed operations.",
+      "live_value": true,
+      "default_enabled": false,
+      "requires": ["legal_review", "custody_review", "security_review", "external_audit", "operator_approval"]
+    },
+    {
+      "id": "live",
+      "description": "Future fully live mode after complete compliance and operational readiness.",
+      "live_value": true,
+      "default_enabled": false,
+      "requires": ["legal_review", "custody_review", "security_review", "external_audit", "monitoring", "insurance_review"]
+    }
+  ],
+  "ledgers": [
+    {
+      "id": "parallax-paper-ledger",
+      "name": "PARALLAX Paper Ledger",
+      "mode": "paper",
+      "ledger_type": "simulated_internal",
+      "authority": "PARALLAX Clearinghouse Service",
+      "purpose": "Simulated balances, paper orders, paper transfers, and receipt-backed settlement for alpha development.",
+      "settlement_finality": "receipt_final_within_alpha_state",
+      "enabled": true,
+      "assets": ["PXUSD", "PXICP", "PXAI", "PXGPU", "PXETH", "PXCRED"],
+      "must_not_do": ["represent_real_value", "route_to_bank", "route_to_broker", "bridge_live_assets"]
+    },
+    {
+      "id": "icp-local-ledger",
+      "name": "ICP Local/Test Canister Ledger",
+      "mode": "testnet",
+      "ledger_type": "icp_canister",
+      "authority": "ICP local replica / test canister",
+      "purpose": "Internet Computer canister integration for wallet, receipt, governance, and settlement contract development.",
+      "settlement_finality": "canister_state_plus_receipt",
+      "enabled": true,
+      "assets": ["PXICP", "PXAI", "PXCRED"],
+      "must_not_do": ["claim_mainnet_assets", "hide_canister_network", "skip_candid_versioning"]
+    },
+    {
+      "id": "ethereum-testnet-ledger",
+      "name": "Ethereum Testnet Ledger",
+      "mode": "testnet",
+      "ledger_type": "evm_testnet",
+      "authority": "EVM testnet contracts",
+      "purpose": "Solidity contract and token-economics experiments with testnet-only assets.",
+      "settlement_finality": "testnet_tx_plus_parallax_receipt",
+      "enabled": true,
+      "assets": ["PXETH", "PXUSD", "PXGPU"],
+      "must_not_do": ["claim_mainnet_deployment", "bridge_user_funds", "hide_contract_address"]
+    },
+    {
+      "id": "agent-credit-ledger",
+      "name": "Agent Credit Ledger",
+      "mode": "paper",
+      "ledger_type": "internal_credit_accounting",
+      "authority": "PARALLAX Agent Economy",
+      "purpose": "Credits for AI-agent work, receipts, simulations, research minting, and compute accounting.",
+      "settlement_finality": "internal_credit_receipt",
+      "enabled": true,
+      "assets": ["PXCRED", "PXAI", "PXGPU"],
+      "must_not_do": ["represent_cash_equivalent", "sell_as_security", "promise_yield"]
+    }
+  ],
+  "agent_wallet_classes": [
+    {
+      "id": "agent-operator-wallet",
+      "name": "Agent Operator Wallet",
+      "purpose": "AI agent wallet for proposing paper orders, transfers, and governance-reviewed actions.",
+      "allowed_ledgers": ["parallax-paper-ledger", "icp-local-ledger"],
+      "allowed_assets": ["PXUSD", "PXICP", "PXAI", "PXCRED"],
+      "requires_human_approval": true
+    },
+    {
+      "id": "agent-research-wallet",
+      "name": "Agent Research Wallet",
+      "purpose": "AI agent wallet for research minting, benchmark records, and proof artifacts.",
+      "allowed_ledgers": ["agent-credit-ledger", "parallax-paper-ledger"],
+      "allowed_assets": ["PXAI", "PXCRED"],
+      "requires_human_approval": false,
+      "human_approval_above": 500
+    },
+    {
+      "id": "agent-strategy-wallet",
+      "name": "Agent Strategy Wallet",
+      "purpose": "AI agent wallet for strategy simulations and paper trading proposals.",
+      "allowed_ledgers": ["parallax-paper-ledger", "ethereum-testnet-ledger"],
+      "allowed_assets": ["PXUSD", "PXETH", "PXGPU"],
+      "requires_human_approval": true
+    }
+  ],
+  "settlement_paths": [
+    {
+      "id": "paper-order-to-receipt",
+      "description": "AI wallet proposes paper order, risk gate evaluates, matching engine fills, clearinghouse updates paper ledger, receipt ledger records state transition.",
+      "path": ["ai-wallet-service", "risk-policy-gate", "matching-engine", "clearinghouse-service", "receipt-ledger"]
+    },
+    {
+      "id": "agent-credit-mint",
+      "description": "Research or compute artifact produces internal agent credits through receipt-backed accounting.",
+      "path": ["research-mint-service", "agent-credit-ledger", "receipt-ledger", "proof-room"]
+    },
+    {
+      "id": "testnet-contract-experiment",
+      "description": "Governance-approved testnet contract interaction records tx metadata and mirrors it to PARALLAX receipts.",
+      "path": ["chain-adapter-service", "risk-policy-gate", "ethereum-testnet-ledger", "receipt-ledger"]
+    }
+  ],
+  "global_alpha_gates": [
+    "no_live_money_movement",
+    "no_live_broker_routing",
+    "no_mainnet_bridge_in_alpha",
+    "all_agent_commands_policy_evaluated",
+    "all_state_transitions_emit_receipts",
+    "edge_gateway_auth_required_for_mutation",
+    "tunnel_origin_locked_down",
+    "public_claims_match_evidence"
+  ]
+}

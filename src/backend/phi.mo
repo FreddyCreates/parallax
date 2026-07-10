@@ -150,6 +150,7 @@ module {
   public let PHI_INV_2 : Float = 0.3819660112501051518; // φ⁻² = 1−φ⁻¹
   public let PHI_INV_3 : Float = 0.2360679774997896964; // φ⁻³ = Compliance Reserve fraction
   public let PHI_INV_4 : Float = 0.1458980337503047518; // φ⁻⁴
+  public let PHI_INV_5 : Float = 0.0901699437494742554; // φ⁻⁵
 
   // HEARTBEAT — A03 anchor · Cardiac Law: τ = φ⁴ × (1/SCHUMANN_1) × 1000 ms
   // 6.854 / 7.83 × 1000 ≈ 875.6 → rounded by doctrine to 873ms

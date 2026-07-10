@@ -1,0 +1,26 @@
+name = "parallax-edge-gateway"
+main = "src/index.ts"
+compatibility_date = "2026-07-01"
+workers_dev = true
+
+[observability]
+enabled = true
+
+[vars]
+PARALLAX_ENV = "alpha"
+PARALLAX_PUBLIC_POSTURE = "paper_testnet_first"
+PARALLAX_CORE_URL = "http://127.0.0.1:5173"
+PARALLAX_TUNNEL_EXPECTED_HOST = "parallax-alpha.example.com"
+PARALLAX_ALLOWED_ORIGINS = "http://localhost:5173,https://parallax-alpha.example.com"
+PARALLAX_REQUIRE_AUTH_FOR_MUTATION = "true"
+
+# Production notes:
+# - Set PARALLAX_EDGE_TOKEN with: wrangler secret put PARALLAX_EDGE_TOKEN
+# - Replace PARALLAX_CORE_URL with the private tunnel origin or internal service URL.
+# - Replace route/custom domain after Cloudflare account and zone are confirmed.
+# - Do not enable live money movement through this Worker during alpha.
+
+# Example custom domain/route once the account zone exists:
+# routes = [
+#   { pattern = "parallax-alpha.example.com/api/*", zone_name = "example.com" }
+# ]

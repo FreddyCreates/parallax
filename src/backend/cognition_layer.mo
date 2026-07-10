@@ -36,6 +36,7 @@
 import Phi "phi";
 import Laws "laws";
 import Float "mo:core/Float";
+import Homeostat "cognitive_homeostat";
 
 module {
 
@@ -156,6 +157,8 @@ module {
     monologue               : Text;
     reinjection_ready       : Bool;
     last_user_signal_weight : Float;
+    homeostat_state         : Homeostat.HomeostatState;
+    last_homeostat_output   : ?Homeostat.HomeostatOutput;
   };
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -835,6 +838,8 @@ module {
       monologue               = "Organism is online. Field coherent at 0.75. All gates open. The loop never closes.";
       reinjection_ready       = true;
       last_user_signal_weight = 0.0;
+      homeostat_state         = Homeostat.genesisHomeostatState();
+      last_homeostat_output   = null;
     }
   };
 
@@ -899,4 +904,53 @@ module {
     sign # intN.toText() # "." # fracStr
   };
 
+  // ═══════════════════════════════════════════════════════════════════════════
+  // RUN HOMEOSTAT PASS — ADAPTIVE CONTROL
+  // Called every beat from main.mo after cognition update.
+  // Integrates the cognitive homeostat into the sensorimotor loop.
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  public func runHomeostatPass(
+    state : CognitionState,
+    percept : Text,
+    focus_input : Float
+  ) : CognitionState {
+    let homeostat_output = Homeostat.runHomeostatPass(
+      percept,
+      state.homeostat_state,
+      state.world_model.global_coherence,
+      state.world_model.law_compliance_score,
+      Float.fromInt(Nat.toInt(state.adre_result.backpass_violations)),
+      state.world_model.phase_alignment,
+      focus_input
+    );
+
+    // Update cognition state with new homeostat output
+    {
+      beat_index              = state.beat_index;
+      world_model             = state.world_model;
+      adre_result             = state.adre_result;
+      monologue               = state.monologue # " [" # homeostat_output.recommendation # "]";
+      reinjection_ready       = state.reinjection_ready;
+      last_user_signal_weight = state.last_user_signal_weight;
+      homeostat_state         = homeostat_output.state;
+      last_homeostat_output   = ?homeostat_output;
+    }
+  };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // GET HOMEOSTAT EXPLORATION INJECTION — entropy boost for explore branch
+  // Returns the entropy injection amount if explore was triggered
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  public func getHomeostatEntropyInjection(
+    state : CognitionState
+  ) : Float {
+    switch (state.last_homeostat_output) {
+      case (?output) { output.entropy_inject };
+      case (null) { 0.0 };
+    }
+  };
+
 };
+

@@ -1,0 +1,47 @@
+/* PARALLAX Voice — Floating Indicator Styles */
+
+#parallax-voice-indicator {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 2147483647;
+  display: none;
+  align-items: center;
+  gap: 8px;
+  background: rgba(10, 10, 15, 0.92);
+  border: 1px solid rgba(196, 160, 255, 0.3);
+  border-radius: 20px;
+  padding: 6px 14px 6px 10px;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 12px;
+  color: #c4a0ff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+#parallax-voice-indicator.pxv-active {
+  display: flex;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.pxv-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ff4444;
+  animation: pxv-pulse 1.2s infinite ease-in-out;
+}
+
+@keyframes pxv-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+.pxv-label {
+  white-space: nowrap;
+}

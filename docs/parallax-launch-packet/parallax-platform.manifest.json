@@ -1,0 +1,63 @@
+{
+  "platform_id": "parallax.unified.platform",
+  "trunk_repository": "ItsNotAILABS/PARALLAX-Exchange-Clearinghouse",
+  "aliases": ["PARALLAX", "PARRALAX"],
+  "version": "0.2.0-platform-federation",
+  "planes": [
+    {
+      "id": "wallet_identity",
+      "label": "Wallet and Identity",
+      "authority": "motoko_canister",
+      "first_slice": "internet_identity_session_and_balance_view"
+    },
+    {
+      "id": "trading_exchange",
+      "label": "Trading and Exchange",
+      "authority": "phantom_exchange",
+      "first_slice": "paper_order_to_fill_receipt"
+    },
+    {
+      "id": "clearinghouse_ledger",
+      "label": "Clearinghouse and Ledger",
+      "authority": "phantom_clearinghouse",
+      "first_slice": "internal_transfer_to_audit_receipt"
+    },
+    {
+      "id": "ai_execution",
+      "label": "AI Execution and Fund Operations",
+      "authority": "risk_gated_adapter",
+      "source_repository": "ItsNotAILABS/PARRALAX-AIHFTFUND",
+      "first_slice": "read_only_signal_to_protected_order_intent"
+    },
+    {
+      "id": "research_ip",
+      "label": "Research and IP Tokenization",
+      "authority": "token_factory_and_artifact_registry",
+      "source_repository": "ItsNotAILABS/cloudcolony",
+      "first_slice": "research_packet_to_artifact_receipt"
+    },
+    {
+      "id": "defense_compliance",
+      "label": "Defense and Compliance",
+      "authority": "policy_and_admin_gates",
+      "source_repository": "ItsNotAILABS/Chimeria",
+      "first_slice": "adapter_pause_and_quarantine_controls"
+    },
+    {
+      "id": "proof_release",
+      "label": "Proof and Release",
+      "authority": "release_ledger",
+      "source_repository": "ItsNotAILABS/PRODUCTION-",
+      "first_slice": "claim_to_evidence_record"
+    }
+  ],
+  "required_proof_fields": [
+    "trace_id",
+    "intent_id",
+    "idempotency_key",
+    "state_snapshot_hash",
+    "custody_mode",
+    "risk_tier",
+    "receipt_id"
+  ]
+}

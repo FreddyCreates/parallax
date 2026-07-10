@@ -1,0 +1,6 @@
+theme: null
+title: PARALLAX Exchange Clearinghouse
+description: AI-First Sovereign Decentralized Exchange — Zero Gas Fees, Instant Settlement
+baseurl: /PARALLAX-Exchange-Clearinghouse
+include:
+  - index.html

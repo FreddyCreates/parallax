@@ -24,11 +24,14 @@
 // Architect: Alfredo Medina Hernandez — The Architect of the Field
 
 import Phi "phi";
+import RiskEngine "risk_engine";
 import Float "mo:core/Float";
 import Array "mo:core/Array";
+import Char "mo:core/Char";
 import Int "mo:core/Int";
 import Nat "mo:core/Nat";
 import Nat32 "mo:core/Nat32";
+import GraphControl "graph_control";
 
 module {
 
@@ -154,6 +157,8 @@ module {
     totalCrossChain      : Nat;
     // Guarantee fund
     guaranteeFund        : GuaranteeFund;
+    // Mission-critical risk engine
+    riskEngine           : RiskEngine.RiskEngineState;
     // Compliance
     totalReported        : Nat;      // FinCEN reports generated
     // Metrics
@@ -161,6 +166,8 @@ module {
     avgSettlementLatency : Float;    // ms (should be ~0.3)
     totalVolumeCleared   : Float;    // lifetime cleared volume (ICP equivalent)
     totalGasFeesSaved    : Float;    // gas fees that would have been charged elsewhere
+    // Graph + control integration
+    graphControl         : GraphControl.GraphControlState;
     // Meta
     clearinghouseActive  : Bool;
     lastClearingBeat     : Int;
@@ -184,11 +191,13 @@ module {
       crossChainSettlements = [];
       totalCrossChain       = 0;
       guaranteeFund         = defaultGuaranteeFund();
+      riskEngine            = RiskEngine.defaultRiskEngineState();
       totalReported         = 0;
       settlementVelocity    = 0.0;
       avgSettlementLatency  = 0.3; // target: 0.3ms
       totalVolumeCleared    = 0.0;
       totalGasFeesSaved     = 0.0;
+      graphControl          = GraphControl.defaultGraphControlState();
       clearinghouseActive   = true;
       lastClearingBeat      = 0;
     }
@@ -248,9 +257,32 @@ module {
     // Update positions
     let buyerPositions = updatePosition(state.positions, buyer, baseToken, baseAmt, beat);
     let sellerPositions = updatePosition(buyerPositions, seller, baseToken, -baseAmt, beat);
+    let price = if (baseAmt > 0.0) quoteAmt / baseAmt else 1.0;
+    let guaranteeFund = { state.guaranteeFund with guaranteesIssued = state.guaranteeFund.guaranteesIssued + 1 };
+    let exposures = recomputeExposures(sellerPositions, guaranteeFund, beat);
 
     // Gas savings: estimate what this would cost on Ethereum (~$5 per swap)
     let gasSaved = 5.0; // conservative estimate per trade
+    let (priceKalman, pid, priceControl) = GraphControl.priceStabilityControl(
+      state.graphControl.priceKalman,
+      state.graphControl.pid,
+      1.0,
+      price,
+      1.0,
+    );
+    let (adaptive, riskControl) = GraphControl.riskExposureManagement(
+      state.graphControl.adaptive,
+      [computeExposureMetric(exposures), priceControl.controlSignal],
+      [0.0, 0.0],
+    );
+    let riskEngine = RiskEngine.assessRisk(
+      state.riskEngine,
+      snapshotPositions(sellerPositions),
+      snapshotExposures(exposures),
+      snapshotGuaranteeFund(guaranteeFund),
+      snapshotSettlements(settlements),
+      beat,
+    );
 
     {
       state with
@@ -258,10 +290,21 @@ module {
       totalSettlements    = state.totalSettlements + 1;
       nextSettlementId    = state.nextSettlementId + 1;
       positions           = sellerPositions;
+      exposures           = exposures;
       totalVolumeCleared  = state.totalVolumeCleared + quoteAmt;
       totalGasFeesSaved   = state.totalGasFeesSaved + gasSaved;
+      riskEngine          = riskEngine;
+      graphControl        = {
+        state.graphControl with
+        priceKalman = priceKalman;
+        pid = pid;
+        adaptive = adaptive;
+        estimatedState = priceKalman.x;
+        latestControlSignal = if (riskControl.hedgeSignal.size() > 0) riskControl.hedgeSignal else [priceControl.controlSignal];
+        lastControlBeat = beat;
+      };
       lastClearingBeat    = beat;
-      guaranteeFund       = { state.guaranteeFund with guaranteesIssued = state.guaranteeFund.guaranteesIssued + 1 };
+      guaranteeFund       = guaranteeFund;
     }
   };
 
@@ -324,10 +367,10 @@ module {
     var participants : [Text] = [];
     for (s in settlements.vals()) {
       if (not arrayContains(participants, s.buyer)) {
-        participants := Array.append(participants, [s.buyer]);
+        participants := Array.concat(participants, [s.buyer]);
       };
       if (not arrayContains(participants, s.seller)) {
-        participants := Array.append(participants, [s.seller]);
+        participants := Array.concat(participants, [s.seller]);
       };
     };
     participants
@@ -337,10 +380,10 @@ module {
     var tokens : [Text] = [];
     for (s in settlements.vals()) {
       if (not arrayContains(tokens, s.baseToken)) {
-        tokens := Array.append(tokens, [s.baseToken]);
+        tokens := Array.concat(tokens, [s.baseToken]);
       };
       if (not arrayContains(tokens, s.quoteToken)) {
-        tokens := Array.append(tokens, [s.quoteToken]);
+        tokens := Array.concat(tokens, [s.quoteToken]);
       };
     };
     tokens
@@ -385,10 +428,39 @@ module {
     };
 
     let history = appendCrossChain(state.crossChainSettlements, xcs);
+    let exposures = recomputeExposures(state.positions, state.guaranteeFund, beat);
+    let settlements = appendSettlement(
+      state.recentSettlements,
+      {
+        settlementId = state.nextSettlementId;
+        fillId = 0;
+        pairId = sourceToken # "-" # destToken;
+        buyer = sourceChain;
+        seller = destChain;
+        baseToken = sourceToken;
+        quoteToken = destToken;
+        baseAmount = sourceAmt;
+        quoteAmount = destAmt;
+        settlementBeat = beat;
+        settlementProof = proof;
+        gasFee = 0.0;
+        status = #settled;
+      },
+    );
+    let riskEngine = RiskEngine.assessRisk(
+      state.riskEngine,
+      snapshotPositions(state.positions),
+      snapshotExposures(exposures),
+      snapshotGuaranteeFund(state.guaranteeFund),
+      snapshotSettlements(settlements),
+      beat,
+    );
     {
       state with
       crossChainSettlements = history;
       totalCrossChain       = state.totalCrossChain + 1;
+      exposures             = exposures;
+      riskEngine            = riskEngine;
     }
   };
 
@@ -405,11 +477,49 @@ module {
     // Run netting cycle (Fibonacci-gated)
     let netted = runNettingCycle(state, beat);
 
-    // Update settlement velocity
+    // Update control layer and settlement velocity
     let velocity = if (beat > 0) netted.totalSettlements.toInt().toFloat() / Int.abs(beat).toFloat() else 0.0;
+    let observedPrice = latestObservedPrice(netted.recentSettlements);
+    let (priceKalman, pid, priceControl) = GraphControl.priceStabilityControl(
+      netted.graphControl.priceKalman,
+      netted.graphControl.pid,
+      1.0,
+      observedPrice,
+      1.0,
+    );
+    let (adaptive, riskControl) = GraphControl.riskExposureManagement(
+      netted.graphControl.adaptive,
+      [computeExposureMetric(netted.exposures), velocity],
+      [0.0, 0.0],
+    );
+    let guaranteeFund = applyControlToGuaranteeFund(
+      netted.guaranteeFund,
+      if (riskControl.hedgeSignal.size() > 0) riskControl.hedgeSignal else [priceControl.controlSignal],
+    );
+    let exposures = recomputeExposures(netted.positions, guaranteeFund, beat);
+    let riskEngine = RiskEngine.assessRisk(
+      netted.riskEngine,
+      snapshotPositions(netted.positions),
+      snapshotExposures(exposures),
+      snapshotGuaranteeFund(guaranteeFund),
+      snapshotSettlements(netted.recentSettlements),
+      beat,
+    );
 
     { netted with
+      exposures          = exposures;
+      riskEngine         = riskEngine;
       settlementVelocity = velocity;
+      guaranteeFund      = guaranteeFund;
+      graphControl       = {
+        netted.graphControl with
+        priceKalman = priceKalman;
+        pid = pid;
+        adaptive = adaptive;
+        estimatedState = priceKalman.x;
+        latestControlSignal = if (riskControl.hedgeSignal.size() > 0) riskControl.hedgeSignal else [priceControl.controlSignal];
+        lastControlBeat = beat;
+      };
       lastClearingBeat   = beat;
     }
   };
@@ -422,7 +532,7 @@ module {
     let input = Nat.toText(id) # a # b # Float.toText(amt1) # Float.toText(amt2) # Int.toText(beat);
     var h : Nat32 = 2166136261;
     for (c in input.chars()) {
-      h := (h ^ c.toNat32()) *% 16777619;
+      h := (h ^ Char.toNat32(c)) *% 16777619;
     };
     "PROOF-" # Nat32.toText(h)
   };
@@ -436,12 +546,12 @@ module {
   ) : [(Text, [ParticipantPosition])] {
     let found = Array.find<(Text, [ParticipantPosition])>(positions, func (p) { p.0 == principal });
     switch (found) {
-      case (?existing) {
+      case (?_existing) {
         Array.map<(Text, [ParticipantPosition]), (Text, [ParticipantPosition])>(positions, func (p) {
           if (p.0 == principal) {
             let tokenPos = Array.find<ParticipantPosition>(p.1, func (pp) { pp.tokenCode == token });
             switch (tokenPos) {
-              case (?pos) {
+              case (?_pos) {
                 let updated = Array.map<ParticipantPosition, ParticipantPosition>(p.1, func (pp) {
                   if (pp.tokenCode == token) {
                     let bought = if (amount > 0.0) pp.grossBought + amount else pp.grossBought;
@@ -466,7 +576,7 @@ module {
                   marginUsed     = 0.0;
                   lastUpdateBeat = beat;
                 };
-                (principal, Array.append(p.1, [newPos]))
+                (principal, Array.concat(p.1, [newPos]))
               };
             }
           } else { p }
@@ -482,14 +592,138 @@ module {
           marginUsed     = 0.0;
           lastUpdateBeat = beat;
         };
-        Array.append(positions, [(principal, [newPos])])
+        Array.concat(positions, [(principal, [newPos])])
       };
+    }
+  };
+
+  func recomputeExposures(
+    positions : [(Text, [ParticipantPosition])],
+    guaranteeFund : GuaranteeFund,
+    beat : Int,
+  ) : [(Text, ExposureRecord)] {
+    let participantCount = if (positions.size() > 0) positions.size().toInt().toFloat() else 1.0;
+    let reserveCapacity = estimateGuaranteeCapacity(guaranteeFund);
+    Array.map<(Text, [ParticipantPosition]), (Text, ExposureRecord)>(positions, func (entry) {
+      let principal = entry.0;
+      let grossExposure = Array.foldLeft<ParticipantPosition, Float>(entry.1, 0.0, func (acc, position) {
+        acc + Float.abs(position.netPosition)
+      });
+      let netExposure = Array.foldLeft<ParticipantPosition, Float>(entry.1, 0.0, func (acc, position) {
+        acc + position.netPosition
+      });
+      let marginUsed = Array.foldLeft<ParticipantPosition, Float>(entry.1, 0.0, func (acc, position) {
+        acc + position.marginUsed
+      });
+      let maxAllowedExposure = reserveCapacity / participantCount * Phi.PHI;
+      let marginRatio = if (grossExposure > 0.0) Float.min(1.0, marginUsed / grossExposure) else 1.0;
+      (
+        principal,
+        {
+          principal = principal;
+          totalExposure = grossExposure;
+          netExposure = netExposure;
+          marginRatio = marginRatio;
+          maxAllowedExposure = maxAllowedExposure;
+          isOverExposed = grossExposure > maxAllowedExposure or Float.abs(netExposure) > maxAllowedExposure;
+          lastCheckBeat = beat;
+        }
+      )
+    })
+  };
+
+  func snapshotPositions(positions : [(Text, [ParticipantPosition])]) : [RiskEngine.PositionSnapshot] {
+    Array.foldLeft<(Text, [ParticipantPosition]), [RiskEngine.PositionSnapshot]>(positions, [], func (acc, entry) {
+      Array.concat(acc, Array.map<ParticipantPosition, RiskEngine.PositionSnapshot>(entry.1, func (position) {
+        {
+          principal = position.principal;
+          tokenCode = position.tokenCode;
+          netPosition = position.netPosition;
+          grossBought = position.grossBought;
+          grossSold = position.grossSold;
+          marginUsed = position.marginUsed;
+          lastUpdateBeat = position.lastUpdateBeat;
+        }
+      }))
+    })
+  };
+
+  func snapshotExposures(exposures : [(Text, ExposureRecord)]) : [RiskEngine.ExposureSnapshot] {
+    Array.map<(Text, ExposureRecord), RiskEngine.ExposureSnapshot>(exposures, func (entry) {
+      {
+        principal = entry.1.principal;
+        totalExposure = entry.1.totalExposure;
+        netExposure = entry.1.netExposure;
+        marginRatio = entry.1.marginRatio;
+        maxAllowedExposure = entry.1.maxAllowedExposure;
+        isOverExposed = entry.1.isOverExposed;
+        lastCheckBeat = entry.1.lastCheckBeat;
+      }
+    })
+  };
+
+  func snapshotGuaranteeFund(fund : GuaranteeFund) : RiskEngine.GuaranteeFundSnapshot {
+    {
+      totalReserveICP = fund.totalReserveICP;
+      totalReserveBTC = fund.totalReserveBTC;
+      totalReserveETH = fund.totalReserveETH;
+      totalReserveMTC = fund.totalReserveMTC;
+      utilizationRatio = fund.utilizationRatio;
+      coverageRatio = fund.coverageRatio;
+      lastTopUpBeat = fund.lastTopUpBeat;
+      guaranteesIssued = fund.guaranteesIssued;
+      guaranteesFailed = fund.guaranteesFailed;
+    }
+  };
+
+  func snapshotSettlements(settlements : [SettlementRecord]) : [RiskEngine.SettlementSnapshot] {
+    Array.map<SettlementRecord, RiskEngine.SettlementSnapshot>(settlements, func (settlement) {
+      {
+        settlementId = settlement.settlementId;
+        pairId = settlement.pairId;
+        partyA = settlement.buyer;
+        partyB = settlement.seller;
+        baseToken = settlement.baseToken;
+        quoteToken = settlement.quoteToken;
+        baseAmount = settlement.baseAmount;
+        quoteAmount = settlement.quoteAmount;
+        settlementBeat = settlement.settlementBeat;
+      }
+    })
+  };
+
+  func estimateGuaranteeCapacity(fund : GuaranteeFund) : Float {
+    fund.totalReserveICP * 12.0 + fund.totalReserveBTC * 65000.0 + fund.totalReserveETH * 3200.0 + fund.totalReserveMTC
+  };
+
+  func latestObservedPrice(settlements : [SettlementRecord]) : Float {
+    if (settlements.size() == 0) { return 1.0 };
+    let latest = settlements[settlements.size() - 1];
+    if (latest.baseAmount > 0.0) latest.quoteAmount / latest.baseAmount else 1.0
+  };
+
+  func computeExposureMetric(exposures : [(Text, ExposureRecord)]) : Float {
+    if (exposures.size() == 0) { return 0.0 };
+    let total = Array.foldLeft<(Text, ExposureRecord), Float>(exposures, 0.0, func (acc, item) {
+      acc + item.1.netExposure
+    });
+    total / exposures.size().toInt().toFloat()
+  };
+
+  func applyControlToGuaranteeFund(fund : GuaranteeFund, controlSignal : [Float]) : GuaranteeFund {
+    let signal = if (controlSignal.size() > 0) controlSignal[0] else 0.0;
+    let newCoverage = Float.max(1.0, fund.coverageRatio + signal * 0.01);
+    let newUtilization = Float.min(1.0, Float.max(0.0, fund.utilizationRatio - signal * 0.005));
+    {
+      fund with
+      coverageRatio = newCoverage;
+      utilizationRatio = newUtilization;
     }
   };
 
   func appendSettlement(existing : [SettlementRecord], new_ : SettlementRecord) : [SettlementRecord] {
     let max = 500;
-    let combined = Array.append(existing, [new_]);
+    let combined = Array.concat(existing, [new_]);
     if (combined.size() > max) {
       Array.tabulate(max, func i : SettlementRecord { combined[combined.size() - max + i] })
     } else {
@@ -499,7 +733,7 @@ module {
 
   func appendNetting(existing : [NettingRecord], new_ : NettingRecord) : [NettingRecord] {
     let max = 100;
-    let combined = Array.append(existing, [new_]);
+    let combined = Array.concat(existing, [new_]);
     if (combined.size() > max) {
       Array.tabulate(max, func i : NettingRecord { combined[combined.size() - max + i] })
     } else {
@@ -509,7 +743,7 @@ module {
 
   func appendCrossChain(existing : [CrossChainSettlement], new_ : CrossChainSettlement) : [CrossChainSettlement] {
     let max = 200;
-    let combined = Array.append(existing, [new_]);
+    let combined = Array.concat(existing, [new_]);
     if (combined.size() > max) {
       Array.tabulate(max, func i : CrossChainSettlement { combined[combined.size() - max + i] })
     } else {

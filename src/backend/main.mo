@@ -32,8 +32,12 @@ import ContextRouter "context_router";
 import NovaRuntime "nova_runtime";
 import PhantomIntel "phantom_intelligence";
 import PhantomExchange "phantom_exchange";
+import SmartRouting "smart_routing";
+import MarketMaking "market_making";
 import AiArtifactRegistry "ai_artifact_registry";
 import PhantomClearinghouse "phantom_clearinghouse";
+import GraphControl "graph_control";
+import FlowTracker "flow_tracker";
 import TokenFactory "token_factory";
 import AlohaI "aloha_i";
 import MonteCarlo "monte_carlo";
@@ -78,14 +82,17 @@ import IntelligenceRouting "intelligence_routing";
 import IntelligenceExtensions "intelligence_extensions";
 import IntelligenceCoupling "intelligence_coupling";
 import Charter "charter";
-import Mathematics "mathematics";
-import GovernanceLaws "governance_laws";
-import RuntimeGovernance "runtime_governance";
-import FormalVerification "formal_verification";
-import Homeostat "homeostat";
-import GameTheory "game_theory";
-import QuantModels "quantitative_models";
-import FundManager "fund_manager";
+import PredictionMarket "prediction_market";
+import PredictionAssets "prediction_assets";
+import PredictionEngines "prediction_engines";
+import PhantomCrypto "phantom_crypto";
+import ShadowWire "shadow_wire";
+import SovereignVault "sovereign_vault";
+import ReceiptChain "receipt_chain";
+import PhantomKeying "phantom_keying";
+import AiProtocols "ai_protocols";
+import MultiModel "multi_model";
+import QuantTrading "quant_trading";
 
 
 
@@ -147,6 +154,10 @@ actor PARALLAX {
   // Trades ALL tokens: crypto, AI tokens, AI artifacts, sovereign tokens, custom tokens.
   var phantomExchangeState : PhantomExchange.PhantomExchangeState = PhantomExchange.defaultPhantomExchangeState();
 
+  // ── DOMAIN 29B — SMART_ROUTING_STATE ─────────────────────────────────────
+  // Intelligent order routing, execution analytics, stealth and cross-pool logic.
+  var smartRoutingState : SmartRouting.SmartRoutingState = SmartRouting.defaultSmartRoutingState();
+
   // ── DOMAIN 30 — AI_ARTIFACT_REGISTRY_STATE ──────────────────────────────
   // Registry and marketplace for AI artifacts of value.
   // Models, embeddings, reasoning protocols — all tokenized and tradeable.
@@ -156,6 +167,10 @@ actor PARALLAX {
   // Real-time clearing and settlement. Zero fees. Instant finality.
   // Multi-asset netting, cross-chain settlement, organism-guaranteed.
   var phantomClearinghouseState : PhantomClearinghouse.PhantomClearinghouseState = PhantomClearinghouse.defaultPhantomClearinghouseState();
+
+  // ── DOMAIN 31B — FLOW_TRACKER_STATE ──────────────────────────────────────
+  // Directed money-flow graph, synthetic pool surveillance, systemic risk engine.
+  var flowTrackerState : FlowTracker.FlowTrackerState = FlowTracker.defaultFlowTrackerState();
 
   // ── DOMAIN 32 — TOKEN_FACTORY_STATE ─────────────────────────────────────
   // Create and manage custom tokens: AI tokens, creator tokens, artifact tokens.
@@ -271,6 +286,32 @@ actor PARALLAX {
   // All proposals voted on-chain. Quorum phi-derived. Founder veto on emergencies.
   var charterState : Charter.CharterState = Charter.defaultCharterState();
 
+  // ── DOMAIN 39 — PREDICTION_MARKET_STATE ───────────────────────────────────
+  // Full prediction market: 58 world contract types, LMSR pricing,
+  // multi-oracle resolution, 7 AI prediction engines, zero-gas settlement.
+  // Trade the probability of any world event. Instant payout on resolution.
+  var predictionMarketState : PredictionMarket.PredictionMarketState = PredictionMarket.defaultPredictionMarketState();
+
+  // ── DOMAIN 40 — PHANTOM_CRYPTO: Cryptographia Phantasma Infrastructure ────
+  // Shadow Wires, Sovereign Vaults, Receipt Chains, Quantum-Inspired Keying.
+  // Protected cognition layer: proves without exposing, remembers without leaking.
+  var shadowWireState : ShadowWire.ShadowWireState = ShadowWire.defaultShadowWireState();
+  var sovereignVaultState : SovereignVault.SovereignVaultState = SovereignVault.createVault("vault_sovereign_alpha");
+  var receiptChainState : ReceiptChain.ReceiptChainState = ReceiptChain.createChain("parallax.sovereign", 0);
+  var phantomKeyingState : PhantomKeying.PhantomKeyingState = PhantomKeying.defaultKeyingState("PARALLAX_SOVEREIGN_GENESIS_SEED");
+
+  // ── DOMAIN 41 — AI_PROTOCOLS_STATE ──────────────────────────────────────
+  // 10 Major AI Protocols: Cognitive Settlement, Adversarial Reasoning,
+  // Predictive Liquidity, Cross-Asset Valuation, Autonomous Risk Gating,
+  // Multi-Model Consensus, Agent Negotiation, Knowledge Graph Commerce,
+  // Self-Evolving Strategy, Sovereign Audit Intelligence.
+  var aiProtocolsState : AiProtocols.AiProtocolState = AiProtocols.defaultAiProtocolState();
+
+  // ── DOMAIN 42 — MULTI_MODEL_STATE ───────────────────────────────────────
+  // Multi-Model Orchestration Framework: 10 pre-registered AI models across
+  // 7 categories (Foundation, Specialist, Validator, Predictor, Sentinel,
+  // Synthesizer, Sovereign). 7 orchestration strategies. Phi-weighted consensus.
+  var multiModelState : MultiModel.MultiModelState = MultiModel.defaultMultiModelState();
 
   // ── DOMAIN 51 — PHANTOM_SENTIMENT_STATE ───────────────────────────────────
   // Multi-source sentiment intelligence: social, news, on-chain, fear/greed.
@@ -435,14 +476,42 @@ actor PARALLAX {
       // Reasons about trades, decays signals, scans arbitrage, updates predictions.
       phantomIntelligenceState := PhantomIntel.tickIntelligence(phantomIntelligenceState, beat.toInt(), novaCoherence);
 
-      // ── PHANTOM EXCHANGE — Domain 29: matching engine ─────────────────────
-      // Runs price-time priority matching across all active order books.
-      // Settlement is INSTANT — fill = settlement (same beat). ZERO GAS.
-      phantomExchangeState := PhantomExchange.tickExchange(phantomExchangeState, beat.toInt());
+      // ── SMART ROUTING + PHANTOM EXCHANGE — Domains 29/29B ─────────────────
+      // Intelligent parent orders release slices into Phantom Exchange before matching.
+      let (nextSmartRoutingState, routedExchangeState, _scheduledOrders) = SmartRouting.tickSmartRouting(
+        smartRoutingState,
+        phantomExchangeState,
+        beat.toInt(),
+        novaCoherence,
+      );
+      smartRoutingState := nextSmartRoutingState;
+      phantomExchangeState := PhantomExchange.tickExchange(routedExchangeState, beat.toInt());
+      smartRoutingState := SmartRouting.syncExecutionQuality(smartRoutingState, phantomExchangeState, beat.toInt());
 
-      // ── PHANTOM CLEARINGHOUSE — Domain 31: netting & clearing ─────────────
-      // Fibonacci-gated netting cycles. Settlement velocity tracking.
-      phantomClearinghouseState := PhantomClearinghouse.tickClearinghouse(phantomClearinghouseState, beat.toInt());
+      // ── FLOW TRACKER + PHANTOM CLEARINGHOUSE — Domains 31/31B ─────────────
+      // Every new fill is settled, graphed, risk-scored, and routed into pool analytics.
+      let (syncedFlowTrackerState, syncedClearinghouseState) = FlowTracker.syncExchangeSettlements(
+        flowTrackerState,
+        phantomClearinghouseState,
+        phantomExchangeState,
+        beat.toInt(),
+      );
+      flowTrackerState := syncedFlowTrackerState;
+      let observedPrice = if (phantomExchangeState.recentFills.size() > 0) {
+        phantomExchangeState.recentFills[phantomExchangeState.recentFills.size() - 1].price
+      } else { 1.0 };
+      let graphControlState = GraphControl.synchronizeState(
+        syncedClearinghouseState.graphControl,
+        FlowTracker.toLiquidityNetwork(syncedFlowTrackerState),
+        observedPrice,
+        1.0,
+        syncedClearinghouseState.guaranteeFund.utilizationRatio,
+        beat.toInt(),
+      );
+      phantomClearinghouseState := PhantomClearinghouse.tickClearinghouse(
+        { syncedClearinghouseState with graphControl = graphControlState },
+        beat.toInt(),
+      );
 
       // ── TOKEN FACTORY — Domain 32: yield distribution ─────────────────────
       // Distribute phi-derived yield to staked token holders (Fibonacci-gated).
@@ -556,6 +625,22 @@ actor PARALLAX {
       // ── INTELLIGENCE COUPLING — Domain 37: coupling sync ───────────────────
       // Process message queue, sync coupled systems, compute aggregate coherence.
       intelligenceCouplingState := IntelligenceCoupling.tickCoupling(intelligenceCouplingState, novaCoherence, beat.toInt());
+
+      // ── PHANTOM CRYPTO — Domain 40: Cryptographia Phantasma ────────────────
+      // Shadow Wire expiry (replay resistance), Key rotation (ephemeral security),
+      // Vault entry expiry (governed memory lifecycle).
+      shadowWireState := ShadowWire.expireWires(shadowWireState, beat.toInt());
+      phantomKeyingState := PhantomKeying.rotateKeys(phantomKeyingState, beat.toInt());
+      sovereignVaultState := SovereignVault.expireEntries(sovereignVaultState, beat.toInt());
+
+      // ── AI PROTOCOLS — Domain 41: 10 sovereign AI protocols ────────────────
+      // Expire threats, prune negotiations, update risk gate, decay stress.
+      let protocolCoherence = SovereignDB.getKuramotoR(db);
+      aiProtocolsState := AiProtocols.tickProtocols(aiProtocolsState, protocolCoherence, beat.toInt());
+
+      // ── MULTI-MODEL — Domain 42: model ensemble maintenance ────────────────
+      // Health checks (every F(5)=5 beats), expire pending requests, decay weights.
+      multiModelState := MultiModel.tickMultiModel(multiModelState, protocolCoherence, beat.toInt());
 
       // ── CHARTER — Domain 38: governance maintenance ────────────────────────
       // Seal genesis hash on first beat, resolve expired proposals, check term limits.
@@ -2217,6 +2302,101 @@ actor PARALLAX {
     phantomExchangeState.pairs
   };
 
+  public query func getQuantMarketMicrostructure(pairId : Text, depthLevels : Nat) : async ?QuantTrading.MarketMicrostructureSnapshot {
+    QuantTrading.buildMarketMicrostructureSnapshot(phantomExchangeState, phantomIntelligenceState, pairId, depthLevels)
+  };
+
+  public query func analyzeQuantPair(
+    pairId : Text,
+    depthLevels : Nat,
+    priceSeries : [Float],
+    hedgeSeries : [Float],
+    optionQuotes : [QuantTrading.OptionQuote],
+    ticks : [QuantTrading.TickData],
+    executionQuantity : Float,
+    executionSlices : Nat,
+  ) : async ?QuantTrading.IntegratedQuantSnapshot {
+    QuantTrading.analyzePhantomPair(
+      phantomExchangeState,
+      phantomIntelligenceState,
+      pairId,
+      depthLevels,
+      priceSeries,
+      hedgeSeries,
+      optionQuotes,
+      ticks,
+      executionQuantity,
+      executionSlices,
+    )
+  };
+
+  public query func getMarketMakingState() : async PhantomExchange.MarketMakerState {
+    phantomExchangeState.marketMaker
+  };
+
+  public query func getMarketMakingSnapshot(pairId : Text) : async ?MarketMaking.StrategySnapshot {
+    PhantomExchange.getMarketMakingSnapshot(phantomExchangeState, pairId)
+  };
+
+  public query func getSmartRoutingState() : async SmartRouting.SmartRoutingState {
+    smartRoutingState
+  };
+
+  public shared(msg) func placeSmartOrder(
+    pairId            : Text,
+    side              : Text,
+    smartOrderType    : Text,
+    quantity          : Float,
+    limitPrice        : ?Float,
+    stopPrice         : ?Float,
+    maxSlippageBps    : Float,
+    participationRate : Float,
+    executionStyle    : Text,
+    algorithm         : Text,
+    allowDarkPools    : Bool,
+    allowMultiVenue   : Bool,
+    allowCrossPool    : Bool,
+    postOnly          : Bool,
+  ) : async SmartRouting.OrderRoutingResult {
+    let beat = SovereignDB.getBeatCount(db).toInt();
+    let coherenceR = SovereignDB.getKuramotoR(db);
+    let owner = Principal.toText(msg.caller);
+    let orderSide = parseOrderSide(side);
+    let request : SmartRouting.SmartOrderRequest = {
+      requestId = pairId # "-" # Nat.toText(phantomExchangeState.nextOrderId);
+      pairId = pairId;
+      owner = owner;
+      side = orderSide;
+      smartOrderType = parseSmartOrderType(smartOrderType);
+      quantity = quantity;
+      limitPrice = limitPrice;
+      stopPrice = stopPrice;
+      maxSlippageBps = if (maxSlippageBps <= 0.0) 25.0 else maxSlippageBps;
+      participationRate = if (participationRate <= 0.0) 0.236 else participationRate;
+      benchmarkPrice = limitPrice;
+      targetVenueCount = if (allowMultiVenue) 3 else 1;
+      urgency = if (algorithm == "bestExecution" or executionStyle == "immediate") 1.0 else 0.618;
+      allowDarkPools = allowDarkPools;
+      allowMultiVenue = allowMultiVenue;
+      allowCrossPool = allowCrossPool;
+      postOnly = postOnly or smartOrderType == "postOnly";
+      stealthFactor = if (allowDarkPools) 0.618 else 0.236;
+      executionStyle = parseExecutionStyle(executionStyle);
+      algorithm = parseRoutingAlgorithm(algorithm);
+    };
+    let (nextRoutingState, nextExchangeState, result) = SmartRouting.submitSmartOrder(
+      smartRoutingState,
+      phantomExchangeState,
+      request,
+      beat,
+      coherenceR,
+    );
+    smartRoutingState := nextRoutingState;
+    phantomExchangeState := PhantomExchange.runMatchingEngine(nextExchangeState, beat);
+    smartRoutingState := SmartRouting.syncExecutionQuality(smartRoutingState, phantomExchangeState, beat);
+    result
+  };
+
   /// placeOrder — submit a new order (limit or market) to the Phantom Exchange
   /// ZERO GAS FEES. Settlement is instant (same beat).
   public shared(msg) func placeOrder(
@@ -2248,6 +2428,7 @@ actor PARALLAX {
 
     // Run matching engine immediately after order placement
     phantomExchangeState := PhantomExchange.runMatchingEngine(phantomExchangeState, beat);
+    smartRoutingState := SmartRouting.syncExecutionQuality(smartRoutingState, phantomExchangeState, beat);
 
     order
   };
@@ -2278,6 +2459,46 @@ actor PARALLAX {
     true
   };
 
+  func parseOrderSide(side : Text) : PhantomExchange.OrderSide {
+    switch (side) {
+      case "buy" { #buy };
+      case _ { #sell };
+    }
+  };
+
+  func parseSmartOrderType(orderType : Text) : SmartRouting.SmartOrderType {
+    switch (orderType) {
+      case "market" { #market };
+      case "stop" { #stop };
+      case "iceberg" { #iceberg };
+      case "fok" { #fok };
+      case "ioc" { #ioc };
+      case "postOnly" { #postOnly };
+      case _ { #limit };
+    }
+  };
+
+  func parseExecutionStyle(style : Text) : SmartRouting.SmartExecutionStyle {
+    switch (style) {
+      case "timeSlice" { #timeSlice };
+      case "participationRate" { #participationRate };
+      case "liquidityDriven" { #liquidityDriven };
+      case "adaptive" { #adaptive };
+      case "stealth" { #stealth };
+      case _ { #immediate };
+    }
+  };
+
+  func parseRoutingAlgorithm(algorithm : Text) : SmartRouting.RoutingAlgorithm {
+    switch (algorithm) {
+      case "bestExecution" { #bestExecution };
+      case "multiVenue" { #multiVenue };
+      case "liquiditySeeking" { #liquiditySeeking };
+      case "darkPool" { #darkPool };
+      case _ { #smartOrderRouting };
+    }
+  };
+
   func parseTokenCategory(cat : Text) : PhantomExchange.TokenCategory {
     switch (cat) {
       case "crypto"          { #crypto };
@@ -2290,7 +2511,7 @@ actor PARALLAX {
       case "syntheticAsset"  { #syntheticAsset };
       case "realWorldAsset"  { #realWorldAsset };
       case "governanceToken" { #governanceToken };
-      case _                 { #crypto };
+      case _                  { #crypto };
     }
   };
 
@@ -2386,12 +2607,76 @@ actor PARALLAX {
     phantomClearinghouseState
   };
 
+  public query func getRiskEngineState() : async RiskEngine.RiskEngineState {
+    phantomClearinghouseState.riskEngine
+  };
+
+  public query func getRiskAlerts() : async [RiskEngine.RiskAlert] {
+    phantomClearinghouseState.riskEngine.monitoring.alerts
+  };
+
+  public query func isRiskCircuitBreakerActive() : async Bool {
+    phantomClearinghouseState.riskEngine.operationalRisk.circuitBreakerActive or phantomClearinghouseState.riskEngine.operationalRisk.emergencyShutdownActive
+  };
+
+  public query func getFlowTrackerState() : async FlowTracker.FlowTrackerState {
+    flowTrackerState
+  };
+
+  public query func getFlowVisualization() : async FlowTracker.VisualizationGraph {
+    FlowTracker.getVisualizationData(flowTrackerState)
+  };
+
+  public query func getFlowRiskMetrics() : async FlowTracker.SystemicRiskMetrics {
+    FlowTracker.getSystemicRiskMetrics(flowTrackerState)
+  };
+
+  public query func getFlowPools() : async [FlowTracker.PoolState] {
+    FlowTracker.getPoolStates(flowTrackerState)
+  };
+
   public query func getSettlementVelocity() : async Float {
     phantomClearinghouseState.settlementVelocity
   };
 
   public query func getTotalGasFeesSaved() : async Float {
     phantomClearinghouseState.totalGasFeesSaved
+  };
+
+  public query func getGraphControlState() : async GraphControl.GraphControlState {
+    phantomClearinghouseState.graphControl
+  };
+
+  public query func getOptimalTradeRoute(
+    sourceToken : Text,
+    destToken   : Text,
+    amountIn    : Float,
+  ) : async GraphControl.TradeRoute {
+    GraphControl.optimalTradeRoute(FlowTracker.toLiquidityNetwork(flowTrackerState), sourceToken, destToken, amountIn)
+  };
+
+  public query func detectArbitrageCycles(
+    baseToken : Text,
+    notional  : Float,
+  ) : async [GraphControl.ArbitrageCycle] {
+    GraphControl.detectArbitrageCycles(FlowTracker.toLiquidityNetwork(flowTrackerState), baseToken, notional)
+  };
+
+  public query func optimizeLiquidityNetwork(
+    source : Text,
+    sink   : Text,
+    demand : Float,
+  ) : async GraphControl.LiquidityOptimization {
+    GraphControl.optimizeLiquidityNetwork(FlowTracker.toLiquidityNetwork(flowTrackerState), source, sink, demand)
+  };
+
+  public query func planTokenDistribution(
+    sourceNode  : Text,
+    sourceToken : Text,
+    sinkNodes   : [Text],
+    supply      : Float,
+  ) : async GraphControl.TokenDistributionPlan {
+    GraphControl.designTokenDistributionNetwork(FlowTracker.toLiquidityNetwork(flowTrackerState), sourceNode, sourceToken, sinkNodes, supply)
   };
 
   /// crossChainSettle — settle across chains without bridges (internal reserves)
@@ -2408,6 +2693,10 @@ actor PARALLAX {
     phantomClearinghouseState := PhantomClearinghouse.crossChainSettle(
       phantomClearinghouseState, sourceChain, destChain, sourceToken, destToken, sourceAmt, destAmt, beat
     );
+    if (phantomClearinghouseState.crossChainSettlements.size() > 0) {
+      let latest = phantomClearinghouseState.crossChainSettlements[phantomClearinghouseState.crossChainSettlements.size() - 1];
+      flowTrackerState := FlowTracker.trackCrossChainSettlement(flowTrackerState, latest, beat);
+    };
     true
   };
 
@@ -3183,6 +3472,639 @@ actor PARALLAX {
     FundManager.concentrationIndex(weights)
   };
 
+  // ══════════════════════════════════════════════════════════════════════════
+  // DOMAIN 39 — PREDICTION MARKET ENDPOINTS
+  // Full prediction market: 58 world contract types, zero-gas, instant settlement
+  // ══════════════════════════════════════════════════════════════════════════
 
+  /// getPredictionMarketMetrics — public query, returns market-wide metrics
+  public query func getPredictionMarketMetrics() : async PredictionMarket.MarketMetrics {
+    predictionMarketState.metrics
+  };
+
+  /// getPredictionAssetRegistry — returns all 58 world contract asset classes
+  public query func getPredictionAssetRegistry() : async [PredictionAssets.PredictionAssetClass] {
+    PredictionAssets.getAssetRegistry()
+  };
+
+  /// getPredictionEngines — returns all 7 AI prediction engines
+  public query func getPredictionEngines() : async [PredictionEngines.PredictionEngine] {
+    PredictionEngines.getAllEngines()
+  };
+
+  /// getPredictionContract — returns a specific prediction contract by ID
+  public query func getPredictionContract(contractId : Nat) : async ?PredictionMarket.PredictionContract {
+    if (contractId >= predictionMarketState.contracts.size()) { return null };
+    predictionMarketState.contracts[contractId]
+  };
+
+  /// getLMSRState — returns LMSR market maker state for a contract
+  public query func getLMSRState(contractId : Nat) : async ?PredictionMarket.LMSRState {
+    if (contractId >= predictionMarketState.lmsrStates.size()) { return null };
+    predictionMarketState.lmsrStates[contractId]
+  };
+
+  /// getLMSRPrice — calculates current LMSR price for a share type
+  public query func getLMSRPrice(contractId : Nat, shareType : PredictionMarket.ShareType) : async Float {
+    if (contractId >= predictionMarketState.lmsrStates.size()) { return 0.5 };
+    switch (predictionMarketState.lmsrStates[contractId]) {
+      case null { 0.5 };
+      case (?state) { PredictionMarket.lmsrPrice(state, shareType) };
+    }
+  };
+
+  /// getLMSRCost — calculates cost to buy shares via LMSR
+  public query func getLMSRCost(contractId : Nat, shareType : PredictionMarket.ShareType, quantity : Float) : async Float {
+    if (contractId >= predictionMarketState.lmsrStates.size()) { return 0.0 };
+    switch (predictionMarketState.lmsrStates[contractId]) {
+      case null { 0.0 };
+      case (?state) { PredictionMarket.lmsrCost(state, shareType, quantity) };
+    }
+  };
+
+  /// getMarketEntropy — returns information entropy of a contract's price
+  public query func getMarketEntropy(contractId : Nat) : async Float {
+    if (contractId >= predictionMarketState.lmsrStates.size()) { return 0.6931471805599453 };
+    switch (predictionMarketState.lmsrStates[contractId]) {
+      case null { 0.6931471805599453 }; // ln(2) — maximum entropy for binary
+      case (?state) { PredictionMarket.marketEntropy(state.currentYesPrice) };
+    }
+  };
+
+  /// getKellySize — calculates optimal Kelly criterion position size
+  public query func getKellySize(estimatedProb : Float, marketPrice : Float, bankroll : Float) : async Float {
+    PredictionMarket.kellySize(estimatedProb, marketPrice, bankroll)
+  };
+
+  /// createPredictionContract — creator creates a new prediction contract
+  public shared(msg) func createPredictionContract(
+    category : PredictionMarket.ContractCategory,
+    title : Text,
+    description : Text,
+    resolutionType : PredictionMarket.ContractResolutionType,
+    outcomes : [Text],
+    expirationBeat : Int,
+    oracleSource : Text,
+    baseLiquidity : Float
+  ) : async Nat {
+    assertCreator(msg.caller);
+    let id = predictionMarketState.contractCount;
+    let contract : PredictionMarket.PredictionContract = {
+      contractId = id;
+      category = category;
+      title = title;
+      description = description;
+      resolutionType = resolutionType;
+      outcomes = outcomes;
+      createdBeat = SovereignDB.getBeatCount(db);
+      expirationBeat = expirationBeat;
+      resolutionBeat = null;
+      resolvedOutcome = null;
+      status = #active;
+      oracleSource = oracleSource;
+      minTradeSize = 1.0;
+      maxPosition = PredictionMarket.maxAllowedPosition(0.5, 1000.0);
+      totalVolume = 0.0;
+      openInterest = 0.0;
+      liquidityDepth = baseLiquidity;
+      creatorPrincipal = Principal.toText(msg.caller);
+    };
+    let lmsr = PredictionMarket.initLMSR(id, baseLiquidity);
+    let newContracts = Array.append(predictionMarketState.contracts, [?contract]);
+    let newLmsr = Array.append(predictionMarketState.lmsrStates, [?lmsr]);
+    predictionMarketState := {
+      predictionMarketState with
+      contracts = newContracts;
+      lmsrStates = newLmsr;
+      contractCount = id + 1;
+      metrics = {
+        predictionMarketState.metrics with
+        totalContracts = predictionMarketState.metrics.totalContracts + 1;
+        activeContracts = predictionMarketState.metrics.activeContracts + 1;
+      };
+    };
+    id
+  };
+
+  /// resolvePredictionContract — creator resolves a contract with outcome
+  public shared(msg) func resolvePredictionContract(contractId : Nat, outcome : Float) : async () {
+    assertCreator(msg.caller);
+    let contracts = predictionMarketState.contracts;
+    if (contractId >= contracts.size()) { assert false; return };
+    switch (contracts[contractId]) {
+      case null { assert false };
+      case (?c) {
+        let resolved : PredictionMarket.PredictionContract = {
+          c with
+          status = #resolved;
+          resolvedOutcome = ?outcome;
+          resolutionBeat = ?SovereignDB.getBeatCount(db);
+        };
+        let newContracts = Array.tabulate<?PredictionMarket.PredictionContract>(
+          contracts.size(),
+          func(i : Nat) : ?PredictionMarket.PredictionContract {
+            if (i == contractId) { ?resolved } else { contracts[i] }
+          }
+        );
+        predictionMarketState := {
+          predictionMarketState with
+          contracts = newContracts;
+          metrics = {
+            predictionMarketState.metrics with
+            resolvedContracts = predictionMarketState.metrics.resolvedContracts + 1;
+            activeContracts = predictionMarketState.metrics.activeContracts - 1;
+          };
+        };
+      };
+    };
+  };
+
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // DOMAIN 40 — CRYPTOGRAPHIA PHANTASMA: Public Endpoints
+  // Protected cognition infrastructure: Shadow Wires, Sovereign Vaults,
+  // Receipt Chains, Quantum-Inspired Keying.
+  // Public-safe: only proof surfaces exposed. Private core stays hidden.
+  // ══════════════════════════════════════════════════════════════════════════
+
+  // ── SHADOW WIRE ENDPOINTS ──────────────────────────────────────────────
+
+  /// Open a shadow wire between two cognitive agents (creator-gated)
+  public shared(msg) func openShadowWire(
+    sourceAgent : Text,
+    targetAgent : Text,
+    payloadData : Text,
+    lifetimeBeats : Nat,
+  ) : async ?PhantomCrypto.ShadowWireEnvelope {
+    assertCreator(msg.caller);
+    let coherence = SovereignDB.getKuramotoR(db);
+    let beat = SovereignDB.getBeatCount(db).toInt();
+    let (newState, envelope, receipt) = ShadowWire.openWire(
+      shadowWireState, sourceAgent, targetAgent, payloadData, coherence, beat, lifetimeBeats
+    );
+    shadowWireState := newState;
+    // Append receipt to main chain if produced
+    switch (receipt) {
+      case (?r) {
+        switch (ReceiptChain.appendReceipt(receiptChainState, r)) {
+          case (?chain) { receiptChainState := chain };
+          case null {};
+        };
+      };
+      case null {};
+    };
+    envelope;
+  };
+
+  /// Acknowledge receipt of a shadow wire message (target-side)
+  public shared(msg) func acknowledgeShadowWire(wireId : Text, actorId : Text) : async Bool {
+    assertCreator(msg.caller);
+    let beat = SovereignDB.getBeatCount(db).toInt();
+    let (newState, receipt) = ShadowWire.acknowledgeWire(shadowWireState, wireId, actorId, beat);
+    shadowWireState := newState;
+    switch (receipt) {
+      case (?r) {
+        switch (ReceiptChain.appendReceipt(receiptChainState, r)) {
+          case (?chain) { receiptChainState := chain };
+          case null {};
+        };
+        true;
+      };
+      case null { false };
+    };
+  };
+
+  /// Get shadow wire public ledger (safe proof surface — no private data)
+  public query func getShadowWirePublicLedger() : async [ShadowWire.WirePublicSummary] {
+    ShadowWire.publicLedger(shadowWireState);
+  };
+
+  /// Get shadow wire statistics
+  public query func getShadowWireStats() : async {
+    activeCount : Nat; expiredCount : Nat; totalSent : Nat; totalReceived : Nat; chainHead : Nat32;
+  } {
+    ShadowWire.getStats(shadowWireState);
+  };
+
+  // ── SOVEREIGN VAULT ENDPOINTS ──────────────────────────────────────────
+
+  /// Write a protected memory entry to the sovereign vault (creator-gated)
+  public shared(msg) func vaultWrite(
+    label : Text,
+    content : Text,
+    expireBeats : ?Nat,
+  ) : async ?Text {
+    assertCreator(msg.caller);
+    let coherence = SovereignDB.getKuramotoR(db);
+    let beat = SovereignDB.getBeatCount(db).toInt();
+    let expiresBeat : ?Int = switch (expireBeats) {
+      case (?n) { ?(beat + n.toInt()) };
+      case null { null };
+    };
+    let (newVault, entryId, receipt) = SovereignVault.writeEntry(
+      sovereignVaultState, "creator.sovereign", label, content,
+      #governed_read, beat, expiresBeat, coherence
+    );
+    sovereignVaultState := newVault;
+    switch (receipt) {
+      case (?r) {
+        switch (ReceiptChain.appendReceipt(receiptChainState, r)) {
+          case (?chain) { receiptChainState := chain };
+          case null {};
+        };
+      };
+      case null {};
+    };
+    entryId;
+  };
+
+  /// Read an entry as abstracted commitment (public-safe — returns hash only)
+  public shared(msg) func vaultReadAbstracted(entryId : Text) : async ?Nat32 {
+    assertCreator(msg.caller);
+    let coherence = SovereignDB.getKuramotoR(db);
+    let beat = SovereignDB.getBeatCount(db).toInt();
+    let (newVault, commitment, receipt) = SovereignVault.readAbstracted(
+      sovereignVaultState, "creator.sovereign", entryId, beat, coherence
+    );
+    sovereignVaultState := newVault;
+    switch (receipt) {
+      case (?r) {
+        switch (ReceiptChain.appendReceipt(receiptChainState, r)) {
+          case (?chain) { receiptChainState := chain };
+          case null {};
+        };
+      };
+      case null {};
+    };
+    commitment;
+  };
+
+  /// Seal a vault entry permanently (one-time read pattern)
+  public shared(msg) func vaultSeal(entryId : Text) : async Bool {
+    assertCreator(msg.caller);
+    let beat = SovereignDB.getBeatCount(db).toInt();
+    let (newVault, receipt) = SovereignVault.sealEntry(
+      sovereignVaultState, "creator.sovereign", entryId, beat
+    );
+    sovereignVaultState := newVault;
+    switch (receipt) {
+      case (?r) {
+        switch (ReceiptChain.appendReceipt(receiptChainState, r)) {
+          case (?chain) { receiptChainState := chain };
+          case null {};
+        };
+        true;
+      };
+      case null { false };
+    };
+  };
+
+  /// Get vault public stats (safe proof surface)
+  public query func getVaultStats() : async {
+    vaultIdHash : Nat32; entryCount : Nat; sealedCount : Nat;
+    totalWrites : Nat; totalReads : Nat; totalSeals : Nat; chainHead : Nat32;
+  } {
+    SovereignVault.getPublicStats(sovereignVaultState);
+  };
+
+  // ── RECEIPT CHAIN ENDPOINTS ────────────────────────────────────────────
+
+  /// Seal a computation into the receipt chain (creator-gated)
+  public shared(msg) func sealComputation(
+    computationClass : Text,
+    inputData : Text,
+    outputData : Text,
+    policyId : Text,
+  ) : async PhantomCrypto.ComputeReceipt {
+    assertCreator(msg.caller);
+    let coherence = SovereignDB.getKuramotoR(db);
+    let beat = SovereignDB.getBeatCount(db).toInt();
+    let (newChain, receipt) = ReceiptChain.sealComputation(
+      receiptChainState, computationClass, inputData, outputData, policyId, coherence, beat
+    );
+    receiptChainState := newChain;
+    receipt;
+  };
+
+  /// Get receipt chain public ledger (safe proof surface)
+  public query func getReceiptChainPublicLedger() : async [ReceiptChain.PublicReceiptSummary] {
+    ReceiptChain.publicLedger(receiptChainState);
+  };
+
+  /// Get receipt chain statistics
+  public query func getReceiptChainStats() : async {
+    chainLength : Nat; activeReceipts : Nat; compactionRoots : Nat;
+    totalCompacted : Nat; chainHead : Nat32; isValid : Bool;
+  } {
+    ReceiptChain.getStats(receiptChainState);
+  };
+
+  /// Verify receipt chain integrity
+  public query func verifyReceiptChain() : async Bool {
+    ReceiptChain.verifyChain(receiptChainState);
+  };
+
+  // ── PHANTOM KEYING ENDPOINTS ───────────────────────────────────────────
+
+  /// Derive a new context-bound ephemeral session key (creator-gated)
+  public shared(msg) func deriveSessionKey(context : Text, boundAgent : Text) : async PhantomCrypto.EphemeralKeySession {
+    assertCreator(msg.caller);
+    let beat = SovereignDB.getBeatCount(db).toInt();
+    let (newState, session, receipt) = PhantomKeying.deriveSessionKey(
+      phantomKeyingState, context, boundAgent, beat
+    );
+    phantomKeyingState := newState;
+    switch (ReceiptChain.appendReceipt(receiptChainState, receipt)) {
+      case (?chain) { receiptChainState := chain };
+      case null {};
+    };
+    session;
+  };
+
+  /// Emergency: compromise all keys bound to a context (creator-gated)
+  public shared(msg) func compromiseKeyContext(context : Text) : async () {
+    assertCreator(msg.caller);
+    let beat = SovereignDB.getBeatCount(db).toInt();
+    phantomKeyingState := PhantomKeying.compromiseContext(phantomKeyingState, context, beat);
+  };
+
+  /// Get keying statistics (safe proof surface — no key material exposed)
+  public query func getPhantomKeyingStats() : async {
+    activeKeys : Nat; rotatedKeys : Nat; totalDerivations : Nat;
+    currentEpoch : Nat; lastRotationBeat : Int; chainHead : Nat32;
+  } {
+    PhantomKeying.getStats(phantomKeyingState);
+  };
+
+  // ── COMBINED PHANTOM CRYPTO DIAGNOSTICS ────────────────────────────────
+
+  /// Get full Cryptographia Phantasma system diagnostics (public-safe)
+  public query func getPhantomCryptoDiagnostics() : async {
+    shadowWires : { activeCount : Nat; expiredCount : Nat; totalSent : Nat; totalReceived : Nat; chainHead : Nat32 };
+    vault : { vaultIdHash : Nat32; entryCount : Nat; sealedCount : Nat; totalWrites : Nat; totalReads : Nat; totalSeals : Nat; chainHead : Nat32 };
+    receiptChain : { chainLength : Nat; activeReceipts : Nat; compactionRoots : Nat; totalCompacted : Nat; chainHead : Nat32; isValid : Bool };
+    keying : { activeKeys : Nat; rotatedKeys : Nat; totalDerivations : Nat; currentEpoch : Nat; lastRotationBeat : Int; chainHead : Nat32 };
+  } {
+    {
+      shadowWires = ShadowWire.getStats(shadowWireState);
+      vault = SovereignVault.getPublicStats(sovereignVaultState);
+      receiptChain = ReceiptChain.getStats(receiptChainState);
+      keying = PhantomKeying.getStats(phantomKeyingState);
+    };
+  };
+
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // DOMAIN 41 — AI PROTOCOLS: 10 Major Sovereign AI Protocols
+  // Cognitive Settlement, Adversarial Reasoning, Predictive Liquidity,
+  // Cross-Asset Valuation, Autonomous Risk Gating, Multi-Model Consensus,
+  // Agent Negotiation, Knowledge Graph Commerce, Self-Evolving Strategy,
+  // Sovereign Audit Intelligence.
+  // ══════════════════════════════════════════════════════════════════════════
+
+  // ── PROTOCOL 1: COGNITIVE SETTLEMENT ────────────────────────────────────
+
+  /// Assess settlement risk cognitively before execution (creator-gated)
+  public shared(msg) func assessSettlementRisk(
+    counterpartyId : Text,
+    amount : Float,
+    tokenPair : Text,
+  ) : async AiProtocols.SettlementRiskAssessment {
+    assertCreator(msg.caller);
+    let coherence = SovereignDB.getKuramotoR(db);
+    let beat = SovereignDB.getBeatCount(db).toInt();
+    let (newState, assessment) = AiProtocols.assessSettlementRisk(
+      aiProtocolsState, counterpartyId, amount, tokenPair, coherence, beat
+    );
+    aiProtocolsState := newState;
+    assessment;
+  };
+
+  // ── PROTOCOL 2: ADVERSARIAL MARKET REASONING ───────────────────────────
+
+  /// Scan for market manipulation threats (creator-gated)
+  public shared(msg) func scanMarketThreats(
+    tokenPair : Text,
+    volumeSpike : Float,
+    priceDeviation : Float,
+  ) : async ?AiProtocols.ThreatDetection {
+    assertCreator(msg.caller);
+    let coherence = SovereignDB.getKuramotoR(db);
+    let beat = SovereignDB.getBeatCount(db).toInt();
+    let (newState, detection) = AiProtocols.scanForThreats(
+      aiProtocolsState, tokenPair, volumeSpike, priceDeviation, coherence, beat
+    );
+    aiProtocolsState := newState;
+    detection;
+  };
+
+  // ── PROTOCOL 3: PREDICTIVE LIQUIDITY ───────────────────────────────────
+
+  /// Predict liquidity needs for a token pair (creator-gated)
+  public shared(msg) func predictLiquidity(
+    tokenPair : Text,
+    currentVolume : Float,
+    currentLiquidity : Float,
+  ) : async AiProtocols.LiquidityPrediction {
+    assertCreator(msg.caller);
+    let coherence = SovereignDB.getKuramotoR(db);
+    let beat = SovereignDB.getBeatCount(db).toInt();
+    let (newState, prediction) = AiProtocols.predictLiquidity(
+      aiProtocolsState, tokenPair, currentVolume, currentLiquidity, coherence, beat
+    );
+    aiProtocolsState := newState;
+    prediction;
+  };
+
+  // ── PROTOCOL 4: CROSS-ASSET VALUATION ──────────────────────────────────
+
+  /// Value an asset using cognitive resonance scoring (creator-gated)
+  public shared(msg) func valueAsset(
+    assetId : Text,
+    category : AiProtocols.AssetCategory,
+    marketPrice : Float,
+    utilityScore : Float,
+    scarcityScore : Float,
+  ) : async AiProtocols.CognitiveValuation {
+    assertCreator(msg.caller);
+    let coherence = SovereignDB.getKuramotoR(db);
+    let beat = SovereignDB.getBeatCount(db).toInt();
+    let (newState, valuation) = AiProtocols.valueAsset(
+      aiProtocolsState, assetId, category, marketPrice, utilityScore, scarcityScore, coherence, beat
+    );
+    aiProtocolsState := newState;
+    valuation;
+  };
+
+  // ── PROTOCOL 7: AGENT-TO-AGENT NEGOTIATION ─────────────────────────────
+
+  /// Open a negotiation between two AI agents (creator-gated)
+  public shared(msg) func openNegotiation(
+    agentA : Text,
+    agentB : Text,
+    assetOffered : Text,
+    assetRequested : Text,
+  ) : async ?AiProtocols.AgentNegotiation {
+    assertCreator(msg.caller);
+    let coherence = SovereignDB.getKuramotoR(db);
+    let beat = SovereignDB.getBeatCount(db).toInt();
+    let (newState, negotiation) = AiProtocols.openNegotiation(
+      aiProtocolsState, agentA, agentB, assetOffered, assetRequested, coherence, beat
+    );
+    aiProtocolsState := newState;
+    negotiation;
+  };
+
+  /// Advance a negotiation to a new state (creator-gated)
+  public shared(msg) func advanceNegotiation(
+    negotiationId : Text,
+    newState : AiProtocols.NegotiationState,
+  ) : async () {
+    assertCreator(msg.caller);
+    let beat = SovereignDB.getBeatCount(db).toInt();
+    aiProtocolsState := AiProtocols.advanceNegotiation(aiProtocolsState, negotiationId, newState, beat);
+  };
+
+  // ── PROTOCOL 9: SELF-EVOLVING STRATEGY ─────────────────────────────────
+
+  /// Report strategy performance for Hebbian evolution (creator-gated)
+  public shared(msg) func evolveStrategy(
+    geneId : Text,
+    success : Bool,
+    returnAmount : Float,
+  ) : async () {
+    assertCreator(msg.caller);
+    let beat = SovereignDB.getBeatCount(db).toInt();
+    aiProtocolsState := AiProtocols.evolveStrategies(aiProtocolsState, geneId, success, returnAmount, beat);
+  };
+
+  // ── PROTOCOL 10: SOVEREIGN AUDIT ───────────────────────────────────────
+
+  /// Run a sovereign audit on a domain (creator-gated)
+  public shared(msg) func runSovereignAudit(
+    domain : AiProtocols.AuditDomain,
+    checksPerformed : Nat,
+    anomaliesFound : Nat,
+  ) : async AiProtocols.AuditProof {
+    assertCreator(msg.caller);
+    let beat = SovereignDB.getBeatCount(db).toInt();
+    let (newState, proof) = AiProtocols.runAudit(aiProtocolsState, domain, checksPerformed, anomaliesFound, beat);
+    aiProtocolsState := newState;
+    proof;
+  };
+
+  // ── AI PROTOCOLS DIAGNOSTICS ───────────────────────────────────────────
+
+  /// Get AI protocols system statistics (public-safe)
+  public query func getAiProtocolStats() : async {
+    totalExecutions : Nat;
+    settlementsReasoned : Nat;
+    threatsDetected : Nat;
+    threatsNeutralized : Nat;
+    repositionsExecuted : Nat;
+    assetsValued : Nat;
+    riskLevel : AiProtocols.RiskGateLevel;
+    consensusReached : Nat;
+    negotiationsCompleted : Nat;
+    knowledgeNodes : Nat;
+    evolutionEvents : Nat;
+    currentGeneration : Nat;
+    totalAudits : Nat;
+    lastBeat : Int;
+  } {
+    AiProtocols.getStats(aiProtocolsState);
+  };
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // DOMAIN 42 — MULTI-MODEL ORCHESTRATION FRAMEWORK
+  // 10 pre-registered models, 7 categories, 7 strategies, phi-weighted consensus.
+  // Foundation (GPT-5, Claude Opus 4, Gemini Ultra 2), Specialists (PHI-Finance,
+  // QuantRisk), Validator (RedTeam), Predictor (Harmonic-φ), Sentinel (Sentinel-X),
+  // Synthesizer (MetaSynthesizer-φ), Sovereign (MEDINA-PRIME).
+  // ══════════════════════════════════════════════════════════════════════════
+
+  /// Register a new model in the multi-model ensemble (creator-gated)
+  public shared(msg) func registerModel(
+    modelId : Text,
+    displayName : Text,
+    category : MultiModel.ModelCategory,
+    provider : Text,
+    version : Text,
+    capabilities : [Text],
+    costPerCall : Float,
+  ) : async Bool {
+    assertCreator(msg.caller);
+    let beat = SovereignDB.getBeatCount(db).toInt();
+    let (newState, success) = MultiModel.registerModel(
+      multiModelState, modelId, displayName, category, provider, version, capabilities, costPerCall, beat
+    );
+    multiModelState := newState;
+    success;
+  };
+
+  /// Retire a model from the ensemble (creator-gated)
+  public shared(msg) func retireModel(modelId : Text) : async () {
+    assertCreator(msg.caller);
+    let beat = SovereignDB.getBeatCount(db).toInt();
+    multiModelState := MultiModel.retireModel(multiModelState, modelId, beat);
+  };
+
+  /// Execute a multi-model ensemble decision (creator-gated)
+  public shared(msg) func executeEnsemble(
+    taskType : MultiModel.TaskType,
+    inputData : Text,
+    requiredCapabilities : [Text],
+  ) : async MultiModel.EnsembleResult {
+    assertCreator(msg.caller);
+    let coherence = SovereignDB.getKuramotoR(db);
+    let beat = SovereignDB.getBeatCount(db).toInt();
+    let strategy = MultiModel.selectStrategy(taskType, coherence);
+    let (newState, result) = MultiModel.executeEnsemble(
+      multiModelState, taskType, inputData, strategy, requiredCapabilities, coherence, beat
+    );
+    multiModelState := newState;
+    result;
+  };
+
+  /// Get the public model registry (no internal weights)
+  public query func getModelRegistry() : async [MultiModel.ModelPublicSummary] {
+    MultiModel.getModelRegistry(multiModelState);
+  };
+
+  /// Get multi-model system statistics (public-safe)
+  public query func getMultiModelStats() : async {
+    totalModels : Nat;
+    activeModels : Nat;
+    totalEnsembleCalls : Nat;
+    consensusReached : Nat;
+    consensusFailed : Nat;
+    avgConfidence : Float;
+    avgDisagreement : Float;
+    pendingRequests : Nat;
+    lastBeat : Int;
+  } {
+    MultiModel.getStats(multiModelState);
+  };
+
+  /// Get combined AI & Multi-Model diagnostics (public-safe)
+  public query func getAiInfrastructureDiagnostics() : async {
+    protocols : {
+      totalExecutions : Nat; settlementsReasoned : Nat; threatsDetected : Nat;
+      threatsNeutralized : Nat; repositionsExecuted : Nat; assetsValued : Nat;
+      riskLevel : AiProtocols.RiskGateLevel; consensusReached : Nat;
+      negotiationsCompleted : Nat; knowledgeNodes : Nat; evolutionEvents : Nat;
+      currentGeneration : Nat; totalAudits : Nat; lastBeat : Int;
+    };
+    multiModel : {
+      totalModels : Nat; activeModels : Nat; totalEnsembleCalls : Nat;
+      consensusReached : Nat; consensusFailed : Nat; avgConfidence : Float;
+      avgDisagreement : Float; pendingRequests : Nat; lastBeat : Int;
+    };
+  } {
+    {
+      protocols = AiProtocols.getStats(aiProtocolsState);
+      multiModel = MultiModel.getStats(multiModelState);
+    };
+  };
 
 };

@@ -28,6 +28,7 @@
 // Architect: Alfredo Medina Hernandez — The Architect of the Field
 
 import Phi "phi";
+import MarketMaking "market_making";
 import Float "mo:core/Float";
 import Array "mo:core/Array";
 import Int "mo:core/Int";
@@ -145,6 +146,7 @@ module {
     totalFillsProvided: Nat;
     pnl               : Float;      // market making P&L in ICP
     lastQuoteBeat     : Int;
+    strategyState     : MarketMaking.MarketMakingState;
   };
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -211,6 +213,7 @@ module {
       totalFillsProvided = 0;
       pnl                = 0.0;
       lastQuoteBeat      = 0;
+      strategyState      = MarketMaking.defaultMarketMakingState();
     }
   };
 
@@ -406,12 +409,29 @@ module {
     beat  : Int,
   ) : PhantomExchangeState {
     var updatedState = state;
-    // Match all order books
     for (bookEntry in state.orderBooks.vals()) {
       let (pairId, _book) = bookEntry;
-      updatedState := matchOrderBook(updatedState, pairId, beat);
+      updatedState := matchOrderBookUntilStable(updatedState, pairId, beat, 34);
     };
-    { updatedState with lastSettlementBeat = beat }
+    refreshMarketMaking({ updatedState with lastSettlementBeat = beat }, beat)
+  };
+
+  func matchOrderBookUntilStable(
+    state          : PhantomExchangeState,
+    pairId         : Text,
+    beat           : Int,
+    remainingPasses: Nat,
+  ) : PhantomExchangeState {
+    if (remainingPasses == 0) { return state };
+    let nextState = matchOrderBook(state, pairId, beat);
+    if (
+      nextState.totalFills == state.totalFills and
+      nextState.totalOrdersCancelled == state.totalOrdersCancelled
+    ) {
+      state
+    } else {
+      matchOrderBookUntilStable(nextState, pairId, beat, remainingPasses - 1)
+    }
   };
 
   func matchOrderBook(
@@ -424,35 +444,46 @@ module {
       case null { state };
       case (?found) {
         let book = found.1;
-        if (book.bids.size() == 0 or book.asks.size() == 0) { return state };
-
-        // Check if best bid >= best ask (crossing)
-        let bestBid = book.bids[0];
-        let bestAsk = book.asks[0];
-        if (bestBid.price < bestAsk.price) { return state }; // no cross
-
-        // MATCH: execute at midpoint (fair price)
-        let execPrice = (bestBid.price + bestAsk.price) / 2.0;
-        let execQty = if (bestBid.remainingQty < bestAsk.remainingQty)
-          bestBid.remainingQty else bestAsk.remainingQty;
-
-        // Create fill — ZERO FEES
-        let fill : Fill = {
-          fillId          = state.nextFillId;
-          pairId          = pairId;
-          buyOrderId      = bestBid.orderId;
-          sellOrderId     = bestAsk.orderId;
-          price           = execPrice;
-          quantity         = execQty;
-          buyerPrincipal  = bestBid.owner;
-          sellerPrincipal = bestAsk.owner;
-          fillBeat        = beat;
-          gasFee          = 0.0;  // PHANTOM LAW: ZERO GAS
-          makerFee        = 0.0;  // PHANTOM LAW: ZERO MAKER FEE
-          takerFee        = 0.0;  // PHANTOM LAW: ZERO TAKER FEE
+        if (book.bids.size() == 0 or book.asks.size() == 0) {
+          return cancelNonRestingOrders(state, pairId);
         };
 
-        // Update orders
+        let bestBid = book.bids[0];
+        let bestAsk = book.asks[0];
+
+        if (bestBid.timeInForce == #fok and not canFillCompletely(book, bestBid)) {
+          return cancelTopOrder(state, pairId, #buy);
+        };
+        if (bestAsk.timeInForce == #fok and not canFillCompletely(book, bestAsk)) {
+          return cancelTopOrder(state, pairId, #sell);
+        };
+
+        if (not canOrdersCross(bestBid, bestAsk)) {
+          return cancelNonRestingOrders(state, pairId);
+        };
+
+        let execPrice = determineExecutionPrice(state, pairId, bestBid, bestAsk);
+        let execQty = if (bestBid.remainingQty < bestAsk.remainingQty) {
+          bestBid.remainingQty
+        } else {
+          bestAsk.remainingQty
+        };
+
+        let fill : Fill = {
+          fillId           = state.nextFillId;
+          pairId           = pairId;
+          buyOrderId       = bestBid.orderId;
+          sellOrderId      = bestAsk.orderId;
+          price            = execPrice;
+          quantity         = execQty;
+          buyerPrincipal   = bestBid.owner;
+          sellerPrincipal  = bestAsk.owner;
+          fillBeat         = beat;
+          gasFee           = 0.0;
+          makerFee         = 0.0;
+          takerFee         = 0.0;
+        };
+
         let updatedBid = { bestBid with
           filledQty      = bestBid.filledQty + execQty;
           remainingQty   = bestBid.remainingQty - execQty;
@@ -466,25 +497,12 @@ module {
           lastUpdateBeat = beat;
         };
 
-        // Rebuild order book
-        let newBids = if (updatedBid.status == #filled) {
-          Array.tabulate(book.bids.size() - 1 : Nat, func i : Order { book.bids[i + 1] })
-        } else {
-          Array.tabulate(book.bids.size(), func i : Order {
-            if (i == 0) updatedBid else book.bids[i]
-          })
-        };
-        let newAsks = if (updatedAsk.status == #filled) {
-          Array.tabulate(book.asks.size() - 1 : Nat, func i : Order { book.asks[i + 1] })
-        } else {
-          Array.tabulate(book.asks.size(), func i : Order {
-            if (i == 0) updatedAsk else book.asks[i]
-          })
-        };
-
-        let spread = if (newBids.size() > 0 and newAsks.size() > 0) {
-          (newAsks[0].price - newBids[0].price) / ((newAsks[0].price + newBids[0].price) / 2.0) * 10000.0
-        } else { 0.0 };
+        let keepBid = restingOrder(updatedBid);
+        let keepAsk = restingOrder(updatedAsk);
+        let cancelledResiduals = residualCancellationCount(updatedBid, keepBid) + residualCancellationCount(updatedAsk, keepAsk);
+        let newBids = rebuildSide(book.bids, keepBid);
+        let newAsks = rebuildSide(book.asks, keepAsk);
+        let spread = spreadBps(newBids, newAsks);
 
         let newBook : OrderBook = {
           pairId        = pairId;
@@ -495,23 +513,196 @@ module {
           spreadBps     = spread;
         };
 
-        // Update state
         let updatedBooks = Array.map<(Text, OrderBook), (Text, OrderBook)>(state.orderBooks, func (b) {
           if (b.0 == pairId) (pairId, newBook) else b
         });
 
         let fills = appendFill(state.recentFills, fill);
+        let updatedPairs = updatePairAfterFill(state.pairs, pairId, execPrice, execQty);
 
         {
           state with
-          orderBooks        = updatedBooks;
-          recentFills       = fills;
-          nextFillId        = state.nextFillId + 1;
-          totalFills        = state.totalFills + 1;
-          totalVolumeICP    = state.totalVolumeICP + (execPrice * execQty);
-          lastSettlementBeat = beat;
+          pairs                = updatedPairs;
+          orderBooks           = updatedBooks;
+          recentFills          = fills;
+          nextFillId           = state.nextFillId + 1;
+          totalFills           = state.totalFills + 1;
+          totalVolumeICP       = state.totalVolumeICP + (execPrice * execQty);
+          totalOrdersCancelled = state.totalOrdersCancelled + cancelledResiduals;
+          lastSettlementBeat   = beat;
         }
       };
+    }
+  };
+
+  func canOrdersCross(bid : Order, ask : Order) : Bool {
+    if (bid.orderType == #market or ask.orderType == #market) {
+      true
+    } else {
+      bid.price >= ask.price
+    }
+  };
+
+  func canFillCompletely(book : OrderBook, order : Order) : Bool {
+    let opposing = switch (order.side) {
+      case (#buy)  { book.asks };
+      case (#sell) { book.bids };
+    };
+    var remaining = order.remainingQty;
+    for (candidate in opposing.vals()) {
+      if (remaining > 0.0 and canTradeWith(order, candidate)) {
+        if (candidate.remainingQty >= remaining) {
+          remaining := 0.0;
+        } else {
+          remaining -= candidate.remainingQty;
+        };
+      };
+    };
+    remaining <= 0.0
+  };
+
+  func canTradeWith(order : Order, opposing : Order) : Bool {
+    if (order.orderType == #market or opposing.orderType == #market) {
+      true
+    } else {
+      switch (order.side) {
+        case (#buy)  { order.price >= opposing.price };
+        case (#sell) { order.price <= opposing.price };
+      }
+    }
+  };
+
+  func determineExecutionPrice(
+    state : PhantomExchangeState,
+    pairId: Text,
+    bid   : Order,
+    ask   : Order,
+  ) : Float {
+    if (bid.orderType == #market and ask.orderType == #market) {
+      switch (getTradingPair(state, pairId)) {
+        case (?pair) { pair.lastPrice };
+        case null { 0.0 };
+      }
+    } else if (bid.orderType == #market) {
+      ask.price
+    } else if (ask.orderType == #market) {
+      bid.price
+    } else {
+      (bid.price + ask.price) / 2.0
+    }
+  };
+
+  func restingOrder(order : Order) : ?Order {
+    if (order.remainingQty <= 0.0 or order.status == #filled) {
+      null
+    } else if (order.orderType == #market) {
+      null
+    } else if (order.timeInForce == #ioc or order.timeInForce == #fok) {
+      null
+    } else {
+      ?order
+    }
+  };
+
+  func residualCancellationCount(order : Order, resting : ?Order) : Nat {
+    if (order.remainingQty > 0.0 and order.status != #filled) {
+      switch (resting) {
+        case null { 1 };
+        case (?_) { 0 };
+      }
+    } else {
+      0
+    }
+  };
+
+  func rebuildSide(existing : [Order], topReplacement : ?Order) : [Order] {
+    let tail = if (existing.size() > 1) {
+      Array.tabulate(existing.size() - 1 : Nat, func i : Order { existing[i + 1] })
+    } else {
+      []
+    };
+    switch (topReplacement) {
+      case null { tail };
+      case (?replacement) { Array.append([replacement], tail) };
+    }
+  };
+
+  func cancelNonRestingOrders(state : PhantomExchangeState, pairId : Text) : PhantomExchangeState {
+    let found = Array.find<(Text, OrderBook)>(state.orderBooks, func (entry) { entry.0 == pairId });
+    switch (found) {
+      case null { state };
+      case (?entry) {
+        let book = entry.1;
+        let cancelBid = book.bids.size() > 0 and shouldCancelUnmatched(book.bids[0]);
+        let cancelAsk = book.asks.size() > 0 and shouldCancelUnmatched(book.asks[0]);
+        if (not cancelBid and not cancelAsk) { return state };
+
+        let newBids = if (cancelBid) rebuildSide(book.bids, null) else book.bids;
+        let newAsks = if (cancelAsk) rebuildSide(book.asks, null) else book.asks;
+        let updatedBooks = Array.map<(Text, OrderBook), (Text, OrderBook)>(state.orderBooks, func (bookEntry) {
+          if (bookEntry.0 == pairId) {
+            (pairId, {
+              bookEntry.1 with
+              bids = newBids;
+              asks = newAsks;
+              spreadBps = spreadBps(newBids, newAsks);
+            })
+          } else {
+            bookEntry
+          }
+        });
+        {
+          state with
+          orderBooks = updatedBooks;
+          totalOrdersCancelled = state.totalOrdersCancelled + (if (cancelBid) 1 else 0) + (if (cancelAsk) 1 else 0);
+        }
+      };
+    }
+  };
+
+  func shouldCancelUnmatched(order : Order) : Bool {
+    order.orderType == #market or order.timeInForce == #ioc or order.timeInForce == #fok
+  };
+
+  func cancelTopOrder(
+    state : PhantomExchangeState,
+    pairId: Text,
+    side  : OrderSide,
+  ) : PhantomExchangeState {
+    let updatedBooks = Array.map<(Text, OrderBook), (Text, OrderBook)>(state.orderBooks, func (entry) {
+      if (entry.0 == pairId) {
+        let book = entry.1;
+        switch (side) {
+          case (#buy) {
+            let newBids = rebuildSide(book.bids, null);
+            (pairId, { book with bids = newBids; spreadBps = spreadBps(newBids, book.asks) })
+          };
+          case (#sell) {
+            let newAsks = rebuildSide(book.asks, null);
+            (pairId, { book with asks = newAsks; spreadBps = spreadBps(book.bids, newAsks) })
+          };
+        }
+      } else {
+        entry
+      }
+    });
+    {
+      state with
+      orderBooks = updatedBooks;
+      totalOrdersCancelled = state.totalOrdersCancelled + 1;
+    }
+  };
+
+  func spreadBps(bids : [Order], asks : [Order]) : Float {
+    if (bids.size() > 0 and asks.size() > 0) {
+      let midpoint = (asks[0].price + bids[0].price) / 2.0;
+      if (midpoint > 0.0) {
+        (asks[0].price - bids[0].price) / midpoint * 10000.0
+      } else {
+        0.0
+      }
+    } else {
+      0.0
     }
   };
 
@@ -585,6 +776,10 @@ module {
       state with
       pairs      = Array.append(state.pairs, [(pairId, pair)]);
       totalPairs = state.totalPairs + 1;
+      marketMaker = {
+        state.marketMaker with
+        activePairs = Array.append(state.marketMaker.activePairs, [pairId]);
+      };
     }
   };
 
@@ -592,6 +787,140 @@ module {
     switch (Array.find<(Text, TradingPair)>(state.pairs, func (p) { p.0 == pairId })) {
       case null { false };
       case (?_) { true };
+    }
+  };
+
+  func getTradingPair(state : PhantomExchangeState, pairId : Text) : ?TradingPair {
+    switch (Array.find<(Text, TradingPair)>(state.pairs, func (entry) { entry.0 == pairId })) {
+      case (?entry) { ?entry.1 };
+      case null { null };
+    }
+  };
+
+  func sumRemaining(orders : [Order]) : Float {
+    Array.foldLeft<Order, Float>(orders, 0.0, func (acc, order) { acc + order.remainingQty })
+  };
+
+  func updatePairAfterFill(pairs : [(Text, TradingPair)], pairId : Text, execPrice : Float, execQty : Float) : [(Text, TradingPair)] {
+    Array.map<(Text, TradingPair), (Text, TradingPair)>(pairs, func (entry) {
+      if (entry.0 == pairId) {
+        let pair = entry.1;
+        let newHigh = if (pair.highPrice24h == 0.0 or execPrice > pair.highPrice24h) execPrice else pair.highPrice24h;
+        let newLow = if (pair.lowPrice24h == 0.0 or execPrice < pair.lowPrice24h) execPrice else pair.lowPrice24h;
+        (pairId, {
+          pair with
+          volume24h   = pair.volume24h + (execPrice * execQty);
+          lastPrice   = execPrice;
+          highPrice24h = newHigh;
+          lowPrice24h  = newLow;
+        })
+      } else { entry }
+    })
+  };
+
+  func buildMarketMakingInput(state : PhantomExchangeState, pair : TradingPair, bookOpt : ?OrderBook) : MarketMaking.PairInput {
+    let bestBid = switch (bookOpt) {
+      case (?book) { if (book.bids.size() > 0) book.bids[0].price else pair.lastPrice };
+      case null { pair.lastPrice };
+    };
+    let bestAsk = switch (bookOpt) {
+      case (?book) { if (book.asks.size() > 0) book.asks[0].price else pair.lastPrice };
+      case null { pair.lastPrice };
+    };
+    let reference = if (pair.lastPrice > 0.0) pair.lastPrice else if (bestBid > 0.0 and bestAsk > 0.0) (bestBid + bestAsk) / 2.0 else 1.0;
+    let mid = if (bestBid > 0.0 and bestAsk > 0.0) (bestBid + bestAsk) / 2.0 else reference;
+    let fair = if (pair.lastPrice > 0.0) (mid * 0.6 + pair.lastPrice * 0.4) else mid;
+    let bidDepth = switch (bookOpt) {
+      case (?book) { sumRemaining(book.bids) };
+      case null { 0.0 };
+    };
+    let askDepth = switch (bookOpt) {
+      case (?book) { sumRemaining(book.asks) };
+      case null { 0.0 };
+    };
+    let depthTotal = bidDepth + askDepth;
+    let depthImbalance = if (depthTotal > 0.0) (bidDepth - askDepth) / depthTotal else 0.0;
+    let volatility = if (pair.highPrice24h > 0.0 and pair.lowPrice24h > 0.0 and fair > 0.0) {
+      Float.max(pair.tickSize, (pair.highPrice24h - pair.lowPrice24h) / fair)
+    } else {
+      Float.max(pair.tickSize, state.marketMaker.spreadTarget / 10000.0)
+    };
+    let toxicFlow = Float.min(1.0, Float.abs(depthImbalance) * 0.5 + Float.abs(reference - mid) / Float.max(0.000001, mid));
+    let adverseSelection = switch (bookOpt) {
+      case (?book) {
+        if (book.spreadBps <= 0.0) 0.2 else Float.min(1.0, Float.max(0.0, state.marketMaker.spreadTarget - book.spreadBps) / Float.max(1.0, state.marketMaker.spreadTarget))
+      };
+      case null { 0.2 };
+    };
+    let mevRisk = Float.min(1.0, toxicFlow * 0.6 + adverseSelection * 0.25 + volatility * 2.0);
+    let inventory = switch (Array.find<(Text, MarketMaking.InventoryState)>(state.marketMaker.strategyState.inventories, func (entry) { entry.0 == pair.pairId })) {
+      case (?entry) { entry.1 };
+      case null { MarketMaking.defaultInventoryState(state.marketMaker.maxInventory) };
+    };
+    {
+      pairId = pair.pairId;
+      baseSymbol = pair.baseToken;
+      quoteSymbol = pair.quoteToken;
+      market = {
+        midPrice = Float.max(0.000001, mid);
+        bestBid = Float.max(0.000001, bestBid);
+        bestAsk = Float.max(0.000001, bestAsk);
+        fairPrice = Float.max(0.000001, fair);
+        oraclePrice = Float.max(0.000001, if (pair.lastPrice > 0.0) pair.lastPrice else mid);
+        volatility = volatility;
+        depthImbalance = depthImbalance;
+        recentVolume = pair.volume24h;
+        mevRisk = mevRisk;
+        toxicFlowRatio = toxicFlow;
+        adverseSelectionScore = adverseSelection;
+      };
+      inventory = inventory;
+      lpTokenSupply = 1_000_000.0;
+      weightBase = 0.5;
+      weightQuote = 0.5;
+    }
+  };
+
+  func refreshMarketMaking(state : PhantomExchangeState, beat : Int) : PhantomExchangeState {
+    var inputs : [MarketMaking.PairInput] = [];
+    for (pairId in state.marketMaker.activePairs.vals()) {
+      switch (getTradingPair(state, pairId)) {
+        case (?pair) {
+          inputs := Array.append(inputs, [buildMarketMakingInput(state, pair, getOrderBook(state, pairId))]);
+        };
+        case null {};
+      }
+    };
+    if (inputs.size() == 0) { return state };
+
+    let strategyState = MarketMaking.tickMarketMaking(state.marketMaker.strategyState, inputs, beat);
+    let quoteCount = strategyState.latestQuotes.size();
+    let avgSpread = if (quoteCount == 0) {
+      state.marketMaker.spreadTarget
+    } else {
+      Array.foldLeft<(Text, MarketMaking.QuoteIntent), Float>(strategyState.latestQuotes, 0.0, func (acc, entry) {
+        acc + entry.1.spreadBps
+      }) / quoteCount.toInt().toFloat()
+    };
+    let avgSkew = if (quoteCount == 0) {
+      state.marketMaker.inventoryBias
+    } else {
+      Array.foldLeft<(Text, MarketMaking.QuoteIntent), Float>(strategyState.latestQuotes, 0.0, func (acc, entry) {
+        acc + entry.1.skew
+      }) / quoteCount.toInt().toFloat()
+    };
+
+    {
+      state with
+      marketMaker = {
+        state.marketMaker with
+        spreadTarget = avgSpread;
+        inventoryBias = avgSkew;
+        totalQuotesPosted = state.marketMaker.totalQuotesPosted + quoteCount;
+        pnl = strategyState.totalFeesEarned - strategyState.totalImpermanentLossSaved;
+        lastQuoteBeat = beat;
+        strategyState = strategyState;
+      };
     }
   };
 
@@ -605,6 +934,10 @@ module {
       case (?f) { ?f.1 };
       case null { null };
     }
+  };
+
+  public func getMarketMakingSnapshot(state : PhantomExchangeState, pairId : Text) : ?MarketMaking.StrategySnapshot {
+    MarketMaking.getSnapshot(state.marketMaker.strategyState, pairId)
   };
 
   // ═══════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,112 @@
+{
+  "schema": "parallax.agent.tokenomics.v1",
+  "platform": "PARALLAX",
+  "mode": "alpha",
+  "public_posture": "research_simulation_internal_credit_first",
+  "generated_at": "2026-07-10",
+  "token_classes": [
+    {
+      "symbol": "PXUSD",
+      "name": "PARALLAX Paper Dollar",
+      "class": "paper_stable_unit",
+      "mode": "paper",
+      "purpose": "Unit of account for simulated trading, transfers, and clearinghouse accounting.",
+      "supply_policy": "fixture_or_operator_issued",
+      "value_claim": "no_real_value",
+      "transferability": "internal_only",
+      "must_not_do": ["claim_redeemability", "represent_bank_deposit", "sell_to_public"]
+    },
+    {
+      "symbol": "PXICP",
+      "name": "PARALLAX ICP Test Unit",
+      "class": "testnet_protocol_unit",
+      "mode": "testnet",
+      "purpose": "ICP canister and ledger integration experiments.",
+      "supply_policy": "testnet_or_fixture_issued",
+      "value_claim": "testnet_only",
+      "transferability": "testnet_or_internal_only",
+      "must_not_do": ["claim_icp_mainnet_value", "bridge_live_icp", "hide_network_mode"]
+    },
+    {
+      "symbol": "PXETH",
+      "name": "PARALLAX ETH Test Unit",
+      "class": "evm_test_unit",
+      "mode": "testnet",
+      "purpose": "EVM testnet contract and adapter experiments.",
+      "supply_policy": "testnet_or_fixture_issued",
+      "value_claim": "testnet_only",
+      "transferability": "testnet_or_internal_only",
+      "must_not_do": ["claim_eth_mainnet_value", "bridge_live_eth", "hide_contract_network"]
+    },
+    {
+      "symbol": "PXAI",
+      "name": "PARALLAX Agent Work Unit",
+      "class": "agent_work_credit",
+      "mode": "paper",
+      "purpose": "Internal accounting for agent work, governance-reviewed actions, research minting, and task receipts.",
+      "supply_policy": "earned_by_receipted_agent_work_or_operator_issued",
+      "value_claim": "internal_credit_only",
+      "transferability": "internal_agent_economy_only",
+      "must_not_do": ["promise_yield", "sell_as_security", "represent_wage_or_cash_equivalent"]
+    },
+    {
+      "symbol": "PXGPU",
+      "name": "PARALLAX Compute Credit",
+      "class": "compute_credit",
+      "mode": "paper",
+      "purpose": "Internal accounting for simulation, model inference, native worker runs, and benchmark compute.",
+      "supply_policy": "earned_or_burned_by_compute_receipts",
+      "value_claim": "internal_compute_accounting_only",
+      "transferability": "internal_only",
+      "must_not_do": ["represent_external_gpu_inventory", "promise_access_to_real_hardware_without_capacity", "sell_to_public"]
+    },
+    {
+      "symbol": "PXCRED",
+      "name": "PARALLAX Credit Receipt",
+      "class": "receipt_credit",
+      "mode": "paper",
+      "purpose": "Receipt-backed agent credit for completed tasks, research artifacts, simulations, and governance work.",
+      "supply_policy": "minted_by_receipt_ledger_only",
+      "value_claim": "internal_credit_only",
+      "transferability": "agent_wallets_and_operator_accounts_only",
+      "must_not_do": ["claim_cash_value", "sell_to_public", "mint_without_receipt"]
+    }
+  ],
+  "economic_loops": [
+    {
+      "id": "agent-work-to-credit",
+      "description": "Agent completes governed task, receipt ledger records proof, PXCRED is minted as internal credit.",
+      "inputs": ["AgentTaskReceipt", "OperatorApproval"],
+      "outputs": ["PXCRED"],
+      "required_gates": ["receipt_exists", "operator_policy_allows", "no_live_value_claim"]
+    },
+    {
+      "id": "compute-to-pxgpu-burn",
+      "description": "Simulation or native worker run consumes PXGPU internal compute credits and emits benchmark receipts.",
+      "inputs": ["PXGPU", "ComputeRunRequest"],
+      "outputs": ["BenchmarkReceipt", "ComputeUsageReceipt"],
+      "required_gates": ["compute_budget_available", "receipt_export_enabled", "no_hardware_capacity_claim_without_evidence"]
+    },
+    {
+      "id": "research-mint-to-pxai",
+      "description": "Research artifact or protocol charter is registered, then PXAI internal work units can be credited to the agent or team lane.",
+      "inputs": ["ResearchArtifact", "ResearchArtifactReceipt"],
+      "outputs": ["PXAI", "ResearchProofRecord"],
+      "required_gates": ["artifact_hash_present", "claim_boundary_passed", "receipt_chain_valid"]
+    },
+    {
+      "id": "paper-trade-to-settlement",
+      "description": "Agent proposes paper trade, risk gate evaluates, matching engine fills, paper ledger updates, settlement receipt is emitted.",
+      "inputs": ["AiWalletCommand", "RiskDecision", "OrderBook"],
+      "outputs": ["FillReceipt", "SettlementReceipt"],
+      "required_gates": ["human_approval_if_required", "no_live_broker_route", "receipt_emitted"]
+    }
+  ],
+  "governance_rules": [
+    "tokens_are_alpha_internal_or_testnet_only",
+    "agent_wallets_cannot_self_approve_above_threshold",
+    "receipt_ledger_is_source_of_truth_for_credit_mints",
+    "mainnet_or_live_economic_claims_require_new_governance_gate",
+    "public_language_must_state_no_real_money_movement_in_alpha"
+  ]
+}

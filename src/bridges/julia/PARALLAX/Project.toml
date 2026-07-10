@@ -1,0 +1,22 @@
+name = "PARALLAX"
+uuid = "a1f4ed0e-7b3c-4e9d-b8a1-c5f9e2d3b6a0"
+authors = ["Alfredo Medina Hernandez <architect@parallax.field>"]
+version = "0.1.0"
+
+[deps]
+DifferentialEquations = "0c46a032-eb83-5123-abaf-570d42b7caa7"
+DSP = "717857b8-e6f2-59f4-9121-6e50c889abd2"
+FFTW = "7a1cc6ca-52ef-59f5-83cd-3a7055c09341"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+Optim = "429524aa-4258-5aef-a3af-852621145aeb"
+Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
+StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
+
+[compat]
+julia = "1.9"
+DifferentialEquations = "7"
+DSP = "0.7"
+FFTW = "1"
+Optim = "1"
+StaticArrays = "1"

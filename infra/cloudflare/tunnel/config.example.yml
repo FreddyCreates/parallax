@@ -1,0 +1,26 @@
+# PARALLAX Cloudflare Tunnel example
+# Copy this file to your cloudflared config path after creating a tunnel.
+# Do not commit real tunnel credentials.
+
+tunnel: PARALLAX_TUNNEL_ID
+credentials-file: /etc/cloudflared/PARALLAX_TUNNEL_ID.json
+
+originRequest:
+  connectTimeout: 10s
+  tlsTimeout: 10s
+  tcpKeepAlive: 30s
+  noTLSVerify: false
+
+warp-routing:
+  enabled: false
+
+ingress:
+  - hostname: parallax-alpha.example.com
+    service: http://localhost:5173
+    originRequest:
+      httpHostHeader: parallax-alpha.example.com
+  - hostname: parallax-api.example.com
+    service: http://localhost:6188
+    originRequest:
+      httpHostHeader: parallax-api.example.com
+  - service: http_status:404

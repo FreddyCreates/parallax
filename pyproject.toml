@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "parallax-sdk"
+version = "0.2.0"
+description = "Python SDK for the PARALLAX Sovereign Exchange Clearinghouse"
+readme = "ABOUT.md"
+license = {text = "PARALLAX Sovereign License"}
+requires-python = ">=3.10"
+authors = [
+    {name = "Alfredo Medina Hernandez", email = "MedinaSITech@outlook.com"},
+]
+keywords = [
+    "parallax", "decentralized-exchange", "clearinghouse",
+    "internet-computer", "icp", "golden-ratio", "kuramoto",
+    "sovereign", "ai-native", "tokenization",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Office/Business :: Financial",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "torch>=2.2",
+    "numpy>=1.26",
+    "scipy>=1.11",
+    "pandas>=2.1",
+    "scikit-learn>=1.4",
+    "statsmodels>=0.14",
+    "nashpy>=0.0.41",
+    "matplotlib>=3.7",
+    "plotly>=5.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/ItsNotAILABS/PARALLAX-Exchange-Clearinghouse"
+Documentation = "https://github.com/ItsNotAILABS/PARALLAX-Exchange-Clearinghouse"
+Repository = "https://github.com/ItsNotAILABS/PARALLAX-Exchange-Clearinghouse"
+Zenodo = "https://zenodo.org/records/20370721"
+
+[tool.setuptools.packages.find]
+where = ["src/python"]

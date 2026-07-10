@@ -1,0 +1,501 @@
+run_id,strategy,models_used,model_categories,mean_confidence,consensus_score,consensus_passed,disagreement,latency_ms,latency_beats,phi_efficiency,decision
+ENS-000000,adaptive,5,"[""synthesizer"", ""specialist"", ""foundation"", ""sovereign""]",0.59814,0.788434,True,0.5347,1084.43,1.2422,0.487279,execute
+ENS-000001,adaptive,7,"[""foundation"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.644486,0.802031,True,0.5621,1474.87,1.6894,0.495683,execute
+ENS-000002,committee,8,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer""]",0.718013,0.732559,True,0.6044,2328.89,2.6677,0.452746,execute
+ENS-000003,cascade,5,"[""sentinel"", ""synthesizer"", ""validator"", ""predictor""]",0.65398,0.702495,True,0.4487,970.5,1.1117,0.434166,execute
+ENS-000004,adversarial,7,"[""validator"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.664629,0.63092,True,0.4128,1900.64,2.1771,0.38993,execute
+ENS-000005,committee,5,"[""sentinel"", ""specialist"", ""synthesizer"", ""predictor""]",0.55112,0.675237,True,0.4131,1235.78,1.4156,0.41732,execute
+ENS-000006,hierarchical,3,"[""synthesizer"", ""foundation"", ""validator""]",0.694067,0.611553,False,0.311,617.66,0.7075,0.377961,escalate
+ENS-000007,adaptive,6,"[""synthesizer"", ""specialist"", ""sentinel"", ""predictor""]",0.632233,0.766119,True,0.4826,1123.21,1.2866,0.473488,execute
+ENS-000008,hierarchical,8,"[""foundation"", ""specialist"", ""validator"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.633138,0.670038,True,0.5136,1909.23,2.187,0.414106,execute
+ENS-000009,adversarial,5,"[""sentinel"", ""validator"", ""sovereign"", ""predictor""]",0.68798,0.814123,True,0.5206,1223.69,1.4017,0.503156,execute
+ENS-000010,committee,7,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel"", ""sovereign""]",0.766729,0.704612,True,0.3242,1739.8,1.9929,0.435474,execute
+ENS-000011,parallel,4,"[""sentinel"", ""synthesizer"", ""validator""]",0.631275,0.812405,True,0.4251,343.87,0.3939,0.502094,execute
+ENS-000012,hierarchical,8,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel"", ""sovereign""]",0.534887,0.659059,True,0.57,1940.58,2.2229,0.407321,execute
+ENS-000013,committee,7,"[""specialist"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.600786,0.754042,True,0.4737,1128.37,1.2925,0.466024,execute
+ENS-000014,cascade,3,"[""sentinel"", ""foundation""]",0.5484,0.756234,True,0.2615,587.57,0.673,0.467379,execute
+ENS-000015,parallel,8,"[""specialist"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.535112,0.665201,True,0.3616,372.56,0.4268,0.411117,execute
+ENS-000016,adaptive,6,"[""synthesizer"", ""foundation"", ""validator""]",0.750617,0.635308,True,0.4268,1225.22,1.4035,0.392642,execute
+ENS-000017,adversarial,6,"[""specialist"", ""synthesizer"", ""foundation"", ""validator""]",0.646783,0.638859,True,0.6557,1282.85,1.4695,0.394837,execute
+ENS-000018,parallel,8,"[""foundation"", ""validator"", ""predictor"", ""synthesizer"", ""sovereign""]",0.63475,0.76784,True,0.5771,297.8,0.3411,0.474551,execute
+ENS-000019,committee,7,"[""specialist"", ""foundation"", ""validator"", ""sovereign""]",0.6286,0.736149,True,0.5534,2021.69,2.3158,0.454965,execute
+ENS-000020,tournament,6,"[""sentinel"", ""synthesizer"", ""sovereign"", ""predictor""]",0.744183,0.688583,True,0.3814,1316.84,1.5084,0.425568,execute
+ENS-000021,adaptive,3,"[""synthesizer"", ""validator"", ""predictor""]",0.7691,0.5714,False,0.3185,298.64,0.3421,0.353145,escalate
+ENS-000022,adaptive,7,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""synthesizer"", ""sovereign""]",0.612829,0.782223,True,0.525,1370.76,1.5702,0.48344,execute
+ENS-000023,hierarchical,5,"[""specialist"", ""foundation"", ""sovereign"", ""predictor""]",0.76876,0.545034,False,0.2637,859.47,0.9845,0.336849,escalate
+ENS-000024,parallel,4,"[""specialist"", ""synthesizer"", ""foundation"", ""predictor""]",0.6436,0.714428,True,0.529,329.47,0.3774,0.441541,execute
+ENS-000025,tournament,6,"[""foundation"", ""specialist"", ""predictor"", ""sentinel"", ""sovereign""]",0.6983,0.595573,False,0.4848,1063.11,1.2178,0.368084,escalate
+ENS-000026,adversarial,3,"[""synthesizer"", ""foundation"", ""predictor""]",0.8443,0.486885,False,0.1648,664.17,0.7608,0.300911,escalate
+ENS-000027,parallel,3,"[""sentinel"", ""synthesizer"", ""predictor""]",0.556067,0.482288,False,0.2399,369.29,0.423,0.29807,escalate
+ENS-000028,cascade,3,"[""specialist"", ""validator"", ""predictor""]",0.550767,0.63831,True,0.5467,594.16,0.6806,0.394497,execute
+ENS-000029,cascade,8,"[""foundation"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.692075,0.621978,True,0.5732,2295.9,2.6299,0.384403,execute
+ENS-000030,cascade,6,"[""specialist"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer""]",0.65475,0.611572,False,0.4399,1196.82,1.3709,0.377972,escalate
+ENS-000031,tournament,8,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""synthesizer"", ""sovereign""]",0.68365,0.772701,True,0.5099,1437.15,1.6462,0.477555,execute
+ENS-000032,committee,7,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""synthesizer""]",0.664,0.758164,True,0.3824,1381.67,1.5827,0.468571,execute
+ENS-000033,adversarial,5,"[""foundation"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer""]",0.80218,0.655908,True,0.3426,1428.82,1.6367,0.405373,execute
+ENS-000034,adversarial,7,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel""]",0.707457,0.764187,True,0.5652,1616.84,1.8521,0.472294,execute
+ENS-000035,adversarial,3,"[""specialist"", ""synthesizer""]",0.6237,0.80514,True,0.459,435.03,0.4983,0.497604,execute
+ENS-000036,adaptive,5,"[""foundation"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.58912,0.740299,True,0.5685,721.77,0.8268,0.45753,execute
+ENS-000037,hierarchical,4,"[""validator"", ""sovereign"", ""predictor""]",0.56885,0.861901,True,0.5079,1234.6,1.4142,0.532684,execute
+ENS-000038,committee,5,"[""synthesizer"", ""specialist"", ""foundation"", ""validator""]",0.65056,0.696296,True,0.4337,1189.22,1.3622,0.430335,execute
+ENS-000039,adaptive,4,"[""sentinel"", ""synthesizer"", ""foundation"", ""sovereign""]",0.6827,0.734938,True,0.5477,1468.08,1.6817,0.454217,execute
+ENS-000040,adversarial,6,"[""sentinel"", ""specialist"", ""validator"", ""sovereign""]",0.5658,0.692837,True,0.2475,1514.41,1.7347,0.428197,execute
+ENS-000041,hierarchical,3,"[""specialist"", ""validator""]",0.547433,0.743185,True,0.5138,429.87,0.4924,0.459314,execute
+ENS-000042,cascade,7,"[""sentinel"", ""specialist"", ""validator"", ""sovereign""]",0.640586,0.763363,True,0.5072,1853.14,2.1227,0.471784,execute
+ENS-000043,tournament,4,"[""sentinel"", ""specialist"", ""validator"", ""predictor""]",0.457925,0.785652,True,0.5245,740.11,0.8478,0.48556,execute
+ENS-000044,adaptive,5,"[""specialist"", ""foundation"", ""validator"", ""predictor""]",0.58638,0.664687,True,0.4516,1079.38,1.2364,0.410799,execute
+ENS-000045,cascade,5,"[""specialist"", ""validator"", ""sovereign"", ""predictor""]",0.74556,0.802407,True,0.5184,1080.18,1.2373,0.495915,execute
+ENS-000046,tournament,8,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.762175,0.680503,True,0.5228,1569.0,1.7973,0.420574,execute
+ENS-000047,committee,4,"[""foundation"", ""sovereign"", ""predictor""]",0.64015,0.665886,True,0.4112,847.21,0.9705,0.41154,execute
+ENS-000048,parallel,7,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""synthesizer"", ""sovereign""]",0.655414,0.699817,True,0.5859,360.4,0.4128,0.43251,execute
+ENS-000049,parallel,5,"[""specialist"", ""sentinel"", ""synthesizer"", ""foundation""]",0.4462,0.58909,False,0.2457,318.12,0.3644,0.364078,escalate
+ENS-000050,tournament,3,"[""sentinel"", ""synthesizer"", ""sovereign""]",0.571067,0.763745,True,0.6202,650.87,0.7456,0.47202,execute
+ENS-000051,adversarial,8,"[""foundation"", ""specialist"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.646925,0.679515,True,0.509,1816.12,2.0803,0.419963,execute
+ENS-000052,tournament,5,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""synthesizer""]",0.57186,0.646637,True,0.3599,1357.93,1.5555,0.399644,execute
+ENS-000053,parallel,7,"[""foundation"", ""validator"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.672229,0.757388,True,0.598,355.9,0.4077,0.468092,execute
+ENS-000054,hierarchical,7,"[""synthesizer"", ""specialist"", ""foundation"", ""sentinel""]",0.671743,0.611401,False,0.5531,1261.95,1.4455,0.377867,escalate
+ENS-000055,adversarial,4,"[""synthesizer"", ""foundation"", ""validator""]",0.535375,0.710508,True,0.4778,736.61,0.8438,0.439118,execute
+ENS-000056,cascade,3,"[""synthesizer"", ""validator"", ""sovereign""]",0.616867,0.44572,False,0.4175,713.1,0.8168,0.27547,escalate
+ENS-000057,adversarial,7,"[""sentinel"", ""specialist"", ""validator"", ""sovereign""]",0.836214,0.626092,True,0.2312,1477.75,1.6927,0.386946,execute
+ENS-000058,adversarial,6,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sovereign""]",0.6067,0.754489,True,0.5267,1330.68,1.5243,0.4663,execute
+ENS-000059,tournament,6,"[""foundation"", ""validator"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.689167,0.710191,True,0.6008,1147.47,1.3144,0.438922,execute
+ENS-000060,tournament,6,"[""specialist"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.779467,0.563278,False,0.5619,989.34,1.1333,0.348125,escalate
+ENS-000061,hierarchical,3,"[""sentinel"", ""foundation"", ""sovereign""]",0.479767,0.569626,False,0.1388,698.22,0.7998,0.352048,escalate
+ENS-000062,cascade,7,"[""foundation"", ""specialist"", ""validator"", ""sentinel"", ""synthesizer""]",0.6521,0.757925,True,0.6339,1249.8,1.4316,0.468423,execute
+ENS-000063,adaptive,5,"[""foundation"", ""specialist"", ""validator"", ""sentinel"", ""synthesizer""]",0.68302,0.741898,True,0.6503,686.45,0.7863,0.458518,execute
+ENS-000064,tournament,3,"[""synthesizer"", ""validator"", ""predictor""]",0.649133,0.660653,True,0.5205,546.27,0.6257,0.408306,execute
+ENS-000065,committee,7,"[""foundation"", ""specialist"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.563257,0.641227,True,0.495,1547.22,1.7723,0.3963,execute
+ENS-000066,hierarchical,3,"[""foundation"", ""validator""]",0.544933,0.914539,True,0.1634,525.86,0.6024,0.565216,execute
+ENS-000067,hierarchical,3,"[""sentinel"", ""foundation"", ""sovereign""]",0.683967,0.738951,True,0.1131,580.61,0.6651,0.456697,execute
+ENS-000068,adversarial,4,"[""synthesizer"", ""foundation"", ""validator"", ""sovereign""]",0.676775,0.783421,True,0.3684,893.33,1.0233,0.484181,execute
+ENS-000069,adversarial,5,"[""specialist"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer""]",0.5301,0.819448,True,0.4903,1428.4,1.6362,0.506447,execute
+ENS-000070,adaptive,5,"[""validator"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.7574,0.58848,False,0.4262,1272.25,1.4573,0.363701,escalate
+ENS-000071,adaptive,5,"[""foundation"", ""validator"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.47682,0.719162,True,0.2486,1128.17,1.2923,0.444467,execute
+ENS-000072,tournament,8,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.544025,0.718638,True,0.6174,2016.7,2.3101,0.444143,execute
+ENS-000073,parallel,6,"[""foundation"", ""specialist"", ""validator"", ""synthesizer"", ""sovereign""]",0.681517,0.817805,True,0.4803,339.03,0.3884,0.505431,execute
+ENS-000074,tournament,7,"[""sentinel"", ""validator"", ""sovereign"", ""predictor""]",0.625943,0.768332,True,0.5072,1385.96,1.5876,0.474855,execute
+ENS-000075,hierarchical,8,"[""foundation"", ""specialist"", ""predictor"", ""sentinel"", ""sovereign""]",0.523025,0.728281,True,0.658,1305.23,1.4951,0.450103,execute
+ENS-000076,hierarchical,8,"[""specialist"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer""]",0.637563,0.664759,True,0.5406,1851.87,2.1213,0.410843,execute
+ENS-000077,hierarchical,4,"[""specialist"", ""sentinel"", ""synthesizer"", ""foundation""]",0.54055,0.721829,True,0.1674,976.84,1.1189,0.446115,execute
+ENS-000078,adaptive,5,"[""specialist"", ""validator"", ""sovereign"", ""predictor""]",0.583,0.775177,True,0.6141,1099.89,1.2599,0.479086,execute
+ENS-000079,adaptive,7,"[""foundation"", ""validator"", ""predictor"", ""sentinel"", ""sovereign""]",0.693943,0.727328,True,0.5645,1279.43,1.4655,0.449514,execute
+ENS-000080,hierarchical,3,"[""sentinel"", ""specialist"", ""validator""]",0.573867,0.828876,True,0.4364,774.88,0.8876,0.512274,execute
+ENS-000081,hierarchical,7,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sovereign""]",0.765829,0.7082,True,0.5295,1383.25,1.5845,0.437691,execute
+ENS-000082,hierarchical,7,"[""foundation"", ""specialist"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.523486,0.768753,True,0.5709,2120.51,2.429,0.475116,execute
+ENS-000083,adversarial,5,"[""synthesizer"", ""specialist"", ""sentinel"", ""sovereign""]",0.81158,0.753715,True,0.4129,978.69,1.1211,0.465822,execute
+ENS-000084,committee,7,"[""sentinel"", ""specialist"", ""validator"", ""predictor""]",0.633243,0.749766,True,0.5546,1930.14,2.2109,0.463381,execute
+ENS-000085,adversarial,3,"[""synthesizer"", ""sovereign"", ""predictor""]",0.6185,0.623079,True,0.3287,757.44,0.8676,0.385084,execute
+ENS-000086,parallel,4,"[""sentinel"", ""validator"", ""predictor""]",0.77035,0.718962,True,0.3767,397.24,0.455,0.444343,execute
+ENS-000087,hierarchical,6,"[""foundation"", ""validator"", ""predictor"", ""sentinel"", ""sovereign""]",0.634967,0.695275,True,0.5722,1273.32,1.4586,0.429704,execute
+ENS-000088,adversarial,8,"[""foundation"", ""specialist"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.515437,0.781172,True,0.6287,2054.29,2.3531,0.482791,execute
+ENS-000089,adversarial,7,"[""specialist"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer""]",0.7128,0.77222,True,0.4937,1472.95,1.6872,0.477258,execute
+ENS-000090,adversarial,6,"[""sentinel"", ""specialist"", ""foundation"", ""sovereign""]",0.599833,0.744605,True,0.5674,1361.67,1.5598,0.460191,execute
+ENS-000091,adversarial,8,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""synthesizer"", ""sovereign""]",0.568713,0.789909,True,0.6139,1733.31,1.9855,0.488191,execute
+ENS-000092,committee,6,"[""sentinel"", ""specialist"", ""sovereign"", ""predictor""]",0.556617,0.683427,True,0.672,1156.4,1.3246,0.422381,execute
+ENS-000093,hierarchical,6,"[""sentinel"", ""synthesizer"", ""validator"", ""predictor""]",0.551233,0.714857,True,0.4076,1337.79,1.5324,0.441806,execute
+ENS-000094,cascade,6,"[""foundation"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.7432,0.66914,True,0.3605,1533.39,1.7565,0.413551,execute
+ENS-000095,hierarchical,4,"[""sentinel"", ""specialist"", ""validator"", ""sovereign""]",0.530875,0.829099,True,0.4775,849.74,0.9734,0.512411,execute
+ENS-000096,tournament,7,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer""]",0.602914,0.722611,True,0.6009,1889.46,2.1643,0.446598,execute
+ENS-000097,parallel,3,"[""synthesizer"", ""validator""]",0.6804,0.513784,False,0.4252,367.26,0.4207,0.317536,escalate
+ENS-000098,tournament,4,"[""sentinel"", ""specialist"", ""synthesizer""]",0.664425,0.665438,True,0.5634,862.06,0.9875,0.411263,execute
+ENS-000099,adversarial,8,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel""]",0.60045,0.712121,True,0.4908,2199.86,2.5199,0.440115,execute
+ENS-000100,cascade,7,"[""foundation"", ""validator"", ""sovereign"", ""predictor""]",0.587214,0.572648,False,0.3211,1360.17,1.558,0.353916,escalate
+ENS-000101,cascade,5,"[""foundation"", ""specialist"", ""validator"", ""sentinel"", ""synthesizer""]",0.57738,0.910171,True,0.5987,671.23,0.7689,0.562517,execute
+ENS-000102,committee,8,"[""foundation"", ""specialist"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.685913,0.677804,True,0.5852,1683.72,1.9287,0.418906,execute
+ENS-000103,committee,3,"[""sovereign"", ""predictor""]",0.697267,0.745186,True,0.3703,212.7,0.2436,0.46055,execute
+ENS-000104,cascade,8,"[""foundation"", ""specialist"", ""predictor"", ""synthesizer"", ""sovereign""]",0.612762,0.650244,True,0.3129,1647.47,1.8871,0.401873,execute
+ENS-000105,hierarchical,4,"[""synthesizer"", ""specialist"", ""foundation""]",0.7088,0.70947,True,0.5116,898.45,1.0292,0.438477,execute
+ENS-000106,adaptive,7,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer""]",0.715929,0.663888,True,0.599,1545.38,1.7702,0.410305,execute
+ENS-000107,cascade,6,"[""sentinel"", ""specialist"", ""foundation"", ""synthesizer""]",0.67775,0.764289,True,0.4419,1335.73,1.53,0.472357,execute
+ENS-000108,cascade,5,"[""foundation"", ""validator"", ""sovereign""]",0.69934,0.687037,True,0.3678,1205.75,1.3812,0.424612,execute
+ENS-000109,adaptive,5,"[""sentinel"", ""synthesizer"", ""validator"", ""predictor""]",0.64842,0.794784,True,0.3944,1557.68,1.7843,0.491203,execute
+ENS-000110,tournament,8,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel""]",0.605563,0.749171,True,0.5153,1835.1,2.1021,0.463013,execute
+ENS-000111,tournament,4,"[""specialist"", ""foundation"", ""validator"", ""sovereign""]",0.663525,0.808548,True,0.6482,693.38,0.7943,0.49971,execute
+ENS-000112,hierarchical,4,"[""synthesizer"", ""validator"", ""sovereign"", ""predictor""]",0.6264,0.643117,True,0.5254,434.56,0.4978,0.397468,execute
+ENS-000113,adversarial,4,"[""specialist"", ""sovereign"", ""predictor""]",0.598875,0.578528,False,0.5589,1113.68,1.2757,0.35755,escalate
+ENS-000114,committee,8,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel""]",0.696625,0.667306,True,0.4443,1936.95,2.2187,0.412418,execute
+ENS-000115,hierarchical,6,"[""synthesizer"", ""specialist"", ""validator"", ""sovereign""]",0.684017,0.772052,True,0.5775,1544.57,1.7693,0.477154,execute
+ENS-000116,tournament,4,"[""sentinel"", ""specialist"", ""foundation""]",0.5785,0.614628,False,0.4124,1014.61,1.1622,0.379861,escalate
+ENS-000117,tournament,8,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer""]",0.702037,0.599703,False,0.5993,1589.11,1.8203,0.370637,escalate
+ENS-000118,committee,8,"[""validator"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.6655,0.758227,True,0.6393,2032.71,2.3284,0.46861,execute
+ENS-000119,committee,7,"[""validator"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.611614,0.649787,True,0.6437,1352.07,1.5488,0.40159,execute
+ENS-000120,tournament,8,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.642637,0.650188,True,0.4806,2005.4,2.2971,0.401838,execute
+ENS-000121,tournament,6,"[""specialist"", ""synthesizer"", ""validator"", ""sovereign""]",0.661983,0.813868,True,0.4478,1270.17,1.455,0.502998,execute
+ENS-000122,adaptive,6,"[""foundation"", ""validator"", ""predictor"", ""sentinel"", ""sovereign""]",0.706483,0.762107,True,0.5193,1627.34,1.8641,0.471008,execute
+ENS-000123,hierarchical,3,"[""synthesizer"", ""predictor""]",0.645767,0.758199,True,0.436,1063.74,1.2185,0.468593,execute
+ENS-000124,parallel,4,"[""sentinel"", ""validator"", ""predictor""]",0.755925,0.624581,True,0.4388,393.88,0.4512,0.386013,execute
+ENS-000125,committee,6,"[""foundation"", ""specialist"", ""validator"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.6375,0.770231,True,0.5879,1258.68,1.4418,0.476029,execute
+ENS-000126,committee,8,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""synthesizer""]",0.634463,0.756402,True,0.4909,1900.15,2.1766,0.467482,execute
+ENS-000127,hierarchical,7,"[""foundation"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.637343,0.879689,True,0.3951,1840.07,2.1078,0.543678,execute
+ENS-000128,adaptive,6,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer""]",0.703817,0.651543,True,0.5914,1357.96,1.5555,0.402675,execute
+ENS-000129,adversarial,4,"[""specialist"", ""foundation"", ""validator"", ""sovereign""]",0.642125,0.643745,True,0.4566,1047.31,1.1997,0.397856,execute
+ENS-000130,committee,8,"[""foundation"", ""validator"", ""predictor"", ""synthesizer"", ""sovereign""]",0.720575,0.533379,False,0.6162,2100.74,2.4063,0.329647,escalate
+ENS-000131,parallel,3,"[""synthesizer"", ""foundation"", ""predictor""]",0.582667,0.735564,True,0.5602,334.16,0.3828,0.454603,execute
+ENS-000132,hierarchical,8,"[""foundation"", ""specialist"", ""validator"", ""sentinel"", ""sovereign""]",0.700875,0.689491,True,0.5742,1823.53,2.0888,0.426129,execute
+ENS-000133,adaptive,7,"[""specialist"", ""validator"", ""predictor"", ""sentinel"", ""sovereign""]",0.5641,0.655093,True,0.6035,1470.11,1.684,0.40487,execute
+ENS-000134,hierarchical,5,"[""sentinel"", ""validator"", ""sovereign"", ""predictor""]",0.73378,0.548839,False,0.527,1243.66,1.4246,0.339201,escalate
+ENS-000135,adversarial,8,"[""specialist"", ""validator"", ""predictor"", ""sentinel"", ""sovereign""]",0.614675,0.660119,True,0.6486,1798.61,2.0603,0.407976,execute
+ENS-000136,adversarial,4,"[""sentinel"", ""specialist"", ""foundation"", ""validator""]",0.6136,0.593592,False,0.5596,1016.83,1.1648,0.36686,escalate
+ENS-000137,hierarchical,5,"[""specialist"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.61884,0.866304,True,0.503,1308.03,1.4983,0.535405,execute
+ENS-000138,cascade,6,"[""synthesizer"", ""foundation"", ""predictor""]",0.570983,0.74521,True,0.3475,1396.7,1.5999,0.460565,execute
+ENS-000139,hierarchical,7,"[""specialist"", ""validator"", ""sovereign"", ""predictor""]",0.665629,0.715729,True,0.6153,1212.54,1.3889,0.442345,execute
+ENS-000140,tournament,4,"[""synthesizer"", ""sovereign"", ""predictor""]",0.673825,0.569458,False,0.3614,997.26,1.1423,0.351944,escalate
+ENS-000141,hierarchical,7,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.668114,0.868396,True,0.4448,1379.53,1.5802,0.536698,execute
+ENS-000142,parallel,7,"[""specialist"", ""validator"", ""predictor"", ""synthesizer"", ""sovereign""]",0.6647,0.666199,True,0.4946,374.78,0.4293,0.411733,execute
+ENS-000143,adversarial,5,"[""foundation"", ""specialist"", ""validator"", ""sentinel"", ""synthesizer""]",0.60868,0.756362,True,0.608,944.81,1.0823,0.467457,execute
+ENS-000144,cascade,8,"[""foundation"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.548025,0.689441,True,0.4754,2033.33,2.3291,0.426098,execute
+ENS-000145,parallel,3,"[""sentinel"", ""validator"", ""sovereign""]",0.609333,0.676554,True,0.0963,398.19,0.4561,0.418134,execute
+ENS-000146,cascade,3,"[""synthesizer"", ""foundation"", ""validator""]",0.5668,0.722594,True,0.4167,687.35,0.7873,0.446588,execute
+ENS-000147,committee,3,"[""sentinel"", ""specialist"", ""predictor""]",0.727533,0.593714,False,0.1775,744.47,0.8528,0.366935,escalate
+ENS-000148,parallel,8,"[""synthesizer"", ""foundation"", ""sovereign"", ""predictor""]",0.545562,0.715542,True,0.5371,356.24,0.4081,0.442229,execute
+ENS-000149,committee,6,"[""validator"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.61595,0.782781,True,0.6051,1342.45,1.5377,0.483785,execute
+ENS-000150,committee,4,"[""specialist"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.70285,0.681679,True,0.536,764.78,0.876,0.421301,execute
+ENS-000151,tournament,4,"[""synthesizer"", ""specialist"", ""sentinel"", ""predictor""]",0.881925,0.827734,True,0.1793,767.58,0.8792,0.511568,execute
+ENS-000152,tournament,8,"[""specialist"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.672362,0.642446,True,0.6855,1789.67,2.05,0.397053,execute
+ENS-000153,hierarchical,8,"[""specialist"", ""validator"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.564025,0.65088,True,0.6437,2537.91,2.9071,0.402266,execute
+ENS-000154,parallel,8,"[""foundation"", ""validator"", ""predictor"", ""synthesizer"", ""sovereign""]",0.59775,0.767655,True,0.5449,398.26,0.4562,0.474437,execute
+ENS-000155,committee,4,"[""specialist"", ""synthesizer"", ""sovereign"", ""predictor""]",0.714975,0.753651,True,0.3061,735.09,0.842,0.465782,execute
+ENS-000156,tournament,5,"[""sentinel"", ""synthesizer"", ""validator"", ""predictor""]",0.61706,0.705381,True,0.5989,1088.33,1.2467,0.43595,execute
+ENS-000157,cascade,4,"[""sentinel"", ""synthesizer"", ""predictor""]",0.643775,0.544952,False,0.3386,922.28,1.0565,0.336799,escalate
+ENS-000158,parallel,5,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""synthesizer""]",0.60954,0.671531,True,0.4548,358.63,0.4108,0.415029,execute
+ENS-000159,tournament,5,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel""]",0.70102,0.707497,True,0.5687,1426.33,1.6338,0.437257,execute
+ENS-000160,adaptive,6,"[""specialist"", ""synthesizer"", ""foundation"", ""validator""]",0.6806,0.497767,False,0.52,1157.04,1.3254,0.307637,escalate
+ENS-000161,adaptive,7,"[""foundation"", ""specialist"", ""validator"", ""synthesizer"", ""sovereign""]",0.640143,0.757305,True,0.6093,1800.43,2.0624,0.46804,execute
+ENS-000162,adaptive,6,"[""foundation"", ""specialist"", ""validator"", ""sentinel"", ""sovereign""]",0.695333,0.734312,True,0.3693,1512.38,1.7324,0.45383,execute
+ENS-000163,adversarial,5,"[""sentinel"", ""synthesizer"", ""validator"", ""sovereign""]",0.7642,0.728191,True,0.571,1127.13,1.2911,0.450047,execute
+ENS-000164,parallel,5,"[""foundation"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer""]",0.71054,0.661922,True,0.4525,386.19,0.4424,0.40909,execute
+ENS-000165,parallel,5,"[""foundation"", ""specialist"", ""predictor"", ""sentinel"", ""sovereign""]",0.56406,0.710593,True,0.4869,399.11,0.4572,0.439171,execute
+ENS-000166,committee,6,"[""sentinel"", ""synthesizer"", ""foundation"", ""predictor""]",0.6946,0.642759,True,0.4253,1753.85,2.009,0.397247,execute
+ENS-000167,cascade,4,"[""sentinel"", ""foundation"", ""validator"", ""predictor""]",0.767,0.768466,True,0.3924,1008.8,1.1555,0.474938,execute
+ENS-000168,adversarial,4,"[""synthesizer"", ""foundation"", ""predictor""]",0.758375,0.66466,True,0.5901,1160.7,1.3296,0.410783,execute
+ENS-000169,hierarchical,8,"[""validator"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.705313,0.746483,True,0.6638,1947.51,2.2308,0.461352,execute
+ENS-000170,committee,5,"[""foundation"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer""]",0.5852,0.678487,True,0.4928,1251.28,1.4333,0.419328,execute
+ENS-000171,hierarchical,7,"[""foundation"", ""validator"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.569871,0.757051,True,0.5951,2301.97,2.6369,0.467883,execute
+ENS-000172,cascade,3,"[""specialist"", ""foundation"", ""sovereign""]",0.616833,0.653492,True,0.4566,689.06,0.7893,0.40388,execute
+ENS-000173,committee,4,"[""specialist"", ""sentinel"", ""synthesizer"", ""validator""]",0.56335,0.540145,False,0.2085,996.43,1.1414,0.333828,escalate
+ENS-000174,tournament,7,"[""specialist"", ""validator"", ""predictor"", ""sentinel"", ""sovereign""]",0.638686,0.733481,True,0.5325,1349.76,1.5461,0.453316,execute
+ENS-000175,adaptive,8,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.670225,0.650777,True,0.5293,2028.56,2.3237,0.402202,execute
+ENS-000176,cascade,5,"[""specialist"", ""validator"", ""predictor"", ""sentinel"", ""sovereign""]",0.64064,0.9327,True,0.5801,1158.15,1.3266,0.57644,execute
+ENS-000177,parallel,6,"[""specialist"", ""validator"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.639467,0.743339,True,0.2323,327.32,0.3749,0.459409,execute
+ENS-000178,tournament,6,"[""specialist"", ""sovereign"", ""predictor""]",0.7192,0.752797,True,0.6038,1591.42,1.8229,0.465254,execute
+ENS-000179,tournament,6,"[""synthesizer"", ""specialist"", ""foundation"", ""validator""]",0.61595,0.69528,True,0.4603,1394.83,1.5977,0.429707,execute
+ENS-000180,hierarchical,5,"[""foundation"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.77518,0.772298,True,0.4273,1052.2,1.2053,0.477306,execute
+ENS-000181,committee,8,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""synthesizer""]",0.630525,0.799822,True,0.6264,1402.82,1.6069,0.494317,execute
+ENS-000182,committee,4,"[""specialist"", ""foundation"", ""predictor""]",0.72465,0.669552,True,0.4777,812.36,0.9305,0.413806,execute
+ENS-000183,parallel,5,"[""foundation"", ""specialist"", ""validator"", ""synthesizer"", ""sovereign""]",0.62218,0.7281,True,0.6308,342.44,0.3923,0.449991,execute
+ENS-000184,tournament,6,"[""foundation"", ""specialist"", ""validator"", ""synthesizer"", ""sovereign""]",0.87555,0.680147,True,0.2491,1905.94,2.1832,0.420354,execute
+ENS-000185,hierarchical,8,"[""specialist"", ""validator"", ""predictor"", ""sentinel"", ""sovereign""]",0.82415,0.787104,True,0.6507,2266.07,2.5957,0.486457,execute
+ENS-000186,hierarchical,7,"[""specialist"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.6199,0.656925,True,0.5797,1265.61,1.4497,0.406002,execute
+ENS-000187,parallel,5,"[""synthesizer"", ""specialist"", ""sovereign""]",0.54488,0.746839,True,0.5929,395.05,0.4525,0.461572,execute
+ENS-000188,adaptive,4,"[""specialist"", ""validator""]",0.481025,0.609313,False,0.294,409.58,0.4692,0.376576,escalate
+ENS-000189,tournament,7,"[""foundation"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.539,0.772357,True,0.6653,1515.56,1.736,0.477343,execute
+ENS-000190,committee,8,"[""foundation"", ""specialist"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.473712,0.617995,False,0.397,1884.32,2.1584,0.381942,escalate
+ENS-000191,adversarial,5,"[""specialist"", ""synthesizer"", ""foundation"", ""predictor""]",0.63318,0.582187,False,0.4193,944.47,1.0819,0.359811,escalate
+ENS-000192,hierarchical,5,"[""specialist"", ""foundation"", ""validator"", ""predictor""]",0.6573,0.709927,True,0.5127,1230.4,1.4094,0.438759,execute
+ENS-000193,committee,5,"[""foundation"", ""validator"", ""predictor"", ""synthesizer"", ""sovereign""]",0.67434,0.615006,False,0.5674,1140.52,1.3064,0.380095,escalate
+ENS-000194,parallel,3,"[""sentinel"", ""sovereign"", ""predictor""]",0.8982,0.587257,False,0.1976,244.9,0.2805,0.362945,escalate
+ENS-000195,adaptive,7,"[""foundation"", ""specialist"", ""validator"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.743643,0.727331,True,0.3236,1888.19,2.1629,0.449515,execute
+ENS-000196,parallel,5,"[""sentinel"", ""synthesizer"", ""foundation"", ""validator""]",0.65116,0.748211,True,0.5507,388.6,0.4451,0.46242,execute
+ENS-000197,cascade,3,"[""specialist"", ""foundation""]",0.4362,0.693755,True,0.2809,305.12,0.3495,0.428764,execute
+ENS-000198,tournament,7,"[""foundation"", ""specialist"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.674643,0.755364,True,0.6119,2105.56,2.4119,0.466841,execute
+ENS-000199,tournament,6,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""synthesizer""]",0.649133,0.696219,True,0.5178,1693.85,1.9403,0.430287,execute
+ENS-000200,tournament,6,"[""foundation"", ""specialist"", ""validator"", ""sentinel"", ""sovereign""]",0.670183,0.776487,True,0.3424,1374.4,1.5743,0.479896,execute
+ENS-000201,hierarchical,7,"[""foundation"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.706086,0.59727,False,0.6399,1361.84,1.56,0.369133,escalate
+ENS-000202,parallel,4,"[""specialist"", ""synthesizer"", ""foundation""]",0.578175,0.707879,True,0.4364,392.04,0.4491,0.437493,execute
+ENS-000203,adversarial,8,"[""foundation"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.65095,0.721717,True,0.6412,1852.98,2.1225,0.446046,execute
+ENS-000204,cascade,8,"[""specialist"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.641312,0.660074,True,0.5239,2319.07,2.6564,0.407948,execute
+ENS-000205,hierarchical,4,"[""specialist"", ""foundation"", ""validator"", ""sovereign""]",0.502925,0.733671,True,0.5159,741.88,0.8498,0.453433,execute
+ENS-000206,parallel,8,"[""foundation"", ""specialist"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.631887,0.663457,True,0.577,371.77,0.4259,0.410039,execute
+ENS-000207,adaptive,3,"[""specialist"", ""synthesizer"", ""foundation""]",0.624767,0.539172,False,0.4998,538.69,0.6171,0.333227,escalate
+ENS-000208,parallel,5,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel""]",0.86518,0.661568,True,0.1889,399.79,0.4579,0.408871,execute
+ENS-000209,cascade,8,"[""foundation"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.644388,0.60035,False,0.5633,1612.6,1.8472,0.371037,escalate
+ENS-000210,tournament,7,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""synthesizer"", ""sovereign""]",0.7152,0.671649,True,0.3762,1678.09,1.9222,0.415102,execute
+ENS-000211,adversarial,3,"[""specialist"", ""foundation"", ""predictor""]",0.721867,0.51666,False,0.4679,789.07,0.9039,0.319314,escalate
+ENS-000212,hierarchical,7,"[""synthesizer"", ""specialist"", ""foundation"", ""predictor""]",0.634671,0.680144,True,0.5653,1535.9,1.7593,0.420352,execute
+ENS-000213,adversarial,3,"[""specialist"", ""validator"", ""sovereign""]",0.620333,0.607475,False,0.2985,667.4,0.7645,0.37544,escalate
+ENS-000214,parallel,8,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel"", ""sovereign""]",0.562588,0.684545,True,0.5643,360.29,0.4127,0.423072,execute
+ENS-000215,cascade,4,"[""specialist"", ""synthesizer"", ""foundation"", ""sovereign""]",0.47525,0.645791,True,0.3169,778.78,0.8921,0.399121,execute
+ENS-000216,hierarchical,7,"[""sentinel"", ""foundation"", ""sovereign"", ""predictor""]",0.7208,0.612763,False,0.3293,1708.12,1.9566,0.378709,escalate
+ENS-000217,adaptive,8,"[""foundation"", ""specialist"", ""predictor"", ""sentinel"", ""sovereign""]",0.66985,0.640328,True,0.518,1937.09,2.2189,0.395744,execute
+ENS-000218,committee,4,"[""sentinel"", ""synthesizer"", ""sovereign""]",0.672425,0.880358,True,0.5537,906.16,1.038,0.544091,execute
+ENS-000219,committee,8,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""synthesizer"", ""sovereign""]",0.69835,0.687649,True,0.6167,2155.31,2.4689,0.424991,execute
+ENS-000220,cascade,8,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel""]",0.686037,0.670691,True,0.5262,1752.68,2.0076,0.41451,execute
+ENS-000221,hierarchical,7,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer""]",0.6133,0.800753,True,0.4499,1262.69,1.4464,0.494892,execute
+ENS-000222,adaptive,3,"[""specialist"", ""predictor""]",0.8929,0.70135,True,0.2048,781.21,0.8949,0.433458,execute
+ENS-000223,cascade,3,"[""synthesizer"", ""foundation"", ""predictor""]",0.8333,0.786947,True,0.2004,623.1,0.7137,0.48636,execute
+ENS-000224,parallel,5,"[""sentinel"", ""specialist"", ""foundation""]",0.68264,0.732183,True,0.5901,326.1,0.3735,0.452514,execute
+ENS-000225,parallel,4,"[""synthesizer"", ""sovereign"", ""predictor""]",0.48685,0.726582,True,0.2123,281.6,0.3226,0.449052,execute
+ENS-000226,committee,5,"[""foundation"", ""specialist"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.7008,0.73328,True,0.4872,947.83,1.0857,0.453192,execute
+ENS-000227,hierarchical,3,"[""synthesizer"", ""validator"", ""predictor""]",0.500933,0.760895,True,0.3018,713.99,0.8179,0.470259,execute
+ENS-000228,adversarial,4,"[""synthesizer"", ""specialist"", ""foundation""]",0.6879,0.650774,True,0.6095,1036.12,1.1868,0.402201,execute
+ENS-000229,committee,3,"[""specialist"", ""foundation"", ""predictor""]",0.406833,0.594849,False,0.0248,624.23,0.715,0.367637,escalate
+ENS-000230,cascade,8,"[""foundation"", ""validator"", ""predictor"", ""synthesizer"", ""sovereign""]",0.800763,0.707475,True,0.6506,1903.76,2.1807,0.437244,execute
+ENS-000231,hierarchical,8,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""synthesizer""]",0.68715,0.725476,True,0.5696,2127.13,2.4366,0.448369,execute
+ENS-000232,adversarial,4,"[""specialist"", ""synthesizer"", ""foundation"", ""predictor""]",0.7126,0.77328,True,0.4781,894.52,1.0247,0.477914,execute
+ENS-000233,hierarchical,7,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel"", ""sovereign""]",0.776671,0.754009,True,0.3371,1267.84,1.4523,0.466003,execute
+ENS-000234,committee,6,"[""sentinel"", ""synthesizer"", ""foundation"", ""sovereign""]",0.628917,0.805572,True,0.5697,1059.62,1.2138,0.497871,execute
+ENS-000235,cascade,7,"[""synthesizer"", ""specialist"", ""sovereign"", ""predictor""]",0.571686,0.75832,True,0.4584,1618.47,1.8539,0.468668,execute
+ENS-000236,hierarchical,5,"[""synthesizer"", ""foundation"", ""validator"", ""sovereign""]",0.7169,0.686219,True,0.4761,1123.25,1.2867,0.424107,execute
+ENS-000237,cascade,3,"[""validator"", ""sovereign"", ""predictor""]",0.6679,0.847694,True,0.2685,558.7,0.64,0.523904,execute
+ENS-000238,adversarial,5,"[""specialist"", ""synthesizer"", ""validator"", ""sovereign""]",0.53942,0.6316,True,0.5023,904.6,1.0362,0.39035,execute
+ENS-000239,hierarchical,3,"[""synthesizer"", ""foundation"", ""sovereign""]",0.446133,0.624106,True,0.1552,641.0,0.7343,0.385719,execute
+ENS-000240,adaptive,6,"[""specialist"", ""validator"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.630667,0.775883,True,0.6197,1329.45,1.5229,0.479522,execute
+ENS-000241,adaptive,8,"[""specialist"", ""validator"", ""predictor"", ""sentinel"", ""sovereign""]",0.551863,0.579738,False,0.5912,1422.29,1.6292,0.358298,escalate
+ENS-000242,adversarial,6,"[""sentinel"", ""synthesizer"", ""sovereign"", ""predictor""]",0.6479,0.620668,True,0.5769,1291.8,1.4797,0.383594,execute
+ENS-000243,hierarchical,8,"[""foundation"", ""specialist"", ""predictor"", ""sentinel"", ""synthesizer""]",0.57565,0.673934,True,0.6153,1965.77,2.2517,0.416514,execute
+ENS-000244,cascade,7,"[""foundation"", ""specialist"", ""validator"", ""sentinel"", ""synthesizer""]",0.705557,0.826825,True,0.4103,1768.22,2.0255,0.511006,execute
+ENS-000245,hierarchical,8,"[""foundation"", ""specialist"", ""validator"", ""synthesizer"", ""sovereign""]",0.687738,0.655197,True,0.5988,1975.84,2.2633,0.404934,execute
+ENS-000246,adversarial,5,"[""synthesizer"", ""foundation"", ""validator"", ""predictor""]",0.62098,0.597399,False,0.4163,803.06,0.9199,0.369213,escalate
+ENS-000247,committee,8,"[""foundation"", ""specialist"", ""validator"", ""synthesizer"", ""sovereign""]",0.513425,0.782028,True,0.5242,1884.75,2.1589,0.48332,execute
+ENS-000248,committee,6,"[""specialist"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.617633,0.796636,True,0.5013,1068.95,1.2245,0.492348,execute
+ENS-000249,adaptive,3,"[""synthesizer"", ""specialist"", ""predictor""]",0.515733,0.762413,True,0.4902,938.02,1.0745,0.471197,execute
+ENS-000250,cascade,5,"[""specialist"", ""validator"", ""predictor""]",0.7093,0.604222,False,0.5387,1028.64,1.1783,0.37343,escalate
+ENS-000251,hierarchical,5,"[""sentinel"", ""specialist"", ""validator"", ""predictor""]",0.64496,0.762632,True,0.4732,902.34,1.0336,0.471332,execute
+ENS-000252,hierarchical,6,"[""sentinel"", ""synthesizer"", ""sovereign"", ""predictor""]",0.47505,0.696431,True,0.2458,1347.1,1.5431,0.430418,execute
+ENS-000253,adversarial,7,"[""foundation"", ""specialist"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.554486,0.67765,True,0.4,1506.54,1.7257,0.418811,execute
+ENS-000254,tournament,3,"[""synthesizer"", ""validator"", ""sovereign""]",0.731133,0.643032,True,0.1077,940.06,1.0768,0.397415,execute
+ENS-000255,hierarchical,6,"[""synthesizer"", ""specialist"", ""foundation"", ""sovereign""]",0.556433,0.794692,True,0.4183,787.3,0.9018,0.491146,execute
+ENS-000256,tournament,7,"[""foundation"", ""specialist"", ""predictor"", ""sentinel"", ""synthesizer""]",0.711271,0.775928,True,0.4006,1838.75,2.1062,0.47955,execute
+ENS-000257,adversarial,4,"[""foundation"", ""sovereign"", ""predictor""]",0.833625,0.686262,True,0.4224,757.61,0.8678,0.424133,execute
+ENS-000258,committee,6,"[""sentinel"", ""synthesizer"", ""foundation"", ""validator""]",0.601783,0.673033,True,0.5734,1629.86,1.867,0.415957,execute
+ENS-000259,hierarchical,7,"[""foundation"", ""specialist"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.710129,0.712573,True,0.6181,1841.63,2.1095,0.440394,execute
+ENS-000260,tournament,4,"[""sentinel"", ""specialist"", ""foundation"", ""validator""]",0.668925,0.728447,True,0.5155,904.87,1.0365,0.450205,execute
+ENS-000261,committee,8,"[""sentinel"", ""synthesizer"", ""sovereign"", ""predictor""]",0.76555,0.704553,True,0.5947,1690.0,1.9359,0.435438,execute
+ENS-000262,hierarchical,3,"[""sentinel"", ""specialist"", ""sovereign""]",0.6121,0.81666,True,0.3156,797.6,0.9136,0.504724,execute
+ENS-000263,adaptive,4,"[""foundation"", ""sovereign"", ""predictor""]",0.644375,0.648771,True,0.3409,1102.14,1.2625,0.400962,execute
+ENS-000264,committee,8,"[""foundation"", ""specialist"", ""predictor"", ""synthesizer"", ""sovereign""]",0.691338,0.699012,True,0.6178,1459.01,1.6713,0.432013,execute
+ENS-000265,adaptive,3,"[""specialist"", ""validator""]",0.6188,0.815069,True,0.5757,621.72,0.7122,0.503741,execute
+ENS-000266,tournament,6,"[""foundation"", ""specialist"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.461133,0.747026,True,0.3746,1310.07,1.5007,0.461687,execute
+ENS-000267,hierarchical,8,"[""specialist"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.568025,0.637228,True,0.4985,1814.31,2.0782,0.393829,execute
+ENS-000268,hierarchical,5,"[""sentinel"", ""specialist"", ""validator"", ""sovereign""]",0.612,0.715084,True,0.666,706.13,0.8089,0.441946,execute
+ENS-000269,tournament,7,"[""synthesizer"", ""specialist"", ""validator"", ""sovereign""]",0.584071,0.627542,True,0.5341,1369.53,1.5688,0.387842,execute
+ENS-000270,hierarchical,6,"[""sentinel"", ""specialist"", ""foundation"", ""validator""]",0.580417,0.813783,True,0.6406,1163.38,1.3326,0.502945,execute
+ENS-000271,committee,6,"[""sentinel"", ""synthesizer"", ""validator"", ""sovereign""]",0.6841,0.715317,True,0.1823,1576.75,1.8061,0.44209,execute
+ENS-000272,cascade,5,"[""sentinel"", ""specialist"", ""foundation"", ""predictor""]",0.49198,0.682201,True,0.6212,1524.56,1.7463,0.421623,execute
+ENS-000273,tournament,3,"[""synthesizer"", ""specialist"", ""validator""]",0.7269,0.786425,True,0.5139,535.22,0.6131,0.486037,execute
+ENS-000274,adaptive,8,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer""]",0.670225,0.679007,True,0.6503,1706.47,1.9547,0.419649,execute
+ENS-000275,tournament,6,"[""sentinel"", ""specialist"", ""foundation""]",0.50825,0.618996,True,0.3866,1429.47,1.6374,0.382561,execute
+ENS-000276,hierarchical,4,"[""specialist"", ""synthesizer"", ""foundation""]",0.51795,0.828701,True,0.4473,1211.39,1.3876,0.512166,execute
+ENS-000277,tournament,3,"[""sentinel"", ""specialist"", ""validator""]",0.718033,0.779499,True,0.2078,639.61,0.7327,0.481757,execute
+ENS-000278,adaptive,4,"[""sentinel"", ""synthesizer"", ""validator"", ""predictor""]",0.733425,0.675638,True,0.2741,1013.29,1.1607,0.417567,execute
+ENS-000279,cascade,8,"[""foundation"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.703825,0.673651,True,0.5097,1785.2,2.0449,0.416339,execute
+ENS-000280,hierarchical,3,"[""foundation"", ""validator"", ""sovereign""]",0.7247,0.644036,True,0.6469,575.51,0.6592,0.398036,execute
+ENS-000281,cascade,6,"[""sentinel"", ""specialist"", ""foundation"", ""predictor""]",0.7775,0.611623,False,0.467,1401.59,1.6055,0.378004,escalate
+ENS-000282,committee,7,"[""validator"", ""synthesizer"", ""specialist"", ""sentinel""]",0.626986,0.630988,True,0.5313,1527.94,1.7502,0.389972,execute
+ENS-000283,hierarchical,3,"[""specialist"", ""synthesizer"", ""predictor""]",0.780667,0.653809,True,0.398,825.59,0.9457,0.404076,execute
+ENS-000284,tournament,7,"[""sentinel"", ""synthesizer"", ""validator"", ""predictor""]",0.621429,0.872323,True,0.5178,1403.0,1.6071,0.539125,execute
+ENS-000285,adversarial,4,"[""sentinel"", ""validator"", ""sovereign"", ""predictor""]",0.63695,0.739923,True,0.4967,878.16,1.0059,0.457298,execute
+ENS-000286,cascade,7,"[""synthesizer"", ""foundation"", ""predictor""]",0.7094,0.838632,True,0.4563,1318.39,1.5102,0.518303,execute
+ENS-000287,committee,7,"[""sentinel"", ""foundation"", ""validator"", ""sovereign""]",0.583743,0.788011,True,0.5657,1757.66,2.0134,0.487017,execute
+ENS-000288,hierarchical,8,"[""foundation"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.578213,0.693613,True,0.4285,1648.56,1.8884,0.428677,execute
+ENS-000289,committee,7,"[""foundation"", ""validator"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.730057,0.661491,True,0.3115,1309.82,1.5004,0.408824,execute
+ENS-000290,parallel,6,"[""sentinel"", ""specialist"", ""validator"", ""sovereign""]",0.54265,0.759004,True,0.6161,279.23,0.3198,0.469091,execute
+ENS-000291,adversarial,5,"[""specialist"", ""foundation"", ""validator"", ""predictor""]",0.53622,0.699787,True,0.3915,1362.56,1.5608,0.432492,execute
+ENS-000292,committee,3,"[""foundation"", ""sovereign""]",0.584633,0.640857,True,0.3324,756.79,0.8669,0.396071,execute
+ENS-000293,parallel,4,"[""foundation"", ""validator"", ""predictor""]",0.591625,0.701256,True,0.2582,388.8,0.4454,0.4334,execute
+ENS-000294,committee,6,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel""]",0.719,0.725479,True,0.552,1214.34,1.391,0.448371,execute
+ENS-000295,hierarchical,3,"[""sentinel"", ""foundation"", ""sovereign""]",0.593467,0.858989,True,0.5989,650.04,0.7446,0.530885,execute
+ENS-000296,hierarchical,6,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer""]",0.58175,0.753305,True,0.4396,1120.48,1.2835,0.465568,execute
+ENS-000297,hierarchical,5,"[""sentinel"", ""specialist"", ""synthesizer"", ""sovereign""]",0.6496,0.620553,True,0.4421,1123.64,1.2871,0.383523,execute
+ENS-000298,adaptive,8,"[""specialist"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.5696,0.6674,True,0.5036,1755.54,2.0109,0.412476,execute
+ENS-000299,cascade,6,"[""foundation"", ""specialist"", ""validator"", ""synthesizer"", ""sovereign""]",0.589683,0.668285,True,0.5116,1128.63,1.2928,0.413023,execute
+ENS-000300,committee,3,"[""specialist"", ""predictor""]",0.395433,0.497883,False,0.0434,924.05,1.0585,0.307709,escalate
+ENS-000301,hierarchical,3,"[""synthesizer"", ""validator"", ""sovereign""]",0.598967,0.906654,True,0.5772,623.94,0.7147,0.560343,execute
+ENS-000302,adaptive,6,"[""specialist"", ""validator"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.6896,0.802108,True,0.3978,1288.32,1.4757,0.49573,execute
+ENS-000303,tournament,3,"[""sentinel"", ""specialist"", ""predictor""]",0.642467,0.732305,True,0.4787,496.08,0.5683,0.45259,execute
+ENS-000304,adaptive,7,"[""sentinel"", ""synthesizer"", ""sovereign"", ""predictor""]",0.590586,0.688534,True,0.4545,1222.48,1.4003,0.425537,execute
+ENS-000305,adversarial,7,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""synthesizer"", ""sovereign""]",0.5687,0.751294,True,0.376,1787.99,2.0481,0.464325,execute
+ENS-000306,adversarial,3,"[""sentinel"", ""foundation"", ""sovereign""]",0.686533,0.556774,False,0.0581,587.41,0.6729,0.344105,escalate
+ENS-000307,adversarial,8,"[""specialist"", ""validator"", ""predictor"", ""synthesizer"", ""sovereign""]",0.655162,0.659174,True,0.6257,2233.39,2.5583,0.407392,execute
+ENS-000308,tournament,3,"[""synthesizer"", ""sovereign"", ""predictor""]",0.5626,0.517707,False,0.6345,397.83,0.4557,0.319961,escalate
+ENS-000309,cascade,4,"[""sentinel"", ""foundation"", ""sovereign""]",0.535025,0.818963,True,0.5708,500.14,0.5729,0.506147,execute
+ENS-000310,committee,6,"[""foundation"", ""specialist"", ""validator"", ""sentinel"", ""sovereign""]",0.726633,0.664583,True,0.2617,1893.12,2.1685,0.410735,execute
+ENS-000311,hierarchical,3,"[""synthesizer"", ""predictor""]",0.470833,0.581385,False,0.3447,775.69,0.8885,0.359316,escalate
+ENS-000312,tournament,3,"[""sentinel"", ""synthesizer"", ""sovereign""]",0.764233,0.585127,False,0.5275,771.41,0.8836,0.361628,escalate
+ENS-000313,parallel,5,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel""]",0.60648,0.715991,True,0.6183,305.33,0.3497,0.442507,execute
+ENS-000314,adversarial,3,"[""sentinel"", ""specialist"", ""foundation""]",0.552667,0.700396,True,0.4005,721.1,0.826,0.432868,execute
+ENS-000315,cascade,8,"[""specialist"", ""validator"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.739012,0.754726,True,0.5794,1950.34,2.2341,0.466446,execute
+ENS-000316,adversarial,4,"[""synthesizer"", ""sovereign"", ""predictor""]",0.525725,0.641142,True,0.6171,1225.54,1.4038,0.396247,execute
+ENS-000317,cascade,7,"[""specialist"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.636929,0.603776,False,0.4995,1267.09,1.4514,0.373154,escalate
+ENS-000318,committee,6,"[""synthesizer"", ""foundation"", ""validator"", ""predictor""]",0.456,0.791126,True,0.2598,1195.06,1.3689,0.488942,execute
+ENS-000319,parallel,7,"[""specialist"", ""synthesizer"", ""foundation"", ""validator""]",0.631186,0.700582,True,0.497,328.68,0.3765,0.432983,execute
+ENS-000320,adaptive,7,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""synthesizer""]",0.697471,0.753857,True,0.4684,1342.06,1.5373,0.465909,execute
+ENS-000321,hierarchical,5,"[""sentinel"", ""synthesizer"", ""predictor""]",0.70074,0.551627,False,0.3379,1158.71,1.3273,0.340924,escalate
+ENS-000322,hierarchical,5,"[""sentinel"", ""specialist"", ""sovereign"", ""predictor""]",0.5736,0.865541,True,0.4655,1332.66,1.5265,0.534934,execute
+ENS-000323,cascade,6,"[""synthesizer"", ""validator"", ""sovereign"", ""predictor""]",0.598083,0.674091,True,0.2707,1220.86,1.3985,0.416611,execute
+ENS-000324,committee,4,"[""synthesizer"", ""foundation"", ""sovereign"", ""predictor""]",0.617075,0.697639,True,0.2764,1095.25,1.2546,0.431165,execute
+ENS-000325,adaptive,4,"[""sentinel"", ""synthesizer"", ""sovereign"", ""predictor""]",0.802925,0.719706,True,0.1898,804.08,0.9211,0.444803,execute
+ENS-000326,adversarial,7,"[""foundation"", ""specialist"", ""validator"", ""sentinel"", ""sovereign""]",0.566443,0.600677,False,0.3988,882.35,1.0107,0.371239,escalate
+ENS-000327,adversarial,7,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer""]",0.595686,0.711464,True,0.6441,1545.94,1.7708,0.439709,execute
+ENS-000328,hierarchical,7,"[""validator"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.656971,0.634635,True,0.3401,1495.45,1.713,0.392226,execute
+ENS-000329,committee,6,"[""specialist"", ""foundation"", ""validator"", ""predictor""]",0.63265,0.651621,True,0.2301,1334.19,1.5283,0.402724,execute
+ENS-000330,parallel,7,"[""foundation"", ""specialist"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.697671,0.747772,True,0.5807,393.99,0.4513,0.462148,execute
+ENS-000331,hierarchical,4,"[""foundation"", ""sovereign"", ""predictor""]",0.807525,0.695125,True,0.4809,915.57,1.0488,0.429611,execute
+ENS-000332,adversarial,3,"[""synthesizer"", ""specialist""]",0.957767,0.571265,False,0.0692,646.24,0.7402,0.353061,escalate
+ENS-000333,committee,7,"[""foundation"", ""specialist"", ""predictor"", ""sentinel"", ""sovereign""]",0.624729,0.666866,True,0.4925,1981.03,2.2692,0.412146,execute
+ENS-000334,adaptive,7,"[""foundation"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.755857,0.635224,True,0.6346,1636.52,1.8746,0.39259,execute
+ENS-000335,committee,5,"[""specialist"", ""synthesizer"", ""foundation"", ""validator""]",0.48368,0.732796,True,0.4045,1075.78,1.2323,0.452893,execute
+ENS-000336,parallel,3,"[""specialist"", ""sovereign"", ""predictor""]",0.7791,0.794244,True,0.2198,367.52,0.421,0.49087,execute
+ENS-000337,cascade,3,"[""specialist"", ""validator"", ""predictor""]",0.730333,0.782637,True,0.3662,614.33,0.7037,0.483696,execute
+ENS-000338,committee,7,"[""specialist"", ""sentinel"", ""synthesizer"", ""validator""]",0.688157,0.661175,True,0.6276,1309.79,1.5003,0.408629,execute
+ENS-000339,hierarchical,3,"[""specialist"", ""sovereign"", ""predictor""]",0.5758,0.624181,True,0.1883,1043.0,1.1947,0.385765,execute
+ENS-000340,cascade,8,"[""foundation"", ""validator"", ""predictor"", ""sentinel"", ""sovereign""]",0.588175,0.717623,True,0.5201,1230.98,1.4101,0.443516,execute
+ENS-000341,adversarial,4,"[""validator"", ""sovereign"", ""predictor""]",0.815925,0.70555,True,0.3196,1340.97,1.536,0.436054,execute
+ENS-000342,hierarchical,6,"[""sentinel"", ""synthesizer"", ""validator"", ""sovereign""]",0.561517,0.779018,True,0.6756,1186.22,1.3588,0.481459,execute
+ENS-000343,parallel,6,"[""foundation"", ""specialist"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.56505,0.528724,False,0.4243,377.91,0.4329,0.32677,escalate
+ENS-000344,tournament,4,"[""sentinel"", ""foundation"", ""validator"", ""sovereign""]",0.8115,0.729679,True,0.3367,846.13,0.9692,0.450967,execute
+ENS-000345,adaptive,7,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel"", ""sovereign""]",0.561543,0.752197,True,0.5606,1744.49,1.9983,0.464884,execute
+ENS-000346,tournament,8,"[""specialist"", ""validator"", ""predictor"", ""sentinel"", ""sovereign""]",0.541713,0.744856,True,0.5531,1929.26,2.2099,0.460346,execute
+ENS-000347,committee,7,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer""]",0.7284,0.702881,True,0.3248,1319.89,1.5119,0.434405,execute
+ENS-000348,hierarchical,7,"[""foundation"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.7518,0.723451,True,0.3531,1693.19,1.9395,0.447118,execute
+ENS-000349,cascade,6,"[""specialist"", ""foundation"", ""validator"", ""sovereign""]",0.642633,0.712833,True,0.339,940.17,1.0769,0.440555,execute
+ENS-000350,cascade,7,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel"", ""sovereign""]",0.7168,0.616595,False,0.6053,1586.4,1.8172,0.381077,escalate
+ENS-000351,cascade,3,"[""specialist"", ""synthesizer"", ""validator""]",0.8506,0.908962,True,0.2752,472.08,0.5408,0.561769,execute
+ENS-000352,adversarial,4,"[""specialist"", ""foundation"", ""validator""]",0.562425,0.698795,True,0.4607,654.77,0.75,0.431879,execute
+ENS-000353,adversarial,8,"[""specialist"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.687963,0.68355,True,0.6586,1103.13,1.2636,0.422457,execute
+ENS-000354,cascade,4,"[""specialist"", ""foundation"", ""validator""]",0.618725,0.663607,True,0.4172,776.26,0.8892,0.410132,execute
+ENS-000355,hierarchical,8,"[""foundation"", ""validator"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.58665,0.819966,True,0.575,2111.04,2.4181,0.506767,execute
+ENS-000356,tournament,4,"[""synthesizer"", ""foundation"", ""sovereign"", ""predictor""]",0.758475,0.753641,True,0.2879,1090.63,1.2493,0.465776,execute
+ENS-000357,adaptive,3,"[""specialist"", ""validator"", ""predictor""]",0.5865,0.496643,False,0.3469,339.12,0.3885,0.306942,escalate
+ENS-000358,adaptive,8,"[""foundation"", ""validator"", ""predictor"", ""sentinel"", ""sovereign""]",0.610175,0.805416,True,0.5257,2116.97,2.4249,0.497774,execute
+ENS-000359,hierarchical,6,"[""foundation"", ""specialist"", ""predictor"", ""sentinel"", ""synthesizer""]",0.752033,0.786333,True,0.4389,874.1,1.0013,0.48598,execute
+ENS-000360,hierarchical,7,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel""]",0.730557,0.733464,True,0.6305,1703.83,1.9517,0.453305,execute
+ENS-000361,adaptive,7,"[""foundation"", ""validator"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.647229,0.59393,False,0.5152,1483.79,1.6996,0.367069,escalate
+ENS-000362,tournament,7,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel""]",0.651514,0.597713,False,0.5135,1267.18,1.4515,0.369407,escalate
+ENS-000363,parallel,3,"[""specialist"", ""synthesizer"", ""foundation""]",0.863167,0.564719,False,0.1873,224.84,0.2575,0.349016,escalate
+ENS-000364,tournament,8,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""synthesizer"", ""sovereign""]",0.678475,0.735174,True,0.613,2446.35,2.8022,0.454363,execute
+ENS-000365,cascade,5,"[""specialist"", ""synthesizer"", ""sovereign""]",0.79004,0.679271,True,0.6295,1099.47,1.2594,0.419812,execute
+ENS-000366,hierarchical,5,"[""sentinel"", ""specialist"", ""validator"", ""predictor""]",0.67786,0.663204,True,0.5201,1421.73,1.6286,0.409882,execute
+ENS-000367,adversarial,3,"[""sovereign"", ""predictor""]",0.808,0.597283,False,0.3869,849.5,0.9731,0.369141,escalate
+ENS-000368,adversarial,3,"[""synthesizer"", ""sovereign"", ""predictor""]",0.603333,0.774343,True,0.3094,837.49,0.9593,0.47857,execute
+ENS-000369,adversarial,5,"[""synthesizer"", ""specialist"", ""sentinel"", ""sovereign""]",0.6899,0.73381,True,0.537,1063.05,1.2177,0.45352,execute
+ENS-000370,tournament,8,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel"", ""sovereign""]",0.690588,0.639395,True,0.6486,1422.99,1.63,0.395168,execute
+ENS-000371,hierarchical,8,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sovereign""]",0.788575,0.625562,True,0.4589,2283.13,2.6153,0.386619,execute
+ENS-000372,cascade,6,"[""specialist"", ""validator"", ""sovereign"", ""predictor""]",0.617967,0.757767,True,0.562,1272.46,1.4576,0.468326,execute
+ENS-000373,committee,6,"[""sentinel"", ""synthesizer"", ""foundation"", ""sovereign""]",0.690067,0.703398,True,0.3672,1326.8,1.5198,0.434724,execute
+ENS-000374,adaptive,3,"[""sentinel"", ""specialist"", ""predictor""]",0.7331,0.695447,True,0.338,808.8,0.9265,0.42981,execute
+ENS-000375,hierarchical,5,"[""sentinel"", ""synthesizer"", ""sovereign"", ""predictor""]",0.65268,0.748596,True,0.3829,838.27,0.9602,0.462658,execute
+ENS-000376,hierarchical,8,"[""specialist"", ""validator"", ""predictor"", ""synthesizer"", ""sovereign""]",0.644188,0.767744,True,0.5827,2169.34,2.4849,0.474492,execute
+ENS-000377,adversarial,8,"[""foundation"", ""specialist"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.594363,0.707097,True,0.5906,1884.17,2.1583,0.43701,execute
+ENS-000378,hierarchical,8,"[""specialist"", ""validator"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.6859,0.773773,True,0.6655,2461.96,2.8201,0.478218,execute
+ENS-000379,hierarchical,7,"[""sentinel"", ""synthesizer"", ""sovereign"", ""predictor""]",0.5575,0.747056,True,0.624,1486.69,1.703,0.461706,execute
+ENS-000380,adversarial,7,"[""foundation"", ""specialist"", ""predictor"", ""sentinel"", ""synthesizer""]",0.721086,0.739251,True,0.4984,1606.36,1.84,0.456882,execute
+ENS-000381,committee,3,"[""sentinel"", ""sovereign""]",0.716433,0.515184,False,0.5583,519.25,0.5948,0.318401,escalate
+ENS-000382,tournament,3,"[""foundation"", ""validator"", ""predictor""]",0.7588,0.598685,False,0.4881,376.7,0.4315,0.370008,escalate
+ENS-000383,adversarial,3,"[""specialist"", ""foundation"", ""validator""]",0.695267,0.637239,True,0.1986,644.72,0.7385,0.393836,execute
+ENS-000384,hierarchical,8,"[""sentinel"", ""foundation"", ""validator"", ""sovereign""]",0.670713,0.704896,True,0.6869,1974.45,2.2617,0.43565,execute
+ENS-000385,adversarial,4,"[""synthesizer"", ""specialist"", ""sovereign"", ""predictor""]",0.575175,0.701973,True,0.4526,743.29,0.8514,0.433843,execute
+ENS-000386,cascade,4,"[""specialist"", ""validator"", ""predictor""]",0.809925,0.693773,True,0.4334,893.15,1.0231,0.428776,execute
+ENS-000387,hierarchical,8,"[""foundation"", ""specialist"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.63685,0.770798,True,0.6563,1791.1,2.0517,0.476379,execute
+ENS-000388,tournament,5,"[""sentinel"", ""synthesizer"", ""predictor""]",0.57988,0.624884,True,0.4185,1005.67,1.152,0.386199,execute
+ENS-000389,adaptive,7,"[""foundation"", ""specialist"", ""validator"", ""synthesizer"", ""sovereign""]",0.691857,0.67734,True,0.5798,1344.18,1.5397,0.418619,execute
+ENS-000390,adaptive,8,"[""specialist"", ""validator"", ""predictor"", ""sentinel"", ""sovereign""]",0.665575,0.686785,True,0.4781,2528.48,2.8963,0.424456,execute
+ENS-000391,adaptive,3,"[""sentinel"", ""foundation"", ""predictor""]",0.839233,0.819542,True,0.2572,519.96,0.5956,0.506505,execute
+ENS-000392,cascade,3,"[""foundation"", ""predictor""]",0.721667,0.685327,True,0.3381,727.08,0.8329,0.423555,execute
+ENS-000393,committee,5,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel""]",0.65894,0.728156,True,0.5889,617.81,0.7077,0.450025,execute
+ENS-000394,committee,6,"[""specialist"", ""foundation"", ""sovereign"", ""predictor""]",0.653667,0.671051,True,0.441,1502.84,1.7215,0.414733,execute
+ENS-000395,cascade,6,"[""sentinel"", ""synthesizer"", ""sovereign"", ""predictor""]",0.634233,0.55736,False,0.4198,1094.42,1.2536,0.344468,escalate
+ENS-000396,cascade,3,"[""sentinel"", ""synthesizer"", ""predictor""]",0.5839,0.692801,True,0.3453,535.87,0.6138,0.428175,execute
+ENS-000397,adversarial,3,"[""sentinel"", ""validator"", ""predictor""]",0.701933,0.67841,True,0.4373,602.07,0.6897,0.419281,execute
+ENS-000398,hierarchical,4,"[""specialist"", ""synthesizer"", ""validator"", ""predictor""]",0.537675,0.730837,True,0.4451,1419.86,1.6264,0.451682,execute
+ENS-000399,parallel,6,"[""foundation"", ""specialist"", ""validator"", ""synthesizer"", ""sovereign""]",0.563317,0.610826,False,0.5189,390.6,0.4474,0.377511,escalate
+ENS-000400,hierarchical,3,"[""synthesizer"", ""foundation"", ""predictor""]",0.500567,0.551172,False,0.5144,704.97,0.8075,0.340643,escalate
+ENS-000401,cascade,8,"[""foundation"", ""specialist"", ""validator"", ""sentinel"", ""synthesizer""]",0.652212,0.545525,False,0.3589,1737.76,1.9906,0.337153,escalate
+ENS-000402,parallel,5,"[""foundation"", ""specialist"", ""predictor"", ""sentinel"", ""synthesizer""]",0.5028,0.721565,True,0.4512,388.86,0.4454,0.445952,execute
+ENS-000403,adversarial,7,"[""foundation"", ""validator"", ""sovereign"", ""predictor""]",0.528643,0.677181,True,0.5695,1721.62,1.9721,0.418521,execute
+ENS-000404,hierarchical,3,"[""specialist"", ""predictor""]",0.701667,0.621034,True,0.3929,677.21,0.7757,0.38382,execute
+ENS-000405,committee,4,"[""sentinel"", ""specialist"", ""foundation"", ""predictor""]",0.492575,0.575581,False,0.2833,868.64,0.995,0.355729,escalate
+ENS-000406,tournament,3,"[""specialist"", ""predictor""]",0.5426,0.453438,False,0.5247,620.38,0.7106,0.28024,escalate
+ENS-000407,cascade,6,"[""specialist"", ""foundation"", ""validator"", ""sovereign""]",0.58875,0.722427,True,0.5677,946.08,1.0837,0.446484,execute
+ENS-000408,committee,7,"[""specialist"", ""foundation"", ""validator"", ""sovereign""]",0.771029,0.633311,True,0.571,1339.69,1.5346,0.391408,execute
+ENS-000409,cascade,7,"[""specialist"", ""sentinel"", ""synthesizer"", ""validator""]",0.687843,0.720244,True,0.5944,1742.72,1.9962,0.445135,execute
+ENS-000410,adversarial,6,"[""specialist"", ""validator"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.624717,0.725119,True,0.618,1273.48,1.4587,0.448148,execute
+ENS-000411,parallel,8,"[""foundation"", ""specialist"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.568675,0.757456,True,0.5649,372.49,0.4267,0.468134,execute
+ENS-000412,parallel,4,"[""synthesizer"", ""foundation"", ""validator""]",0.58,0.635961,True,0.6554,268.51,0.3076,0.393046,execute
+ENS-000413,committee,7,"[""foundation"", ""specialist"", ""validator"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.607286,0.58979,False,0.5421,1980.01,2.268,0.36451,escalate
+ENS-000414,parallel,4,"[""foundation"", ""sovereign"", ""predictor""]",0.66805,0.717992,True,0.6048,381.43,0.4369,0.443743,execute
+ENS-000415,committee,6,"[""synthesizer"", ""specialist"", ""sentinel"", ""sovereign""]",0.378617,0.795491,True,0.1917,1440.85,1.6505,0.491641,execute
+ENS-000416,hierarchical,4,"[""foundation"", ""sovereign"", ""predictor""]",0.59885,0.693185,True,0.5319,966.74,1.1074,0.428412,execute
+ENS-000417,parallel,5,"[""specialist"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.45834,0.773397,True,0.2305,393.85,0.4511,0.477986,execute
+ENS-000418,committee,8,"[""synthesizer"", ""validator"", ""sovereign""]",0.732862,0.733861,True,0.5089,1515.86,1.7364,0.453551,execute
+ENS-000419,hierarchical,3,"[""foundation"", ""validator"", ""sovereign""]",0.817933,0.478058,False,0.3324,816.62,0.9354,0.295456,escalate
+ENS-000420,adaptive,5,"[""sentinel"", ""specialist"", ""foundation"", ""synthesizer""]",0.7102,0.655459,True,0.4631,964.75,1.1051,0.405096,execute
+ENS-000421,tournament,8,"[""foundation"", ""validator"", ""predictor"", ""synthesizer"", ""sovereign""]",0.702425,0.72186,True,0.5598,1931.49,2.2125,0.446134,execute
+ENS-000422,adaptive,3,"[""synthesizer"", ""foundation"", ""sovereign""]",0.609133,0.746221,True,0.4514,523.89,0.6001,0.46119,execute
+ENS-000423,parallel,3,"[""synthesizer"", ""foundation"", ""sovereign""]",0.572767,0.680807,True,0.3298,287.18,0.329,0.420762,execute
+ENS-000424,parallel,4,"[""synthesizer"", ""sovereign"", ""predictor""]",0.518,0.653748,True,0.2972,391.81,0.4488,0.404039,execute
+ENS-000425,hierarchical,7,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer""]",0.699671,0.647698,True,0.6076,1613.55,1.8483,0.4003,execute
+ENS-000426,committee,8,"[""foundation"", ""specialist"", ""validator"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.734962,0.701827,True,0.5759,2135.06,2.4457,0.433753,execute
+ENS-000427,tournament,8,"[""foundation"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.625575,0.676412,True,0.4026,1691.71,1.9378,0.418046,execute
+ENS-000428,parallel,8,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""synthesizer"", ""sovereign""]",0.584525,0.596188,False,0.5471,369.84,0.4236,0.368465,escalate
+ENS-000429,adaptive,5,"[""synthesizer"", ""foundation"", ""validator"", ""sovereign""]",0.64262,0.633201,True,0.5558,1003.81,1.1498,0.39134,execute
+ENS-000430,tournament,6,"[""specialist"", ""validator"", ""predictor"", ""sentinel"", ""sovereign""]",0.734767,0.747323,True,0.4154,971.44,1.1128,0.461871,execute
+ENS-000431,parallel,5,"[""sentinel"", ""foundation"", ""sovereign"", ""predictor""]",0.72538,0.591259,False,0.476,246.71,0.2826,0.365418,escalate
+ENS-000432,hierarchical,8,"[""foundation"", ""specialist"", ""validator"", ""sentinel"", ""synthesizer""]",0.525687,0.674691,True,0.51,1739.56,1.9926,0.416982,execute
+ENS-000433,committee,5,"[""sentinel"", ""specialist"", ""sovereign""]",0.6848,0.713661,True,0.6706,1409.29,1.6143,0.441067,execute
+ENS-000434,tournament,4,"[""foundation"", ""validator"", ""sovereign"", ""predictor""]",0.529125,0.787501,True,0.2308,695.1,0.7962,0.486703,execute
+ENS-000435,tournament,6,"[""foundation"", ""validator"", ""predictor"", ""sentinel"", ""sovereign""]",0.705317,0.58113,False,0.4714,1109.04,1.2704,0.359158,escalate
+ENS-000436,committee,6,"[""sentinel"", ""synthesizer"", ""validator"", ""predictor""]",0.67365,0.657721,True,0.5275,1383.4,1.5846,0.406494,execute
+ENS-000437,committee,4,"[""specialist"", ""foundation"", ""validator"", ""sovereign""]",0.648375,0.834659,True,0.301,719.22,0.8239,0.515848,execute
+ENS-000438,adaptive,5,"[""sentinel"", ""specialist"", ""validator"", ""sovereign""]",0.64292,0.699421,True,0.4584,1206.07,1.3815,0.432266,execute
+ENS-000439,cascade,3,"[""sentinel"", ""foundation"", ""sovereign""]",0.470533,0.689016,True,0.3123,629.24,0.7208,0.425835,execute
+ENS-000440,hierarchical,8,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""synthesizer"", ""sovereign""]",0.701213,0.612187,False,0.5315,1887.12,2.1616,0.378352,escalate
+ENS-000441,committee,6,"[""foundation"", ""specialist"", ""predictor"", ""sentinel"", ""sovereign""]",0.67195,0.838383,True,0.4847,1767.57,2.0247,0.518149,execute
+ENS-000442,adaptive,7,"[""foundation"", ""specialist"", ""validator"", ""sentinel"", ""sovereign""]",0.769143,0.5816,False,0.5541,1859.97,2.1305,0.359448,escalate
+ENS-000443,parallel,5,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""synthesizer""]",0.61952,0.634294,True,0.6572,399.49,0.4576,0.392015,execute
+ENS-000444,cascade,8,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer""]",0.78095,0.643977,True,0.6417,2318.86,2.6562,0.398,execute
+ENS-000445,hierarchical,7,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer""]",0.651143,0.745087,True,0.4322,1354.91,1.552,0.460489,execute
+ENS-000446,adaptive,7,"[""foundation"", ""specialist"", ""predictor"", ""sentinel"", ""sovereign""]",0.535357,0.744532,True,0.4944,1790.64,2.0511,0.460146,execute
+ENS-000447,committee,7,"[""foundation"", ""validator"", ""sovereign"", ""predictor""]",0.666186,0.64081,True,0.3379,1456.17,1.668,0.396042,execute
+ENS-000448,tournament,6,"[""foundation"", ""validator"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.6963,0.802284,True,0.5587,1255.0,1.4376,0.495839,execute
+ENS-000449,parallel,8,"[""foundation"", ""specialist"", ""validator"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.576538,0.684479,True,0.4804,396.47,0.4541,0.423031,execute
+ENS-000450,adversarial,7,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.575057,0.775245,True,0.5663,1590.26,1.8216,0.479128,execute
+ENS-000451,adversarial,8,"[""validator"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.607988,0.680288,True,0.6371,2043.28,2.3405,0.420441,execute
+ENS-000452,adversarial,6,"[""foundation"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.6296,0.676701,True,0.5084,1387.64,1.5895,0.418224,execute
+ENS-000453,adversarial,5,"[""specialist"", ""validator"", ""predictor""]",0.66618,0.683396,True,0.4662,1194.84,1.3687,0.422362,execute
+ENS-000454,cascade,7,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""synthesizer""]",0.671671,0.720027,True,0.4562,1290.31,1.478,0.445001,execute
+ENS-000455,hierarchical,8,"[""sentinel"", ""specialist"", ""validator"", ""predictor""]",0.651362,0.777506,True,0.5996,2220.88,2.544,0.480525,execute
+ENS-000456,adversarial,4,"[""sentinel"", ""specialist"", ""synthesizer"", ""sovereign""]",0.697275,0.59969,False,0.4774,1028.22,1.1778,0.370629,escalate
+ENS-000457,adversarial,5,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel""]",0.75702,0.653134,True,0.3396,1329.9,1.5234,0.403659,execute
+ENS-000458,parallel,7,"[""validator"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.605257,0.656337,True,0.5206,395.45,0.453,0.405638,execute
+ENS-000459,committee,4,"[""sentinel"", ""synthesizer"", ""foundation"", ""validator""]",0.432025,0.566135,False,0.3495,1103.59,1.2641,0.349891,escalate
+ENS-000460,hierarchical,5,"[""specialist"", ""foundation"", ""validator"", ""sovereign""]",0.80024,0.693427,True,0.4522,1065.56,1.2206,0.428562,execute
+ENS-000461,adaptive,5,"[""specialist"", ""validator"", ""sovereign""]",0.7262,0.706328,True,0.6364,761.57,0.8724,0.436535,execute
+ENS-000462,cascade,3,"[""specialist"", ""foundation"", ""predictor""]",0.814733,0.840609,True,0.4502,811.6,0.9297,0.519525,execute
+ENS-000463,parallel,7,"[""specialist"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer""]",0.664086,0.586001,False,0.5902,337.55,0.3867,0.362168,escalate
+ENS-000464,adaptive,6,"[""foundation"", ""specialist"", ""validator"", ""synthesizer"", ""sovereign""]",0.543083,0.531997,False,0.6121,1392.68,1.5953,0.328792,escalate
+ENS-000465,adaptive,8,"[""specialist"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.7646,0.681766,True,0.416,1995.61,2.2859,0.421354,execute
+ENS-000466,tournament,6,"[""synthesizer"", ""specialist"", ""sovereign""]",0.71715,0.69399,True,0.4604,1153.5,1.3213,0.428909,execute
+ENS-000467,adaptive,3,"[""specialist"", ""predictor""]",0.525567,0.661569,True,0.5153,663.96,0.7605,0.408872,execute
+ENS-000468,tournament,5,"[""foundation"", ""specialist"", ""validator"", ""sentinel"", ""synthesizer""]",0.59926,0.653549,True,0.4765,1432.41,1.6408,0.403916,execute
+ENS-000469,hierarchical,8,"[""specialist"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.716063,0.708812,True,0.5476,1513.27,1.7334,0.43807,execute
+ENS-000470,committee,7,"[""foundation"", ""specialist"", ""validator"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.6188,0.688289,True,0.6258,1487.99,1.7045,0.425386,execute
+ENS-000471,committee,4,"[""synthesizer"", ""specialist"", ""foundation"", ""predictor""]",0.557425,0.671958,True,0.5166,999.49,1.1449,0.415293,execute
+ENS-000472,cascade,7,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""synthesizer""]",0.679571,0.674025,True,0.3645,1653.85,1.8944,0.41657,execute
+ENS-000473,parallel,3,"[""foundation"", ""sovereign"", ""predictor""]",0.4361,0.648244,True,0.1884,265.4,0.304,0.400637,execute
+ENS-000474,parallel,8,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sovereign""]",0.736725,0.728357,True,0.513,383.4,0.4392,0.45015,execute
+ENS-000475,hierarchical,3,"[""sovereign"", ""predictor""]",0.730667,0.893612,True,0.2487,1042.08,1.1937,0.552282,execute
+ENS-000476,parallel,7,"[""sentinel"", ""synthesizer"", ""foundation"", ""validator""]",0.734543,0.727971,True,0.5448,379.1,0.4342,0.449911,execute
+ENS-000477,committee,8,"[""foundation"", ""specialist"", ""validator"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.69485,0.711716,True,0.4184,1628.75,1.8657,0.439865,execute
+ENS-000478,adversarial,8,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""synthesizer"", ""sovereign""]",0.70365,0.618704,True,0.5356,1749.16,2.0036,0.38238,execute
+ENS-000479,committee,3,"[""foundation"", ""sovereign"", ""predictor""]",0.568067,0.598547,False,0.3878,565.21,0.6474,0.369922,escalate
+ENS-000480,committee,5,"[""synthesizer"", ""validator"", ""predictor""]",0.66304,0.772067,True,0.6083,1433.7,1.6423,0.477164,execute
+ENS-000481,parallel,7,"[""specialist"", ""validator"", ""predictor"", ""sentinel"", ""sovereign""]",0.617857,0.681193,True,0.6308,338.9,0.3882,0.421,execute
+ENS-000482,committee,6,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""synthesizer""]",0.684433,0.658435,True,0.3534,1759.92,2.0159,0.406935,execute
+ENS-000483,adversarial,5,"[""synthesizer"", ""specialist"", ""foundation"", ""validator""]",0.72996,0.667833,True,0.4997,1496.04,1.7137,0.412744,execute
+ENS-000484,adaptive,5,"[""sentinel"", ""foundation"", ""validator"", ""predictor""]",0.67364,0.494105,False,0.5102,717.22,0.8216,0.305374,escalate
+ENS-000485,parallel,3,"[""sentinel"", ""specialist"", ""sovereign""]",0.564833,0.864733,True,0.3827,361.53,0.4141,0.534434,execute
+ENS-000486,cascade,5,"[""sentinel"", ""specialist"", ""sovereign""]",0.61372,0.650214,True,0.5839,1166.61,1.3363,0.401854,execute
+ENS-000487,hierarchical,6,"[""foundation"", ""specialist"", ""validator"", ""synthesizer"", ""sovereign""]",0.758917,0.721599,True,0.3571,1272.51,1.4576,0.445972,execute
+ENS-000488,tournament,8,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""sentinel"", ""synthesizer""]",0.761275,0.764659,True,0.6594,1376.0,1.5762,0.472585,execute
+ENS-000489,parallel,4,"[""foundation"", ""sovereign"", ""predictor""]",0.612775,0.896998,True,0.4988,330.62,0.3787,0.554375,execute
+ENS-000490,committee,8,"[""specialist"", ""validator"", ""predictor"", ""sentinel"", ""sovereign""]",0.547312,0.774909,True,0.4631,1558.16,1.7848,0.47892,execute
+ENS-000491,tournament,6,"[""foundation"", ""validator"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.546683,0.646194,True,0.5853,1228.65,1.4074,0.39937,execute
+ENS-000492,adaptive,8,"[""foundation"", ""specialist"", ""validator"", ""sentinel"", ""synthesizer""]",0.5837,0.643007,True,0.4645,1819.15,2.0838,0.3974,execute
+ENS-000493,parallel,7,"[""specialist"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.814657,0.693089,True,0.5456,373.45,0.4278,0.428353,execute
+ENS-000494,hierarchical,8,"[""foundation"", ""specialist"", ""predictor"", ""sentinel"", ""synthesizer"", ""sovereign""]",0.68925,0.758727,True,0.4369,1642.4,1.8813,0.468919,execute
+ENS-000495,adaptive,6,"[""specialist"", ""foundation"", ""validator"", ""predictor""]",0.7642,0.707094,True,0.3849,1967.11,2.2533,0.437008,execute
+ENS-000496,adversarial,7,"[""foundation"", ""specialist"", ""validator"", ""synthesizer"", ""sovereign""]",0.524543,0.601967,False,0.4257,1261.25,1.4447,0.372036,escalate
+ENS-000497,adversarial,4,"[""sentinel"", ""specialist"", ""foundation""]",0.471075,0.691217,True,0.25,1192.19,1.3656,0.427195,execute
+ENS-000498,cascade,3,"[""specialist"", ""foundation""]",0.590433,0.648292,True,0.2865,714.05,0.8179,0.400667,execute
+ENS-000499,adaptive,8,"[""foundation"", ""specialist"", ""validator"", ""predictor"", ""synthesizer"", ""sovereign""]",0.779562,0.71459,True,0.4219,1917.03,2.1959,0.441641,execute
