@@ -1,0 +1,57 @@
+{
+  "schema": "parallax-market-registry-v0.1",
+  "exchange": "PARALLAX Exchange",
+  "status": "developer_registry",
+  "defaultQuoteAssets": ["ICP", "MTC"],
+  "categories": [
+    {"id": "sovereign", "name": "Sovereign", "description": "Protocol-native governance and utility tokens", "quoteAssets": ["ICP"]},
+    {"id": "crypto", "name": "Crypto", "description": "Major cryptocurrencies via chain-key bridges", "quoteAssets": ["ICP"]},
+    {"id": "ai_tokens", "name": "AI Tokens", "description": "Tokenized AI compute, inference, training, memory, data, and evaluation resources", "quoteAssets": ["ICP", "MTC"]},
+    {"id": "ai_artifacts", "name": "AI Artifacts", "description": "Tokenized AI models, agents, datasets, protocols, and systems", "quoteAssets": ["MTC"]},
+    {"id": "creator", "name": "Creator", "description": "Personal tokens, fan tokens, and creator economies", "quoteAssets": ["ICP", "MTC"]}
+  ],
+  "specification": {
+    "tickSize": "0.0001",
+    "minOrderQuantity": "0.001",
+    "settlementCadenceMs": 873,
+    "maxOpenOrdersPerPrincipalPerPair": 100,
+    "makerFeeBps": 0,
+    "takerFeeBps": 5,
+    "priority": "price_time_fifo",
+    "tradingHours": "24_7_365"
+  },
+  "markets": [
+    {"pairId": "GTK_ICP", "display": "GTK/ICP", "base": "GTK", "quote": "ICP", "category": "sovereign", "status": "planned", "description": "Governance Token — protocol voting rights"},
+    {"pairId": "MTC_ICP", "display": "MTC/ICP", "base": "MTC", "quote": "ICP", "category": "sovereign", "status": "planned", "description": "Materia Cogitans — AI compute settlement unit"},
+    {"pairId": "MTH_ICP", "display": "MTH/ICP", "base": "MTH", "quote": "ICP", "category": "sovereign", "status": "planned", "description": "Methane — energy and resource pricing token"},
+    {"pairId": "BTC_ICP", "display": "BTC/ICP", "base": "BTC", "assetAlias": "ckBTC", "quote": "ICP", "category": "crypto", "status": "planned", "bridge": "chain_key_bitcoin"},
+    {"pairId": "ETH_ICP", "display": "ETH/ICP", "base": "ETH", "assetAlias": "ckETH", "quote": "ICP", "category": "crypto", "status": "planned", "bridge": "chain_key_ethereum"},
+    {"pairId": "AICPU_ICP", "display": "AICPU/ICP", "base": "AICPU", "quote": "ICP", "category": "ai_tokens", "status": "planned", "description": "General AI compute credits"},
+    {"pairId": "AIMEM_ICP", "display": "AIMEM/ICP", "base": "AIMEM", "quote": "ICP", "category": "ai_tokens", "status": "planned", "description": "AI memory allocation units"},
+    {"pairId": "AIINF_ICP", "display": "AIINF/ICP", "base": "AIINF", "quote": "ICP", "category": "ai_tokens", "status": "planned", "description": "Inference execution credits"},
+    {"pairId": "AITRAIN_ICP", "display": "AITRAIN/ICP", "base": "AITRAIN", "quote": "ICP", "category": "ai_tokens", "status": "planned", "description": "Training compute allocation"},
+    {"pairId": "AIDATA_ICP", "display": "AIDATA/ICP", "base": "AIDATA", "quote": "ICP", "category": "ai_tokens", "status": "planned", "description": "Dataset access and storage"},
+    {"pairId": "AIGPU_ICP", "display": "AIGPU/ICP", "base": "AIGPU", "quote": "ICP", "category": "ai_tokens", "status": "planned", "description": "GPU compute hours"},
+    {"pairId": "AITPU_ICP", "display": "AITPU/ICP", "base": "AITPU", "quote": "ICP", "category": "ai_tokens", "status": "planned", "description": "TPU compute allocation"},
+    {"pairId": "AIBW_ICP", "display": "AIBW/ICP", "base": "AIBW", "quote": "ICP", "category": "ai_tokens", "status": "planned", "description": "Network bandwidth credits"},
+    {"pairId": "AIST_ICP", "display": "AIST/ICP", "base": "AIST", "quote": "ICP", "category": "ai_tokens", "status": "planned", "description": "Persistent storage allocation"},
+    {"pairId": "AIFT_ICP", "display": "AIFT/ICP", "base": "AIFT", "quote": "ICP", "category": "ai_tokens", "status": "planned", "description": "Fine-tuning compute credits"},
+    {"pairId": "AIEMB_ICP", "display": "AIEMB/ICP", "base": "AIEMB", "quote": "ICP", "category": "ai_tokens", "status": "planned", "description": "Embedding generation credits"},
+    {"pairId": "AIRAG_ICP", "display": "AIRAG/ICP", "base": "AIRAG", "quote": "ICP", "category": "ai_tokens", "status": "planned", "description": "RAG pipeline execution credits"},
+    {"pairId": "AIAGENT_ICP", "display": "AIAGENT/ICP", "base": "AIAGENT", "quote": "ICP", "category": "ai_tokens", "status": "planned", "description": "Agent execution time"},
+    {"pairId": "AIORCH_ICP", "display": "AIORCH/ICP", "base": "AIORCH", "quote": "ICP", "category": "ai_tokens", "status": "planned", "description": "Orchestration and workflow credits"},
+    {"pairId": "AICHAIN_ICP", "display": "AICHAIN/ICP", "base": "AICHAIN", "quote": "ICP", "category": "ai_tokens", "status": "planned", "description": "Reasoning chain execution"},
+    {"pairId": "AIMDL_MTC", "display": "AIMDL/MTC", "base": "AIMDL", "quote": "MTC", "category": "ai_artifacts", "status": "planned", "description": "Foundation models, fine-tuned models, LoRA adapters, merged models, and quantized models"},
+    {"pairId": "AIPROT_MTC", "display": "AIPROT/MTC", "base": "AIPROT", "quote": "MTC", "category": "ai_artifacts", "status": "planned", "description": "AI alignment, safety, governance, and evaluation protocols"},
+    {"pairId": "AIAGENT_MTC", "display": "AIAGENT/MTC", "base": "AIAGENT", "quote": "MTC", "category": "ai_artifacts", "status": "planned", "description": "Autonomous agent artifacts"},
+    {"pairId": "AIRAG_MTC", "display": "AIRAG/MTC", "base": "AIRAG", "quote": "MTC", "category": "ai_artifacts", "status": "planned", "description": "RAG and knowledge-system artifacts"},
+    {"pairId": "AIDATA_MTC", "display": "AIDATA/MTC", "base": "AIDATA", "quote": "MTC", "category": "ai_artifacts", "status": "planned", "description": "Training and dataset artifacts"}
+  ],
+  "plannedExpansions": [
+    {"pairId": "SOL_ICP", "status": "research"},
+    {"pairId": "USDC_ICP", "status": "planned"},
+    {"pairId": "USDT_ICP", "status": "planned"},
+    {"pairId": "DOT_ICP", "status": "research"},
+    {"pairId": "ATOM_ICP", "status": "research"}
+  ]
+}
