@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "canisters": {
+    "ai_wallet_ledger": {
+      "type": "motoko",
+      "main": "canisters/ai-wallet-ledger/src/Main.mo"
+    }
+  },
+  "networks": {
+    "local": {
+      "bind": "127.0.0.1:4943",
+      "type": "ephemeral"
+    }
+  }
+}

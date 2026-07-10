@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PARALLAX Control Tower · AI Wallets</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #050712;
+        color: #f8fafc;
+      }
+      body { margin: 0; padding: 32px; background: radial-gradient(circle at top, #14213d, #050712 55%); }
+      main { max-width: 1180px; margin: 0 auto; }
+      header { display: flex; justify-content: space-between; gap: 24px; align-items: flex-start; margin-bottom: 28px; }
+      h1 { margin: 0 0 8px; font-size: clamp(32px, 5vw, 58px); letter-spacing: -0.05em; }
+      p { color: #cbd5e1; line-height: 1.6; }
+      code { color: #38bdf8; }
+      .badge { border: 1px solid #334155; border-radius: 999px; padding: 8px 12px; color: #93c5fd; background: rgba(15, 23, 42, 0.72); }
+      .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+      .card { border: 1px solid rgba(148, 163, 184, 0.28); border-radius: 22px; padding: 20px; background: rgba(15, 23, 42, 0.76); box-shadow: 0 20px 60px rgba(0,0,0,0.28); }
+      .card h2 { margin: 0 0 10px; font-size: 18px; }
+      .meta { display: grid; gap: 6px; font-size: 14px; color: #cbd5e1; }
+      .status { text-transform: uppercase; font-size: 12px; letter-spacing: 0.16em; color: #22c55e; }
+      .blocked { color: #f97316; }
+      .toolbar { display: flex; gap: 12px; flex-wrap: wrap; margin: 24px 0; }
+      input, button { border-radius: 12px; border: 1px solid #334155; padding: 12px 14px; background: #020617; color: #f8fafc; }
+      input { min-width: min(440px, 100%); flex: 1; }
+      button { cursor: pointer; background: linear-gradient(135deg, #2563eb, #7c3aed); border: 0; font-weight: 700; }
+      .empty { border: 1px dashed #475569; border-radius: 22px; padding: 28px; color: #94a3b8; }
+      .footer { margin-top: 28px; color: #94a3b8; font-size: 13px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <section>
+          <div class="badge">PARALLAX Control Tower · No TypeScript Surface</div>
+          <h1>AI Wallets</h1>
+          <p>
+            Production-facing read model for ICP/Motoko AI wallets. This page renders canister data through the
+            <code>getControlTowerAiWallets</code> query and keeps alpha boundaries visible.
+          </p>
+        </section>
+        <section class="card">
+          <div class="status">Alpha Boundary</div>
+          <p>No live money movement. No live broker routing. No custody/private keys. No autonomous live AI trading. No AI self-approval above threshold.</p>
+        </section>
+      </header>
+
+      <section class="toolbar">
+        <input id="agentUrl" value="http://127.0.0.1:4943" aria-label="ICP local replica URL" />
+        <input id="canisterId" placeholder="ai_wallet_ledger canister id" aria-label="AI wallet ledger canister id" />
+        <button id="loadWallets" type="button">Load Wallets</button>
+      </section>
+
+      <section id="summary" class="card">
+        <strong>Status:</strong> waiting for canister id.
+      </section>
+
+      <section id="wallets" class="grid" aria-live="polite"></section>
+
+      <section class="footer">
+        This page intentionally uses vanilla browser JavaScript, not TypeScript. For production auth, mount this behind Internet Identity / Cloudflare Access and route reads through the PARALLAX edge gateway.
+      </section>
+    </main>
+
+    <script type="module">
+      const wallets = document.querySelector('#wallets');
+      const summary = document.querySelector('#summary');
+      const canisterInput = document.querySelector('#canisterId');
+      const agentInput = document.querySelector('#agentUrl');
+
+      const escapeHtml = (value) => String(value ?? '').replace(/[&<>'"]/g, (char) => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+      }[char]));
+
+      const renderEmpty = (message) => {
+        wallets.innerHTML = `<div class="empty">${escapeHtml(message)}</div>`;
+      };
+
+      const renderWallet = (wallet) => {
+        const status = Object.keys(wallet.status ?? {})[0] ?? 'unknown';
+        const mode = Object.keys(wallet.mode ?? {})[0] ?? 'unknown';
+        return `
+          <article class="card">
+            <div class="status ${status === 'halted' || status === 'paused' ? 'blocked' : ''}">${escapeHtml(status)}</div>
+            <h2>${escapeHtml(wallet.displayName)}</h2>
+            <div class="meta">
+              <span><strong>Wallet:</strong> ${escapeHtml(wallet.walletId)}</span>
+              <span><strong>Agent:</strong> ${escapeHtml(wallet.agentId)}</span>
+              <span><strong>Mode:</strong> ${escapeHtml(mode)}</span>
+              <span><strong>Policy:</strong> ${escapeHtml(wallet.policyId)}</span>
+              <span><strong>Updated:</strong> ${escapeHtml(wallet.updatedAt)}</span>
+            </div>
+          </article>`;
+      };
+
+      document.querySelector('#loadWallets').addEventListener('click', async () => {
+        const canisterId = canisterInput.value.trim();
+        const host = agentInput.value.trim();
+        if (!canisterId) {
+          renderEmpty('Enter the ai_wallet_ledger canister id first.');
+          return;
+        }
+
+        summary.innerHTML = '<strong>Status:</strong> loading canister read model...';
+        renderEmpty('Loading...');
+
+        try {
+          const { HttpAgent, Actor } = await import('https://esm.sh/@dfinity/agent@2.4.1');
+          const idlFactory = ({ IDL }) => IDL.Service({
+            getControlTowerAiWallets: IDL.Func([IDL.Opt(IDL.Nat), IDL.Opt(IDL.Nat)], [IDL.Record({
+              items: IDL.Vec(IDL.Record({
+                walletId: IDL.Text,
+                agentId: IDL.Text,
+                displayName: IDL.Text,
+                ownerPrincipal: IDL.Principal,
+                controllerPrincipal: IDL.Principal,
+                status: IDL.Variant({ active: IDL.Null, paused: IDL.Null, halted: IDL.Null, retired: IDL.Null }),
+                mode: IDL.Variant({ paper: IDL.Null, testnet: IDL.Null, restricted_live: IDL.Null, live: IDL.Null }),
+                policyId: IDL.Text,
+                createdAt: IDL.Int,
+                updatedAt: IDL.Int,
+                metadata: IDL.Vec(IDL.Tuple(IDL.Text, IDL.Text))
+              })),
+              nextCursor: IDL.Opt(IDL.Nat),
+              total: IDL.Nat
+            })], ['query'])
+          });
+
+          const agent = new HttpAgent({ host });
+          if (host.includes('127.0.0.1') || host.includes('localhost')) await agent.fetchRootKey();
+          const actor = Actor.createActor(idlFactory, { agent, canisterId });
+          const page = await actor.getControlTowerAiWallets([], [50n]);
+          summary.innerHTML = `<strong>Status:</strong> loaded ${page.items.length} of ${page.total.toString()} wallets.`;
+          wallets.innerHTML = page.items.length ? page.items.map(renderWallet).join('') : '<div class="empty">No AI wallets found.</div>';
+        } catch (error) {
+          summary.innerHTML = '<strong>Status:</strong> failed to load wallets.';
+          renderEmpty(error instanceof Error ? error.message : String(error));
+        }
+      });
+    </script>
+  </body>
+</html>

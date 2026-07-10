@@ -1,0 +1,43 @@
+{
+  "schema": "parallax.release_receipt.v1",
+  "artifact": "ai-wallet-ledger-canister",
+  "version": "0.2.0-alpha.0",
+  "branch": "codex/icp-ai-wallet-persistence",
+  "generated_at": "2026-07-10",
+  "language_policy": {
+    "production_code_added": ["Motoko", "HTML", "Shell"],
+    "typescript_added": false
+  },
+  "implemented": [
+    "AiWallet stable persistence",
+    "AiWalletPolicy stable persistence",
+    "AiWalletCommand stable persistence",
+    "AiWalletPolicyEvaluation stable persistence",
+    "AiWalletReceipt stable persistence and global receipt pagination",
+    "AiWalletDailyUsage stable persistence",
+    "halt/pause/resume policy gates",
+    "daily limit policy gate",
+    "AI signal approval to policy-gated paper order",
+    "Control Tower AI wallet read model",
+    "vanilla Control Tower AI wallet render surface",
+    "benchmark receipt storage"
+  ],
+  "blocked": [
+    "live money movement",
+    "live broker routing",
+    "custody private keys",
+    "autonomous live AI trading",
+    "AI self-approval above threshold"
+  ],
+  "validation": {
+    "connector_runtime_tests_executed": false,
+    "reason": "GitHub connector cannot run local dfx/Motoko commands.",
+    "local_commands": [
+      "pnpm icp:ai-wallet:deploy",
+      "pnpm icp:ai-wallet:test",
+      "pnpm icp:ai-wallet:version",
+      "pnpm icp:ai-wallet:benchmarks"
+    ]
+  },
+  "showcase_status": "not_ready_until_dfx_tests_pass_and_control_tower_reads_real_canister_state"
+}

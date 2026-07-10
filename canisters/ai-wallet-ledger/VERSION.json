@@ -1,0 +1,32 @@
+{
+  "schema": "parallax.version_manifest.v1",
+  "artifact": "ai-wallet-ledger-canister",
+  "version": "0.2.0-alpha.0",
+  "release_lane": "alpha-production-code",
+  "language": "Motoko",
+  "typescript_added": false,
+  "generated_at": "2026-07-10",
+  "capabilities": [
+    "persistent_ai_wallets",
+    "persistent_ai_wallet_policies",
+    "persistent_ai_wallet_commands",
+    "persistent_policy_evaluations",
+    "persistent_ai_wallet_receipts",
+    "persistent_daily_usage",
+    "control_tower_read_model",
+    "ai_signal_to_policy_gated_paper_order",
+    "global_receipt_pagination",
+    "benchmark_receipts"
+  ],
+  "blocked_capabilities": [
+    "live_money_movement",
+    "live_broker_routing",
+    "custody_private_keys",
+    "autonomous_live_ai_trading",
+    "ai_self_approval_above_threshold"
+  ],
+  "validation_commands": [
+    "dfx deploy ai_wallet_ledger",
+    "bash canisters/ai-wallet-ledger/tests/integration.sh"
+  ]
+}
