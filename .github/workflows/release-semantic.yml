@@ -1,0 +1,147 @@
+name: Semantic release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Semantic version to release (for example v1.2.3).
+        required: true
+        type: string
+      release_ref:
+        description: Branch, tag, or SHA to release.
+        required: false
+        default: main
+        type: string
+
+permissions:
+  contents: write
+  packages: write
+
+concurrency:
+  group: release-semantic
+  cancel-in-progress: false
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_PREFIX: ghcr.io/${{ github.repository }}
+
+jobs:
+  validate-release:
+    name: Validate semantic version
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - name: Validate version input
+        id: version
+        run: |
+          set -euo pipefail
+          VERSION='${{ github.event.inputs.version }}'
+          if [[ ! "$VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Expected a semantic version such as v1.2.3" >&2
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+  docker-release:
+    name: Publish Docker image (${{ matrix.service.name }})
+    runs-on: ubuntu-latest
+    needs: [validate-release]
+    strategy:
+      fail-fast: true
+      matrix:
+        service:
+          - { name: platform, context: . }
+          - { name: rust-engine, context: services/rust-engine }
+          - { name: git-service, context: services/git-service }
+          - { name: ai-service, context: services/ai-service }
+          - { name: rails-api, context: services/rails-api }
+          - { name: execution-engine, context: rust/execution-engine }
+          - { name: trading-api, context: python }
+          - { name: cli, context: services/cli }
+    steps:
+      - name: Checkout release ref
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.release_ref }}
+
+      - name: Setup Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.service.context }}
+          push: true
+          tags: |
+            ${{ env.IMAGE_PREFIX }}/${{ matrix.service.name }}:${{ needs.validate-release.outputs.version }}
+            ${{ env.IMAGE_PREFIX }}/${{ matrix.service.name }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  create-release:
+    name: Create GitHub release
+    runs-on: ubuntu-latest
+    needs: [validate-release, docker-release]
+    steps:
+      - name: Checkout release ref
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.inputs.release_ref }}
+
+      - name: Generate changelog
+        run: |
+          set -euo pipefail
+          PREVIOUS_TAG=$(git describe --tags --abbrev=0 --match 'v*' 2>/dev/null || true)
+          if [ -n "$PREVIOUS_TAG" ]; then
+            git log --pretty=format:'- %s (%h)' "$PREVIOUS_TAG"..HEAD > release-notes.md
+          else
+            git log --pretty=format:'- %s (%h)' > release-notes.md
+          fi
+          if [ ! -s release-notes.md ]; then
+            echo '- Initial release' > release-notes.md
+          fi
+
+      - name: Create and push tag
+        run: |
+          set -euo pipefail
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          if git rev-parse '${{ needs.validate-release.outputs.version }}' >/dev/null 2>&1; then
+            echo 'Tag already exists; skipping creation.'
+          else
+            git tag -a '${{ needs.validate-release.outputs.version }}' -m 'Release ${{ needs.validate-release.outputs.version }}'
+            git push origin '${{ needs.validate-release.outputs.version }}'
+          fi
+
+      - name: Publish GitHub release notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          if gh release view '${{ needs.validate-release.outputs.version }}' >/dev/null 2>&1; then
+            gh release edit '${{ needs.validate-release.outputs.version }}' --notes-file release-notes.md
+          else
+            gh release create '${{ needs.validate-release.outputs.version }}' --title '${{ needs.validate-release.outputs.version }}' --notes-file release-notes.md --target '${{ github.event.inputs.release_ref }}'
+          fi
+
+  notify:
+    name: Notify Slack
+    if: always()
+    needs: [validate-release, docker-release, create-release]
+    uses: ./.github/workflows/notify-slack.yml
+    with:
+      workflow_name: release-semantic
+      run_status: ${{ needs.create-release.result == 'success' && needs.docker-release.result == 'success' && 'success' || 'failure' }}
+      environment: release
+      summary: ${{ format('version={0}, docker={1}, release={2}', needs.validate-release.outputs.version, needs.docker-release.result, needs.create-release.result) }}
+      metrics: ${{ format('tag={0}; registry=ghcr.io', needs.validate-release.outputs.version) }}
+    secrets: inherit

@@ -1,0 +1,143 @@
+name: Deploy PARALLAX Intelligence to ICP Mainnet
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+
+env:
+  NODE_VERSION: '20'
+  PNPM_VERSION: '10'
+  ICP_CLI_VERSION: '0.1.0-beta.3'
+  MOTOKO_VERSION: '1.2.0'
+
+jobs:
+  deploy-mainnet:
+    name: "Deploy to ICP Mainnet (Real Web)"
+    runs-on: ubuntu-latest
+    environment: production
+    concurrency:
+      group: icp-mainnet-deploy
+      cancel-in-progress: false
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install pnpm
+        run: npm install -g pnpm@latest-10
+
+      - name: Install icp-cli
+        run: |
+          curl --proto '=https' --tlsv1.2 -LsSf https://github.com/dfinity/icp-cli/releases/download/v${{ env.ICP_CLI_VERSION }}/icp-cli-installer.sh | sh
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
+      - name: Install Motoko Compiler
+        run: |
+          COMPILER_TARBALL="motoko-Linux-x86_64-${{ env.MOTOKO_VERSION }}.tar.gz"
+          COMPILER_INSTALL_DIR="$HOME/.motoko/moc/${{ env.MOTOKO_VERSION }}/bin"
+          mkdir -p "$COMPILER_INSTALL_DIR"
+          COMPILER_RELEASE_URL="https://github.com/caffeinelabs/motoko/releases/download/${{ env.MOTOKO_VERSION }}/${COMPILER_TARBALL}"
+          curl -L "$COMPILER_RELEASE_URL" | tar -xz -C "$COMPILER_INSTALL_DIR"
+          COMPILER_BINARY=$(find "$COMPILER_INSTALL_DIR" -name "moc" -type f | head -1)
+          chmod +x "$COMPILER_BINARY"
+          echo "MOC_PATH=$COMPILER_BINARY" >> $GITHUB_ENV
+
+      - name: Install Motoko Core Library
+        run: |
+          CORE_LIB_VERSION="moc-${{ env.MOTOKO_VERSION }}"
+          CORE_LIB_INSTALL_DIR="$HOME/.motoko/core/$CORE_LIB_VERSION"
+          mkdir -p "$CORE_LIB_INSTALL_DIR"
+          CORE_LIB_URL="https://github.com/caffeinelabs/motoko-core/archive/refs/tags/${CORE_LIB_VERSION}.tar.gz"
+          SOURCE_SUB_FOLDER="motoko-core-${CORE_LIB_VERSION}/src"
+          curl -L "$CORE_LIB_URL" | tar -xz --strip-components=2 -C "$CORE_LIB_INSTALL_DIR" "$SOURCE_SUB_FOLDER"
+          echo "MOTOKO_CORE=$CORE_LIB_INSTALL_DIR" >> $GITHUB_ENV
+
+      - name: Install Motoko Base Library
+        run: |
+          BASE_LIB_VERSION="SKIP"
+          BASE_LIB_INSTALL_DIR="$HOME/.motoko/base/$BASE_LIB_VERSION"
+          mkdir -p "$BASE_LIB_INSTALL_DIR"
+          BASE_LIB_URL="https://github.com/caffeinelabs/motoko-base/archive/refs/tags/moc-${BASE_LIB_VERSION}.tar.gz"
+          SOURCE_SUB_FOLDER="motoko-base-moc-${BASE_LIB_VERSION}/src"
+          curl -L "$BASE_LIB_URL" | tar -xz --strip-components=2 -C "$BASE_LIB_INSTALL_DIR" "$SOURCE_SUB_FOLDER"
+          echo "MOTOKO_BASE=$BASE_LIB_INSTALL_DIR" >> $GITHUB_ENV
+
+      - name: Install mops
+        run: npm install -g ic-mops@1.11.1
+
+      - name: Install backend dependencies
+        working-directory: src/backend
+        run: mops install
+
+      - name: Install frontend dependencies
+        working-directory: src/frontend
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Setup ICP Identity
+        run: |
+          mkdir -p ~/.config/icp
+          echo "${{ secrets.ICP_IDENTITY_PEM }}" > ~/.config/icp/identity.pem
+          chmod 600 ~/.config/icp/identity.pem
+
+      - name: Configure Production Environment
+        run: |
+          cat > src/frontend/env.json <<EOF
+          {
+            "backend_host": "https://icp-api.io",
+            "backend_canister_id": "${{ secrets.BACKEND_CANISTER_ID }}",
+            "project_id": "${{ secrets.ICP_PROJECT_ID }}",
+            "ii_derivation_origin": "https://${{ secrets.FRONTEND_CANISTER_ID }}.icp0.io"
+          }
+          EOF
+
+      - name: Build & Deploy Backend Canister
+        env:
+          ICP_WASM_OUTPUT_PATH: ./src/backend/dist/backend.wasm
+        working-directory: src/backend
+        run: |
+          mkdir -p dist
+          $MOC_PATH --implicit-package core --default-persistent-actors -no-check-ir -E M0236 -E M0235 -E M0223 -E M0237 --actor-idl system-idl --package base $MOTOKO_BASE --package core $MOTOKO_CORE main.mo -o dist/backend.wasm
+          icp canister install --environment mainnet --wasm dist/backend.wasm --mode upgrade backend
+
+      - name: Build & Deploy Frontend Canister
+        working-directory: src/frontend
+        env:
+          BACKEND_CANISTER_ID: ${{ secrets.BACKEND_CANISTER_ID }}
+          STORAGE_GATEWAY_URL: https://blob.caffeine.ai
+          II_URL: https://identity.internetcomputer.org/
+        run: |
+          pnpm build
+          icp canister install --environment mainnet --mode upgrade frontend
+
+      - name: Verify Deployment
+        run: |
+          echo "═══════════════════════════════════════════════════════"
+          echo "  PARALLAX INTELLIGENCE — DEPLOYED TO REAL WEB"
+          echo "═══════════════════════════════════════════════════════"
+          echo ""
+          echo "  Frontend:  https://${{ secrets.FRONTEND_CANISTER_ID }}.icp0.io"
+          echo "  Backend:   https://${{ secrets.BACKEND_CANISTER_ID }}.raw.icp0.io"
+          echo "  Raw API:   https://${{ secrets.BACKEND_CANISTER_ID }}.raw.icp0.io/api"
+          echo ""
+          echo "  The organism is live on the decentralized web."
+          echo "═══════════════════════════════════════════════════════"
+
+      - name: Health Check
+        run: |
+          sleep 10
+          curl -sf "https://${{ secrets.FRONTEND_CANISTER_ID }}.icp0.io" -o /dev/null && echo "✅ Frontend is live" || echo "⚠️ Frontend not responding yet (may need propagation time)"

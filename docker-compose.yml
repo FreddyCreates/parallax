@@ -1,82 +1,314 @@
-# PARALLAX Exchange Clearinghouse — One-Command Local Development
-#
-# Usage:
-#   docker compose up
-#
-# This spins up:
-#   1. Local ICP replica (dfx network)
-#   2. Backend canister deployment
-#   3. Frontend dev server
-#
-# Access:
-#   - Frontend: http://localhost:5173
-#   - ICP Replica: http://localhost:8000
-#   - Storage Gateway: http://localhost:6188
+version: "3.9"
 
 services:
-  # ─────────────────────────────────────────────────────────────────
-  # ICP Replica — Local Internet Computer network
-  # ─────────────────────────────────────────────────────────────────
-  icp-replica:
+  # ═══════════════════════════════════════════════════════════
+  # CORE SERVICES — Production Multi-Language Architecture
+  # ═══════════════════════════════════════════════════════════
+
+  # Ruby on Rails 7.2 API — Auth (JWT), repos, issues, PRs, search, webhooks, Sidekiq
+  rails-api:
     build:
-      context: .
+      context: ./services/rails-api
       dockerfile: Dockerfile
-    entrypoint: ["bash", "-c", "icp network start && sleep infinity"]
+    container_name: parralax-rails-api
+    environment:
+      - RAILS_ENV=production
+      - DATABASE_URL=mysql2://root:${MYSQL_ROOT_PASSWORD:-parralax}@mysql:3306/parralax_production
+      - REDIS_URL=redis://redis:6379
+      - KAFKA_BROKERS=kafka:9092
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-parralax_jwt_secret_change_in_prod}
+    ports:
+      - "3001:3001"
+    depends_on:
+      - mysql
+      - redis
+      - kafka
+      - elasticsearch
+    healthcheck:
+      test: ["CMD", "ruby", "-rsocket", "-e", "TCPSocket.new('127.0.0.1', 3001).close"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    networks:
+      - parralax-net
+    restart: unless-stopped
+
+  # Go + go-git — Tree, blob, commits, branches, tags, compare, merge, smart HTTP
+  git-service:
+    build:
+      context: ./services/git-service
+      dockerfile: Dockerfile
+    container_name: parralax-git-service
+    environment:
+      - GIT_SERVICE_PORT=8082
+      - GIT_REPO_BASE_PATH=/var/lib/parralax/repos
+    ports:
+      - "8082:8082"
+    volumes:
+      - git_repos:/var/lib/parralax/repos
+    networks:
+      - parralax-net
+    restart: unless-stopped
+
+  # Rust Engine — Tree-sitter parsing, LSP, CRDT real-time collaboration
+  rust-engine:
+    build:
+      context: ./services/rust-engine
+      dockerfile: Dockerfile
+    container_name: parralax-rust-engine
+    environment:
+      - RUST_LOG=info
+      - RUST_ENGINE_PORT=8083
+      - REDIS_URL=redis://redis:6379
+    ports:
+      - "8083:8083"
+    depends_on:
+      - redis
+    networks:
+      - parralax-net
+    restart: unless-stopped
+
+  # Python FastAPI — AI Intelligence Actuary Suite (LLM routing + Trading Strategies + Financial Languages)
+  ai-service:
+    build:
+      context: ./services/ai-service
+      dockerfile: Dockerfile
+    container_name: parralax-ai-intelligence-actuary-suite
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - REDIS_URL=redis://redis:6379
+      - ACTUARY_SUITE_ENABLED=true
+      - STRATEGY_ROUTER_CAPITAL=10000000
+    ports:
+      - "8084:8084"
+    depends_on:
+      - redis
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; sock = socket.create_connection(('127.0.0.1', 8084), 5); sock.close()"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+    networks:
+      - parralax-net
+    restart: unless-stopped
+
+  # Rust HFT Execution Engine (existing)
+  execution-engine:
+    build:
+      context: ./rust/execution-engine
+      dockerfile: Dockerfile
+    container_name: parralax-execution-engine
+    environment:
+      - RUST_LOG=info
+      - REDIS_URL=redis://redis:6379
+    ports:
+      - "8081:8081"
+    depends_on:
+      - redis
+      - mysql
+    healthcheck:
+      test: ["CMD", "sh", "-c", "[ -x /proc/1/exe ] && [ \"$(readlink /proc/1/exe)\" = \"/usr/local/bin/parralax-execution-engine\" ]"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+    networks:
+      - parralax-net
+    restart: unless-stopped
+
+  # Python Trading API (existing)
+  trading-api:
+    build:
+      context: ./python
+      dockerfile: Dockerfile
+    container_name: parralax-trading-api
+    environment:
+      - DATABASE_URL=mysql2://root:${MYSQL_ROOT_PASSWORD:-parralax}@mysql:3306/parralax_production
+      - REDIS_URL=redis://redis:6379
+      - ENVIRONMENT=production
     ports:
       - "8000:8000"
-      - "6188:6188"
+    depends_on:
+      - mysql
+      - redis
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v2/status"]
-      interval: 5s
+      test: ["CMD", "python", "-c", "import socket; sock = socket.create_connection(('127.0.0.1', 8000), 5); sock.close()"]
+      interval: 30s
       timeout: 10s
-      retries: 30
-      start_period: 15s
-    volumes:
-      - icp-state:/home/ubuntu/.local/share/icp
+      retries: 5
+      start_period: 20s
+    networks:
+      - parralax-net
+    restart: unless-stopped
 
-  # ─────────────────────────────────────────────────────────────────
-  # Backend — Deploy Motoko canisters to local replica
-  # ─────────────────────────────────────────────────────────────────
-  backend:
+  # React Dashboard (existing)
+  dashboard:
     build:
-      context: .
+      context: ./src/frontend
       dockerfile: Dockerfile
-    entrypoint: >
-      bash -c "
-        echo 'Waiting for ICP replica...' &&
-        until curl -sf http://icp-replica:8000/api/v2/status > /dev/null 2>&1; do
-          sleep 2
-        done &&
-        echo '✅ ICP replica ready' &&
-        icp canister create --environment local backend --network http://icp-replica:8000 &&
-        icp deploy --environment local backend --network http://icp-replica:8000 &&
-        echo '✅ Backend canister deployed' &&
-        echo \"BACKEND_CANISTER_ID=\$(icp canister settings show --environment local --id-only backend)\" &&
-        sleep infinity
-      "
-    depends_on:
-      icp-replica:
-        condition: service_healthy
-    environment:
-      - ICP_NETWORK_URL=http://icp-replica:8000
-
-  # ─────────────────────────────────────────────────────────────────
-  # Frontend — Vite dev server with hot reload
-  # ─────────────────────────────────────────────────────────────────
-  frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile.frontend
+    container_name: parralax-dashboard
     ports:
-      - "5173:5173"
+      - "3000:3000"
     depends_on:
-      backend:
-        condition: service_started
+      - trading-api
+      - rails-api
+    networks:
+      - parralax-net
+    restart: unless-stopped
+
+  # Sidekiq — Background jobs for Rails API
+  sidekiq:
+    build:
+      context: ./services/rails-api
+      dockerfile: Dockerfile
+    container_name: parralax-sidekiq
+    command: bundle exec sidekiq -C config/sidekiq.yml
     environment:
-      - VITE_ICP_URL=http://localhost:8000
+      - RAILS_ENV=production
+      - DATABASE_URL=mysql2://root:${MYSQL_ROOT_PASSWORD:-parralax}@mysql:3306/parralax_production
+      - REDIS_URL=redis://redis:6379
+      - KAFKA_BROKERS=kafka:9092
+    depends_on:
+      - mysql
+      - redis
+      - kafka
+    networks:
+      - parralax-net
+    restart: unless-stopped
+
+  # ═══════════════════════════════════════════════════════════
+  # DATA LAYER
+  # ═══════════════════════════════════════════════════════════
+
+  # MySQL 8.4 — Full migrations (users, repos, issues, PRs, orgs, teams, webhooks, SSH keys)
+  mysql:
+    image: mysql:8.4
+    container_name: parralax-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-parralax}
+      - MYSQL_DATABASE=parralax_production
+    ports:
+      - "3306:3306"
     volumes:
-      - ./src/frontend/src:/app/src
-    command: pnpm dev --host 0.0.0.0
+      - mysql_data:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4
+    networks:
+      - parralax-net
+    restart: unless-stopped
+
+  # Redis 7 — Caching + Sidekiq background jobs
+  redis:
+    image: redis:7-alpine
+    container_name: parralax-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+    networks:
+      - parralax-net
+    restart: unless-stopped
+
+  # Elasticsearch 8.13 — Code, repo, user, issue search
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.0
+    container_name: parralax-elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+    ports:
+      - "9200:9200"
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    networks:
+      - parralax-net
+    restart: unless-stopped
+
+  # Kafka (Confluent 7.6) — Event streaming (repo.created, issue.created, pr.merged)
+  kafka:
+    image: confluentinc/cp-kafka:7.6.0
+    container_name: parralax-kafka
+    environment:
+      - KAFKA_NODE_ID=1
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - KAFKA_PROCESS_ROLES=broker,controller
+      - KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka:9093
+      - KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
+      - CLUSTER_ID=parralax-kafka-cluster-001
+    ports:
+      - "9092:9092"
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    networks:
+      - parralax-net
+    restart: unless-stopped
+
+  # ═══════════════════════════════════════════════════════════
+  # OBSERVABILITY
+  # ═══════════════════════════════════════════════════════════
+
+  prometheus:
+    image: prom/prometheus:v2.53.0
+    container_name: parralax-prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --web.enable-lifecycle
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    networks:
+      - parralax-net
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:11.1.0
+    container_name: parralax-grafana
+    environment:
+      - GF_SERVER_HTTP_PORT=3030
+    ports:
+      - "3030:3030"
+    depends_on:
+      - prometheus
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - grafana_data:/var/lib/grafana
+    networks:
+      - parralax-net
+    restart: unless-stopped
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.57
+    container_name: parralax-jaeger
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    ports:
+      - "16686:16686"
+      - "4317:4317"
+      - "4318:4318"
+    networks:
+      - parralax-net
+    restart: unless-stopped
 
 volumes:
-  icp-state:
+  mysql_data:
+  redis_data:
+  es_data:
+  kafka_data:
+  git_repos:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  parralax-net:
+    driver: bridge

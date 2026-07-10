@@ -1,0 +1,124 @@
+name: Slack notifications
+
+on:
+  workflow_call:
+    inputs:
+      workflow_name:
+        required: true
+        type: string
+      run_status:
+        required: true
+        type: string
+      environment:
+        required: false
+        type: string
+        default: ci
+      summary:
+        required: false
+        type: string
+        default: No summary provided.
+      metrics:
+        required: false
+        type: string
+        default: n/a
+  workflow_dispatch:
+    inputs:
+      workflow_name:
+        description: Workflow name for a manual test notification.
+        required: true
+        type: string
+      run_status:
+        description: success or failure
+        required: true
+        type: choice
+        options: [success, failure]
+      environment:
+        description: Target environment.
+        required: false
+        default: manual
+        type: string
+      summary:
+        description: Short summary to send.
+        required: false
+        default: Manual notification test.
+        type: string
+      metrics:
+        description: Metrics payload.
+        required: false
+        default: n/a
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: notify-slack-${{ github.event.workflow_run.id || github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  notify:
+    name: Send Slack notification
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build payload
+        env:
+          WORKFLOW_NAME: ${{ inputs.workflow_name || github.event.inputs.workflow_name }}
+          RUN_STATUS: ${{ inputs.run_status || github.event.inputs.run_status }}
+          TARGET_ENVIRONMENT: ${{ inputs.environment || github.event.inputs.environment || 'ci' }}
+          SUMMARY_TEXT: ${{ inputs.summary || github.event.inputs.summary || 'No summary provided.' }}
+          METRICS_TEXT: ${{ inputs.metrics || github.event.inputs.metrics || 'n/a' }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          import os
+
+          status = os.environ['RUN_STATUS'].strip().lower()
+          color = '#2eb886' if status == 'success' else '#e01e5a'
+          icon = ':white_check_mark:' if status == 'success' else ':x:'
+          payload = {
+              'text': f"{icon} {os.environ['WORKFLOW_NAME']} {status}",
+              'attachments': [
+                  {
+                      'color': color,
+                      'blocks': [
+                          {
+                              'type': 'section',
+                              'text': {
+                                  'type': 'mrkdwn',
+                                  'text': (
+                                      f"{icon} *{os.environ['WORKFLOW_NAME']}* finished with *{status}*\n"
+                                      f"*Environment:* {os.environ['TARGET_ENVIRONMENT']}\n"
+                                      f"*Run:* <{os.environ['RUN_URL']}|Open workflow run>"
+                                  ),
+                              },
+                          },
+                          {
+                              'type': 'section',
+                              'fields': [
+                                  {'type': 'mrkdwn', 'text': f"*Summary*\n{os.environ['SUMMARY_TEXT']}"},
+                                  {'type': 'mrkdwn', 'text': f"*Metrics*\n{os.environ['METRICS_TEXT']}"},
+                              ],
+                          },
+                      ],
+                  }
+              ],
+          }
+          with open('slack-payload.json', 'w', encoding='utf-8') as handle:
+              json.dump(payload, handle)
+          PY
+
+      - name: Post to Slack
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          set -euo pipefail
+          if [ -z "${SLACK_WEBHOOK_URL:-}" ]; then
+            echo "SLACK_WEBHOOK_URL is not configured; skipping notification."
+            exit 0
+          fi
+          curl --fail --silent --show-error -X POST \
+            -H 'Content-type: application/json' \
+            --data @slack-payload.json \
+            "$SLACK_WEBHOOK_URL"

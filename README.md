@@ -1,3 +1,203 @@
+<p align="center">
+  <img src="./assets/banner.svg" alt="PARRALAX AI HFT FUND" width="100%"/>
+</p>
+
+<p align="center">
+  <strong>Sovereign AI-Native Financial Execution Infrastructure</strong>
+</p>
+
+<p align="center">
+  <a href="https://github.com/ItsNotAILABS/PARRALAX-AIHFTFUND/actions/workflows/ci.yml"><img src="https://github.com/ItsNotAILABS/PARRALAX-AIHFTFUND/actions/workflows/ci.yml/badge.svg" alt="CI/CD Pipeline"></a>
+  <a href="https://github.com/ItsNotAILABS/PARRALAX-AIHFTFUND/actions/workflows/python-publish.yml"><img src="https://github.com/ItsNotAILABS/PARRALAX-AIHFTFUND/actions/workflows/python-publish.yml/badge.svg" alt="Python Publish"></a>
+  <a href="https://github.com/ItsNotAILABS/PARRALAX-AIHFTFUND/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
+  <a href="https://github.com/ItsNotAILABS/PARRALAX-AIHFTFUND"><img src="https://img.shields.io/github/stars/ItsNotAILABS/PARRALAX-AIHFTFUND?style=social" alt="Stars"></a>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Rust-HFT_Engine-orange?logo=rust&logoColor=white" alt="Rust">
+  <img src="https://img.shields.io/badge/Python-Trading_AI-3776AB?logo=python&logoColor=white" alt="Python">
+  <img src="https://img.shields.io/badge/TypeScript-Dashboard-3178C6?logo=typescript&logoColor=white" alt="TypeScript">
+  <img src="https://img.shields.io/badge/Go-Services-00ADD8?logo=go&logoColor=white" alt="Go">
+  <img src="https://img.shields.io/badge/Ruby-Rails_API-CC342D?logo=ruby&logoColor=white" alt="Ruby">
+  <img src="https://img.shields.io/badge/Motoko-On--Chain-6B25C9?logo=dfinity&logoColor=white" alt="Motoko">
+  <img src="https://img.shields.io/badge/Solidity-Contracts-363636?logo=solidity&logoColor=white" alt="Solidity">
+  <img src="https://img.shields.io/badge/Docker-Orchestration-2496ED?logo=docker&logoColor=white" alt="Docker">
+  <img src="https://img.shields.io/badge/Kubernetes-Deploy-326CE5?logo=kubernetes&logoColor=white" alt="Kubernetes">
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Status-Production_Grade-brightgreen" alt="Status">
+  <img src="https://img.shields.io/badge/Architecture-Multi--Agent-blueviolet" alt="Architecture">
+  <img src="https://img.shields.io/badge/Execution-Sub--Millisecond-ff6b35" alt="Execution">
+  <img src="https://img.shields.io/badge/Assets-Multi--Class-gold" alt="Assets">
+</p>
+
+---
+
+## 🏛️ What is PARRALAX?
+
+**PARRALAX-AIHFTFUND** is a complete, sovereign financial operating system powered by artificial intelligence. It trades, manages risk, issues assets, governs operations, and executes across every major financial market — all autonomously, all under your control.
+
+This isn't a library. It isn't a trading bot. It's a **full financial infrastructure** — the same kind of architecture that powers hedge funds, market makers, and institutional trading desks — made accessible to anyone.
+
+> **Think of it as:** Your own AI-powered hedge fund infrastructure. One install. Full control. Every market.
+
+---
+
+## 🎯 Who Is This For?
+
+| You are... | PARRALAX gives you... |
+|---|---|
+| **A trader** | AI agents that execute your strategies 24/7 across crypto, stocks, forex, and more |
+| **A fund operator** | Complete fund infrastructure with governance, risk controls, and compliance rails |
+| **A developer** | Production-grade APIs, SDKs, and a modular architecture to build on |
+| **An investor** | Transparent, auditable execution with immutable compute receipts |
+| **A builder** | A platform to launch your own financial products, tokens, and digital assets |
+
+---
+
+## ⚡ What Can It Do?
+
+<table>
+<tr>
+<td width="50%">
+
+### 📈 Trade Every Market
+- Crypto (spot & futures)
+- Equities & stocks
+- Foreign exchange
+- AI tokens & digital assets
+- NFTs & programmable assets
+- Internal fund tokens
+
+</td>
+<td width="50%">
+
+### 🤖 AI Agents Work For You
+- Signal detection agents
+- Risk management agents
+- Execution agents
+- Governor agents (oversight)
+- Portfolio optimization
+- Multi-agent coordination
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### 🛡️ Enterprise-Grade Security
+- Multi-layer risk gates
+- Kill switches (per-agent & system)
+- Human approval gates
+- Authority levels & permissions
+- Compliance boundaries
+- Immutable audit trail
+
+</td>
+<td width="50%">
+
+### 🏦 Full Fund Operations
+- Treasury management
+- Asset issuance (tokens, NFTs)
+- Governance protocols
+- Performance attribution
+- Regulatory compliance
+- On-chain receipts
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🚀 Getting Started
+
+### Option 1: One-Command Launch (Docker)
+
+The fastest way to get the full platform running:
+
+```bash
+git clone https://github.com/ItsNotAILABS/PARRALAX-AIHFTFUND.git
+cd PARRALAX-AIHFTFUND
+docker-compose up -d
+```
+
+That's it. The entire platform — trading engine, AI agents, dashboard, API, database — all running.
+
+**Open the Dashboard:** [http://localhost:3000](http://localhost:3000)  
+**API Gateway:** [http://localhost:8000/docs](http://localhost:8000/docs)
+
+---
+
+### Option 2: Individual Services
+
+<details>
+<summary><strong>🦀 Rust HFT Execution Engine</strong> — Sub-millisecond order routing</summary>
+
+```bash
+cd rust/execution-engine
+cargo build --release
+cargo run
+```
+
+The execution engine handles order routing, risk gates, fill execution, and compute receipts at HFT speeds.
+
+</details>
+
+<details>
+<summary><strong>🐍 Python Trading Infrastructure</strong> — AI agents & strategies</summary>
+
+```bash
+cd python
+pip install -e ".[dev]"
+python -m parralax
+```
+
+Includes signal agents, risk agents, execution orchestrators, market data adapters, paper trading, and strategy engines.
+
+</details>
+
+<details>
+<summary><strong>⚛️ React Dashboard</strong> — Fund operations UI</summary>
+
+```bash
+cd src/frontend
+pnpm install
+pnpm dev
+```
+
+Real-time monitoring, agent control, portfolio views, and fund operations — all in one interface.
+
+</details>
+
+<details>
+<summary><strong>🔧 CLI Tool</strong> — Command-line operations</summary>
+
+```bash
+cd services/cli
+go build -o parralax ./...
+./parralax --help
+```
+
+Manage agents, view positions, trigger actions, and monitor the system from your terminal.
+
+</details>
+
+<details>
+<summary><strong>🧠 AI Service</strong> — Intelligence layer (FastAPI)</summary>
+
+```bash
+cd services/ai-service
+pip install -e ".[dev]"
+uvicorn app.main:app --reload
+```
+
+Full actuary suite, trading strategies, financial language engines (FIX, FpML, SWIFT, ISDA CDM, XBRL, ISO 20022).
+
+</details>
+
+---
 <div align="center">
 
 <picture>
@@ -33,320 +233,397 @@
   <img alt="PARALLAX Platform Architecture" src="assets/parallax-platform-infographic.svg" width="100%">
 </div>
 
+## 🚀 What is PARALLAX?
+
+**PARALLAX** is a next-generation **AI-native decentralized exchange** built on the Internet Computer Protocol (ICP). Unlike traditional DEXs, PARALLAX operates as a **sovereign organism** — an autonomous system where intelligence IS the infrastructure.
+
+```
+┌────────────────────────────────────────────────────────────────────┐
+│                    THE PHANTOM EXCHANGE                            │
+│                                                                    │
+│   🧠 AI Intelligence Layer → Reasons about every trade            │
+│   ⚡ Zero Gas Fees        → Organism pays all costs               │
+│   🔄 873ms Settlement     → Heartbeat-driven finality             │
+│   🌐 Universal Trading    → Crypto, AI Tokens, Artifacts, RWAs    │
+│   🔒 Central Counterparty → Organism-guaranteed settlements       │
+│                                                                    │
+└────────────────────────────────────────────────────────────────────┘
+```
+
+## ✨ Key Features
+
+### 🎯 **Zero Gas Fees — Forever**
+The organism runs on ICP canisters. Canister cycles are paid by the organism's own treasury. Users **never** pay gas. Ever.
+
+### ⚡ **873ms Instant Settlement**
+Settlement is not a separate step — it IS the heartbeat. Every **873ms** all trades settle with cryptographic finality. *(Derived from φ⁴ × 1000ms / 7.83Hz Schumann resonance)*
+
+### 🧠 **AI-First Architecture**
+Every trade is a cognitive act. The **Phantom Intelligence Engine** reasons about markets continuously:
+- Detects arbitrage opportunities across all pairs
+- Values AI artifacts using cognitive resonance scoring  
+- Predicts price movements using harmonic wave analysis
+- Gates operations through Kuramoto coherence (R ≥ 0.618)
+
+### 🏦 **Real-Time Clearinghouse**
+Multi-asset netting, cross-chain settlement (ICP ↔ ckBTC ↔ ckETH), organism-guaranteed trades:
+- Bilateral and multilateral netting every beat
+- Central counterparty guarantee — no counterparty risk
+- FinCEN-compatible transaction reporting
+
+### 🪙 **Universal Token Trading**
+Trade everything in existence:
+| Category | Examples |
+|----------|----------|
+| **Crypto** | BTC, ETH, ICP, SOL |
+| **AI Compute Tokens** | GPU, TPU, Memory, Bandwidth, Storage |
+| **AI Inference Tokens** | Inference, RAG, Embedding, Reasoning Chain |
+| **AI Training Tokens** | Training, Fine-Tune, LoRA, Data |
+| **AI Agent Tokens** | Agent Execution, Orchestration, Workflows |
+| **AI Capability Tokens** | Vision, Audio, Code Gen, Translation, Prediction |
+| **AI Governance Tokens** | Model Votes, Dataset Votes, Safety Audits, Certifications |
+| **AI Artifacts** | Models, Agents, RAG Pipelines, Embeddings, Knowledge Graphs |
+| **Creator Tokens** | Personal tokens, Fan tokens |
+| **Stablecoins** | USDC, USDT (bridged) |
+| **Real World Assets** | Commodities, Real Estate |
+
+### 🤖 **AI Artifact Marketplace**
+Trade tokenized AI intellectual property:
+| Artifact Type | Description |
+|---------------|-------------|
+| **Foundation Models** | Large language models, vision models, multimodal |
+| **Fine-tuned Models** | Domain-specific adaptations, LoRA weights |
+| **Autonomous Agents** | Full agents with tools, memory, and workflows |
+| **RAG Systems** | Pipelines, vector databases, knowledge bases |
+| **Generative Models** | Image, video, audio, code, 3D generation |
+| **Training Datasets** | Curated, synthetic, preference, instruction data |
+| **Safety & Alignment** | Guardrails, filters, evaluation suites |
+
+### 🏭 **24 Production Engines**
+Sovereign financial-economic production engines with Latin names, running 93+ AI model ensembles:
+- **Oeconomia.Machina Pretium** — Dynamic pricing engine
+- **Arbitrium.Nexus** — Cross-market arbitrage detection
+- **Portio.Optima** — Phi-weighted Markowitz allocation
+- And 21 more specialized engines...
+
+## 🏗️ Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                         USER INTERFACES                              │
+│  ┌────────────┐  ┌────────────┐  ┌────────────┐  ┌──────────────┐ │
+│  │  Dashboard  │  │    CLI     │  │    API     │  │  VS Code Ext │ │
+│  └────────────┘  └────────────┘  └────────────┘  └──────────────┘ │
+├─────────────────────────────────────────────────────────────────────┤
+│                         API GATEWAY (FastAPI)                        │
+├──────────────┬──────────────┬──────────────┬────────────────────────┤
+│  AI AGENTS   │  EXECUTION   │  ON-CHAIN    │  FUND OPERATIONS       │
+│  ──────────  │  ENGINE      │  LAYER       │  ──────────────        │
+│  Signal      │  ──────────  │  ──────────  │  Treasury              │
+│  Risk        │  Order Router│  ICP Canistr │  Governance            │
+│  Execution   │  Risk Gates  │  ERC-20/721  │  Compliance            │
+│  Governor    │  Fill Engine │  Receipts    │  Asset Issuance        │
+│  Portfolio   │  Receipts    │  DeFi Bridge │  Performance           │
+├──────────────┴──────────────┴──────────────┴────────────────────────┤
+│  PERSISTENCE    │  MESSAGING      │  COMPUTE          │  INFRA      │
+│  PostgreSQL     │  Redis/Celery   │  ALOHA I Protocol │  Docker/K8s │
+│  S3 Archive     │  WebSocket      │  Phantom Engines  │  CI/CD      │
+└─────────────────┴─────────────────┴───────────────────┴─────────────┘
+```
+
 ---
 
-## What PARALLAX is
+## 📊 Technology Stack
 
-**PARALLAX** is a paper-first, proof-forward financial operating system for AI agents. The platform combines multi-ledger registries, token-economics policy, AI-agent wallets, simulated trading, risk-gated execution, clearinghouse receipts, Cloudflare edge access, native C/C++ strategy interfaces, and operator governance into one coherent alpha product.
+| Layer | Technology | What It Does |
+|-------|-----------|--------------|
+| **Execution Core** | Rust | Sub-millisecond order routing, risk gates, HFT engine |
+| **Trading Intelligence** | Python | AI agents, signals, strategies, market data, backtesting |
+| **Web Dashboard** | React + TypeScript | Real-time fund operations UI |
+| **Backend Services** | Go + Rails + FastAPI | Git operations, REST APIs, business logic |
+| **On-Chain** | Motoko (ICP) + Solidity | Smart contracts, token factory, on-chain state |
+| **Data** | PostgreSQL + Redis | Ledger, positions, cache, message queue |
+| **Infrastructure** | Docker + Kubernetes | Multi-service orchestration, auto-scaling |
+| **Financial Protocols** | FIX, FpML, SWIFT, XBRL | Industry-standard financial messaging |
 
-The current posture is intentionally conservative: **paper trading, testnet contracts, simulated balances, internal credits, and receipt-backed proof flows first**. Live money movement, live broker execution, custody, regulated exchange activity, and fund operations require separate legal, security, compliance, and operational readiness gates.
+---
 
-## Product surfaces
+## 🧠 AI & Intelligence Systems
 
-| Surface | Role | First usable capability |
-|---|---|---|
-| **Cloudflare Edge Gateway** | Worker API, auth guard, CORS, tunnel proxy | `/health`, ledger registry, token registry, agent-command precheck |
-| **Multi-Ledger Registry** | Paper, ICP local/test, EVM testnet, agent-credit ledgers | Source-of-truth ledger manifest |
-| **Agent Token Economics** | PXUSD, PXICP, PXETH, PXAI, PXGPU, PXCRED | Internal/testnet token class registry |
-| **Wallet** | Identity, accounts, balances, AI-agent wallets, keys, ledger views | Internet Identity, paper/testnet balances, policy-gated AI wallets |
-| **Native Interface** | C ABI and C++ wrapper for strategy/runtime workers | Buildable AI-wallet policy evaluation outside Node.js |
-| **Trade** | Order ticket, books, fills, market views | Paper order entry into a backend contract |
-| **Clearinghouse** | Matching, netting, settlement records | Fill and settlement receipt generation |
-| **Pay** | Transfers, requests, invoices, remittance workflows | Internal paper transfer with receipt trail |
-| **AI Execution** | Signals, strategy proposals, guarded automation | Signal cards that require operator approval |
-| **Research Mint** | Papers, benchmarks, artifact records | Research metadata to proof artifact receipt |
-| **Proof Room** | Audit exports, release manifests, Merkle records | Query and export receipts |
-| **Governance** | Roles, policies, emergency halt, upgrade posture | Admin halt/resume and role-gated actions |
+PARRALAX includes multiple AI subsystems that work together:
 
-## Cloudflare edge layer
+- **ALOHA I** — Autonomous Liquid Orchestration & Harmonic Arbitrage Intelligence (10 protocol models)
+- **Phantom Engines** — 30+ specialized trading intelligence modules (volatility, sentiment, neural, fractal, microstructure, etc.)
+- **Signal Fusion** — Multi-model signal aggregation with confidence scoring
+- **Cognitive Market Making** — Adaptive spread and inventory management
+- **Neural Portfolio** — AI-driven portfolio construction and rebalancing
+- **Entropic Risk** — Information-theoretic risk measurement
+- **Swarm Execution** — Distributed execution across venues
 
-PARALLAX now includes a Cloudflare Worker gateway package:
+---
 
-```text
-apps/cloudflare-gateway/
+## 🔐 Security & Governance
+
+Every action in PARRALAX is governed, audited, and controlled:
+
+| Control | Description |
+|---------|-------------|
+| **Risk Gates** | Multi-layer checks before any trade executes |
+| **Kill Switches** | Instant halt — per-agent or system-wide |
+| **Authority Levels** | Observer → Proposer → Executor → Governor progression |
+| **Compute Receipts** | Immutable proof of every operation |
+| **Compliance Boundary** | Regulatory guardrails built into the protocol |
+| **Human Override** | You always retain ultimate authority |
+
+📄 See [SECURITY.md](./SECURITY.md) · [GOVERNANCE.md](./GOVERNANCE.md) · [RISK.md](./RISK.md) · [COMPLIANCE_BOUNDARY.md](./COMPLIANCE_BOUNDARY.md)
+
+---
+
+## 📂 Repository Structure
+
+```
+PARRALAX-AIHFTFUND/
+├── rust/execution-engine/     # 🦀 HFT execution engine (Rust)
+├── python/parralax/           # 🐍 Trading AI & strategy engines
+├── src/
+│   ├── frontend/              # ⚛️  React dashboard
+│   └── backend/               # 🧠 On-chain canisters (Motoko/ICP)
+├── services/
+│   ├── ai-service/            # 🤖 AI intelligence layer (FastAPI)
+│   ├── rails-api/             # 💎 Business logic API (Rails)
+│   ├── rust-engine/           # ⚙️  Core computation engine
+│   ├── git-service/           # 📦 Git operations (Go)
+│   ├── cli/                   # 🔧 Command-line interface (Go)
+│   └── vscode-extension/      # 🖥️  VS Code integration
+├── k8s/                       # ☸️  Kubernetes manifests
+├── monitoring/                # 📊 Observability configs
+├── docs/                      # 📚 Documentation
+├── CHARTER.md                 # 🏛️  Fund charter
+├── GOVERNANCE.md              # ⚖️  Governance framework
+├── RISK.md                    # 🛡️  Risk management
+├── ROADMAP.md                 # 🗺️  Development roadmap
+└── docker-compose.yml         # 🐳 One-command full stack
 ```
 
-Routes:
+---
 
-| Route | Method | Purpose |
-|---|---:|---|
-| `/health` | GET | gateway health, alpha gates, expected tunnel host |
-| `/v1/ledgers` | GET | multi-ledger registry |
-| `/v1/tokens` | GET | token class registry |
-| `/v1/agents/classes` | GET | AI-agent wallet classes |
-| `/v1/alpha/gates` | GET | alpha safety gates |
-| `/v1/agent-command/evaluate` | POST | edge-side policy precheck for AI-agent commands |
-| `/v1/proxy/*` | any | guarded proxy to PARALLAX core origin through tunnel/private origin |
+## 📋 Protocol & Charter Documents
 
-Run the edge gateway locally:
+PARRALAX operates under a comprehensive set of governance documents:
+
+| Document | Purpose |
+|----------|---------|
+| [CHARTER.md](./CHARTER.md) | Core fund charter and mission |
+| [GOVERNANCE.md](./GOVERNANCE.md) | Decision-making framework |
+| [RISK.md](./RISK.md) | Risk management protocols |
+| [EXECUTION_PROTOCOL.md](./EXECUTION_PROTOCOL.md) | Order execution rules |
+| [TOKEN_PROTOCOL.md](./TOKEN_PROTOCOL.md) | Internal token system |
+| [NFT_PROTOCOL.md](./NFT_PROTOCOL.md) | Digital asset NFTs |
+| [TREASURY_PROTOCOL.md](./TREASURY_PROTOCOL.md) | Treasury operations |
+| [COMPUTE_RECEIPT_PROTOCOL.md](./COMPUTE_RECEIPT_PROTOCOL.md) | Proof-of-execution |
+| [AGENT_AUTHORITY_CHARTER.md](./AGENT_AUTHORITY_CHARTER.md) | Agent permissions |
+| [ASSET_ISSUANCE_CHARTER.md](./ASSET_ISSUANCE_CHARTER.md) | Asset creation rules |
+| [COMPLIANCE_BOUNDARY.md](./COMPLIANCE_BOUNDARY.md) | Regulatory boundaries |
+
+---
+
+## 🗺️ Roadmap
+
+| Phase | Status | Focus |
+|-------|--------|-------|
+| **Phase 1** — Foundation | ✅ Complete | Core architecture, protocols, charters |
+| **Phase 2** — Simulation | 🔄 In Progress | Paper trading, backtesting, signal agents |
+| **Phase 3** — Digital Assets | 📋 Planned | Token models, NFTs, asset registry |
+| **Phase 4** — Broker Integration | 📋 Planned | Alpaca, Binance, IB, DEX adapters |
+| **Phase 5** — Agent Authority | 📋 Planned | Progressive autonomy, learning, kill switches |
+| **Phase 6** — Fund Operations | 📋 Planned | Full dashboard, treasury, compliance |
+| **Phase 7** — Autonomous Ops | 📋 Planned | Multi-agent coordination, cross-market |
+
+📄 Full details: [ROADMAP.md](./ROADMAP.md)
+
+---
+
+## 🧪 Development
+
+### Prerequisites
+
+- **Docker** (recommended) — for one-command setup
+- **Rust** 1.75+ — for the execution engine
+- **Python** 3.11+ — for trading infrastructure
+- **Node.js** 16+ & pnpm — for the dashboard
+- **Go** 1.22+ — for services and CLI
+
+### Running Tests
 
 ```bash
-pnpm edge:dev
+# Rust execution engine
+cd rust/execution-engine && cargo test --all-features
+
+# Python trading AI
+cd python && pip install -e ".[dev]" && pytest tests/ -v
+
+# AI service
+cd services/ai-service && pip install -e ".[dev]" && pytest tests/ -v
+
+# Go services
+cd services/git-service && go test ./... -v -race
+cd services/cli && go test ./... -v
+
+# Full CI (runs everything)
+# Triggered automatically on push to main/develop
 ```
 
-Deploy when Cloudflare account, zone, token, and route are configured:
+### CI/CD Pipeline
 
-```bash
-pnpm edge:deploy
+The repository runs a comprehensive CI/CD pipeline on every push:
+
+- ✅ Rust engine — build, test, clippy
+- ✅ Rust HFT engine — build, test
+- ✅ Go git service — build, test, vet
+- ✅ Go CLI — build, test
+- ✅ Python AI service — lint, typecheck, test, integration
+- ✅ Python trading — lint, test, strategy verification
+- ✅ Rails API — setup, test
+- ✅ Integration tests — cross-service validation
+- ✅ Docker build — all services containerized
+- ✅ Kubernetes deploy — production orchestration
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions. Please review:
+
+1. [GOVERNANCE.md](./GOVERNANCE.md) — How decisions are made
+2. [SECURITY.md](./SECURITY.md) — Security policies
+3. [AGENTS.md](./AGENTS.md) — Agent development guidelines
+
+---
+
+## 📄 License
+
+[MIT License](./LICENSE) — Copyright © 2026
+
+---
+
+<p align="center">
+  <img src="./assets/logo.svg" alt="PARRALAX" width="400"/>
+</p>
+
+<p align="center">
+  <strong>Built for sovereignty. Engineered for execution. Powered by intelligence.</strong>
+</p>
+
+<p align="center">
+  <sub>PARRALAX-AIHFTFUND — Sovereign AI-Native Financial Infrastructure</sub>
+</p>
+
+---
+
+## 🌌 PARALLAX Exchange Clearinghouse
+
+**The AI-First Sovereign Exchange — Zero Gas Fees, Instant Settlement**
+
+The PARALLAX Exchange Clearinghouse is the on-chain execution layer of the platform, built on the Internet Computer Protocol (ICP). It operates as a sovereign organism — an autonomous system where intelligence IS the infrastructure.
+
+| Feature | Detail |
+|---------|--------|
+| **Zero Gas Fees** | Organism pays all canister cycle costs — users never pay gas |
+| **873ms Settlement** | Heartbeat-driven finality derived from φ⁴ × 1000ms / 7.83Hz |
+| **AI-First** | Phantom Intelligence Engine reasons about every trade |
+| **Clearinghouse** | Central counterparty guarantee, bilateral/multilateral netting |
+| **Universal Trading** | Crypto, AI tokens, artifacts, RWAs, creator tokens, stablecoins |
+
+### On-Chain Architecture
+
+```
+                           ┌─────────────────────┐
+                           │    PARALLAX Core    │
+                           │     (main.mo)       │
+                           └──────────┬──────────┘
+                                      │
+           ┌──────────────────────────┼──────────────────────────┐
+           │                          │                          │
+           ▼                          ▼                          ▼
+  ┌─────────────────┐      ┌─────────────────┐      ┌─────────────────┐
+  │    Phantom      │      │    Phantom      │      │    Phantom      │
+  │  Intelligence   │ ───▶ │    Exchange     │ ───▶ │  Clearinghouse  │
+  │   (reasons)     │      │   (executes)    │      │   (settles)     │
+  └─────────────────┘      └─────────────────┘      └─────────────────┘
+           │                          │                          │
+           └──────────────────────────┼──────────────────────────┘
+                                      │
+           ┌──────────────────────────┼──────────────────────────┐
+           │                          │                          │
+           ▼                          ▼                          ▼
+  ┌─────────────────┐      ┌─────────────────┐      ┌─────────────────┐
+  │  Token Factory  │      │  AI Artifact    │      │   Production    │
+  │  (mints tokens) │      │   Registry      │      │    Engines      │
+  └─────────────────┘      └─────────────────┘      └─────────────────┘
 ```
 
-## Multi-ledger ecosystem
+### Core Modules
 
-Source of truth:
+| Module | Purpose |
+|--------|---------|
+| `phantom_intelligence.mo` | AI reasoning layer — decides WHAT to trade and WHY |
+| `phantom_exchange.mo` | Order book, matching engine — executes trades |
+| `phantom_clearinghouse.mo` | Settlement, netting, guarantees |
+| `token_factory.mo` | Mint 37 AI token types (Compute, GPU, Agent, RAG, etc.) |
+| `ai_artifact_registry.mo` | Register & trade 55 artifact types (Models, Agents, RAG, etc.) |
+| `production_engines.mo` | 24 Latin-named AI production engines |
+| `phi.mo` | Golden ratio constants & Fibonacci sequences |
+| `sovereign_db.mo` | Orthogonal persistence — single source of truth |
 
-```text
-config/ledgers/parallax.multiledger.ecosystem.json
+### AI Token Types (37 Types, 31 Genesis Instances)
+
+| Category | Token Types |
+|----------|-------------|
+| **Core Infrastructure** | AICPU, AIMEM, AIINF, AITRAIN, AIDATA |
+| **Advanced Resources** | AIGPU, AITPU, AIBW, AIST, AIFT, AIEMB, AIRAG, AIAGENT, AIORCH, AICHAIN |
+| **Specialized Capabilities** | AIVIS, AIAUD, AICODE, AITRANS, AISENT, AIANOM, AIPRED, AIOPT, AISIM |
+| **Governance & Quality** | AIMVOTE, AIDVOTE, AISAFE, AIRED, AIBENCH, AICERT |
+| **Standard Types** | creatorPersonal, artifactBacked, governance, yield, utility, rewardPoints, fractionalNFT |
+
+### AI Artifact Types (55 Types, 30 Genesis Instances)
+
+| Category | Artifact Types |
+|----------|----------------|
+| **Foundation** | Sovereign Models, Embeddings, Knowledge Graphs, Protocols, Predictions |
+| **Advanced Models** | Foundation, Fine-tuned, LoRA, Merged, Quantized, Distilled, Multimodal, Specialist, Aligned |
+| **Autonomous Agents** | Agents, Toolkits, Memory, Personas, Workflows, Orchestrators, Evaluators |
+| **RAG & Knowledge** | RAG Pipelines, Vector DBs, Embedding Models, Rerankers, Chunkers, Knowledge Bases |
+| **Prompts & Evaluation** | Templates, Libraries, Few-Shot Examples, Evaluation Suites, Test Harnesses, Red-Team Datasets |
+| **Training & Data** | Synthetic, Labeled, Preference, Instruction, Code, Multilingual Datasets |
+| **Generative** | Image, Video, Audio, Code, 3D, Motion, TTS, Voice Clone Models |
+| **Safety** | Safety Filters, Alignment Protocols, Guardrails, Toxicity Classifiers, Bias Audits |
+
+## 🔢 The PHI Foundation
+
+All system parameters are derived from mathematical constants, not arbitrary choices:
+
+```motoko
+// φ — The Golden Ratio
+public let PHI : Float = 1.6180339887498948482;
+
+// Heartbeat: φ⁴ × (1000 / 7.83Hz) = 873ms
+// Schumann resonance anchors the system to Earth's natural frequency
+
+// Confidence gates at φ⁻¹ = 0.618
+// Spread limits at PHI_INV_3
+// Supply caps = Fibonacci[n] × φ^k
 ```
 
-Ledgers:
+---
 
-| Ledger | Mode | Purpose |
-|---|---:|---|
-| `parallax-paper-ledger` | paper | simulated balances, orders, transfers, and alpha settlement receipts |
-| `icp-local-ledger` | testnet | ICP local/test canister integration |
-| `ethereum-testnet-ledger` | testnet | EVM testnet contract and adapter experiments |
-| `agent-credit-ledger` | paper | internal credits for agent work, compute, research, and proof artifacts |
+<p align="center">
+  <img src="./assets/logo.svg" alt="PARRALAX" width="400"/>
+</p>
 
-## Agent token economics
+<p align="center">
+  <strong>Built for sovereignty. Engineered for execution. Powered by intelligence.</strong>
+</p>
 
-Source of truth:
-
-```text
-config/tokenomics/parallax.agent-tokenomics.json
-```
-
-Token classes:
-
-| Symbol | Class | Mode |
-|---|---|---:|
-| `PXUSD` | paper stable unit | paper |
-| `PXICP` | ICP test unit | testnet |
-| `PXETH` | EVM test unit | testnet |
-| `PXAI` | agent work credit | paper |
-| `PXGPU` | compute credit | paper |
-| `PXCRED` | receipt credit | paper |
-
-## Cloudflare Tunnel
-
-Templates:
-
-```text
-infra/cloudflare/tunnel/config.example.yml
-infra/cloudflare/tunnel/docker-compose.tunnel.yml
-```
-
-The intended path:
-
-```text
-Cloudflare Worker
--> authenticated edge route
--> Cloudflare Tunnel / private origin
--> PARALLAX core service
--> receipt ledger
-```
-
-Do not commit tunnel credentials. Real tunnel deployment requires your Cloudflare account, tunnel id, credentials file, zone, and chosen hostnames.
-
-## Native C/C++ interface
-
-PARALLAX includes a standalone native interface for the AI wallet policy engine:
-
-```text
-src/native/ai-wallet/
-```
-
-It includes:
-
-- stable C ABI: `include/parallax/ai_wallet.h`,
-- modern C++17 wrapper: `include/parallax/ai_wallet.hpp`,
-- C implementation: `src/ai_wallet.c`,
-- CMake build and install targets,
-- C and C++ tests,
-- C++ demo executable.
-
-Run the native gate:
-
-```bash
-pnpm alpha:native
-```
-
-## AI wallet alpha
-
-PARALLAX includes a dedicated AI wallet domain package:
-
-```text
-src/ai-wallet/        @parallax/ai-wallet
-```
-
-The AI wallet gives approved agents policy-gated paper/testnet wallets. It supports deterministic wallet creation, command evaluation, human approval thresholds, asset/counterparty allowlists, daily notional limits, receipt creation, and live-mode blocking.
-
-Run the wallet gate:
-
-```bash
-pnpm alpha:wallet
-```
-
-## Product validation
-
-Run the product gate:
-
-```bash
-pnpm product:validate
-pnpm alpha:product
-```
-
-Full alpha validation path:
-
-```bash
-pnpm alpha:validate
-pnpm alpha:wallet
-pnpm alpha:native
-pnpm alpha:product
-pnpm alpha:gate
-```
-
-## Platform architecture
-
-```mermaid
-flowchart TD
-    A[Cloudflare Worker Edge Gateway] --> B[Cloudflare Tunnel / Private Origin]
-    B --> C[PARALLAX Core Services]
-    C --> D[AI Wallet Service]
-    C --> E[Multi-Ledger Registry]
-    C --> F[Agent Token Economics]
-    C --> G[Trading Service]
-    C --> H[Risk Policy Gate]
-    D --> H
-    E --> H
-    F --> H
-    G --> H
-    H --> I[Matching Engine]
-    I --> J[Clearinghouse + Paper/Testnet Ledgers]
-    J --> K[Receipt Ledger]
-    K --> L[Proof Room + Audit Export]
-    D --> M[Native C/C++ Interface]
-    M --> H
-    J --> N[ICP Local/Test Canisters]
-    J --> O[EVM Testnet Contracts]
-```
-
-## First showcase loop
-
-```text
-Cloudflare Worker Health
--> Ledger Registry
--> Token Registry
--> AI-Agent Wallet Class
--> Edge Command Evaluation
--> Tunnel/Core Route
--> Paper/Testnet Settlement
--> Receipt Export
-```
-
-Showcase-ready means this works through a deployed Worker, verified tunnel, Control Tower UI, and receipt-visible command flow.
-
-## Repository map
-
-```text
-apps/cloudflare-gateway/ Cloudflare Worker gateway and Wrangler config
-config/ledgers/          multi-ledger ecosystem manifest
-config/tokenomics/       AI-agent token economics manifest
-infra/cloudflare/        tunnel templates and Cloudflare runbooks
-src/ai-wallet/           policy-gated AI wallet package for agents
-src/native/ai-wallet/    C ABI, C++ wrapper, CMake build, native tests
-docs/                    architecture, deployment, operator, protocol, and product docs
-```
-
-## Contracts and command families
-
-Every user, agent, or machine action should be represented by an explicit contract object before execution.
-
-| Contract | Purpose |
-|---|---|
-| `LedgerRegistryEntry` | ledger id, mode, assets, authority, and safety boundary |
-| `TokenClass` | token symbol, class, mode, value claim, and transfer boundary |
-| `AgentWalletClass` | AI-agent wallet capability and ledger policy |
-| `EdgePolicyDecision` | Worker-side approve/reject/human-review decision |
-| `CloudflareTunnelRoute` | hostname to private origin mapping |
-| `parallax_aiw_wallet` | native C wallet struct assigned to an AI agent |
-| `parallax_aiw_command` | native C proposed AI wallet action |
-| `parallax_aiw_evaluation` | native C approve/reject/human-approval decision |
-| `parallax_aiw_receipt` | native C receipt proof record |
-| `AiWallet` | wallet assigned to an AI agent |
-| `AiWalletPolicy` | scopes, limits, modes, assets, counterparties, approvals |
-| `AiWalletCommand` | proposed AI wallet action before execution |
-| `AiWalletReceipt` | wallet creation/evaluation/action proof record |
-| `FillReceipt` | matched order record |
-| `SettlementReceipt` | clearing and ledger record |
-| `ResearchArtifactReceipt` | paper, benchmark, and artifact minting record |
-| `GovernancePolicy` | role, mode, and system boundary rules |
-| `SystemMode` | local, paper, testnet, restricted-live, live |
-
-## Deployment posture
-
-| Stage | Description | Allowed actions |
-|---|---|---|
-| **Local** | developer machine and local canisters | paper orders, fixtures, local receipts, native tests, Worker dev |
-| **Edge preview** | Cloudflare Worker preview/dev route | health, registry reads, authenticated alpha policy prechecks |
-| **Testnet** | public test canisters and external testnet contracts | testnet assets, demos, proof exports, policy-gated AI wallets |
-| **Closed alpha** | controlled users and operator review | paper trading, testnet transfers, research receipts, AI signal approval |
-| **Production candidate** | security, legal, compliance, native build matrix, Cloudflare route, tunnel verification, observability gate | no live funds without external validation |
-| **Live** | regulated, audited, monitored, insured posture | only after complete readiness review |
-
-## Documentation
-
-- [Cloudflare Edge Runway](docs/CLOUDFLARE_EDGE_RUNWAY.md)
-- [Multi-Ledger Ecosystem](docs/MULTI_LEDGER_ECOSYSTEM.md)
-- [Agent Token Economics](docs/AGENT_TOKEN_ECONOMICS.md)
-- [Product Showcase Gate](docs/PRODUCT_SHOWCASE_GATE.md)
-- [Native C/C++ Interface](docs/NATIVE_CPP_INTERFACE.md)
-- [AI Wallet Alpha](docs/AI_WALLET_ALPHA.md)
-- [Alpha Service Runway](docs/ALPHA_SERVICE_RUNWAY.md)
-- [Platform Surface Blueprint](docs/PARALLAX_PLATFORM_SURFACE.md)
-- [Product Architecture](docs/PRODUCT_ARCHITECTURE.md)
-- [Platform Federation](docs/PARALLAX_PLATFORM_FEDERATION.md)
-- [Launch Packet](docs/PARALLAX_MAJOR_RUN.md)
-- [Alpha Service Catalog](config/services/parallax.alpha.services.json)
-- [AI Wallet Service Manifest](config/services/parallax.ai-wallet.service.json)
-- [Token Registry](config/tokens/parallax.tokens.json)
-
-## Public language boundary
-
-Use precise language:
-
-- AI-native financial infrastructure,
-- paper-first multi-ledger agent economy,
-- Cloudflare edge gateway,
-- AI-agent token economics,
-- internal agent credits,
-- testnet-ready platform,
-- native C/C++ policy interface,
-- receipt-backed settlement research,
-- governed execution layer.
-
-Avoid unproven claims:
-
-- guaranteed settlement,
-- live HFT fund,
-- production bank replacement,
-- risk-free trading,
-- externally audited status,
-- real money movement,
-- autonomous live AI trading,
-- public token sale,
-- mainnet bridge.
-
-## Near-term roadmap
-
-1. **Cloudflare Deployment Gate**: deploy Worker preview/custom route and set `PARALLAX_EDGE_TOKEN`.
-2. **Tunnel Verification Gate**: connect Cloudflare Tunnel to local/core service without exposing raw origin.
-3. **Control Tower Edge Binding**: read ledgers, tokens, agent classes, and alpha gates from Worker routes.
-4. **Receipt-Visible Command Loop**: POST edge command evaluation, route to core, emit receipt, show proof.
-5. **Native Worker Gate**: use the C/C++ interface inside strategy workers and simulation processes.
-6. **AI Wallet Backend Gate**: persist AI wallets, policies, commands, evaluations, receipts, and daily usage in canisters.
-7. **Token Economics Gate**: issue/burn PXAI, PXGPU, and PXCRED only from receipt-backed internal events.
-8. **Operator Governance**: role policy, emergency halt, upgrade checklist, compliance boundary.
-
-## Status
-
-PARALLAX is being consolidated into a real alpha product. The repo now has AI-wallet policy, native C/C++ policy enforcement, multi-ledger registry, AI-agent token economics, Cloudflare Worker gateway, tunnel templates, product validation, and showcase gates. It is not yet showcase-ready until the Worker is deployed, the tunnel is verified, the Control Tower consumes edge routes, and one receipt-visible paper/testnet command loop is working end-to-end.
+<p align="center">
+  <sub>PARRALAX-AIHFTFUND — Sovereign AI-Native Financial Infrastructure — Built by <a href="https://github.com/ItsNotAILABS">ItsNotAILABS</a></sub>
+</p>

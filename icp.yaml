@@ -4,10 +4,9 @@
 canisters:
   - src/frontend
   - src/backend
-  - src/alpha_conductor
-  - src/alpha_orchestrator
-  - src/brain
-  - src/chrono
-  - src/flux
-  - src/resonex
-  - src/veritas
+
+environments:
+  local:
+    network: local
+  mainnet:
+    network: ic
