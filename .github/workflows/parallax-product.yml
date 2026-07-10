@@ -1,0 +1,46 @@
+name: PARALLAX Product Gate
+
+on:
+  pull_request:
+    paths:
+      - 'apps/cloudflare-gateway/**'
+      - 'config/ledgers/**'
+      - 'config/tokenomics/**'
+      - 'infra/cloudflare/**'
+      - 'docs/CLOUDFLARE_EDGE_RUNWAY.md'
+      - 'docs/MULTI_LEDGER_ECOSYSTEM.md'
+      - 'docs/AGENT_TOKEN_ECONOMICS.md'
+      - 'docs/PRODUCT_SHOWCASE_GATE.md'
+      - 'scripts/validate-parallax-product.mjs'
+      - 'package.json'
+      - '.github/workflows/parallax-product.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'apps/cloudflare-gateway/**'
+      - 'config/ledgers/**'
+      - 'config/tokenomics/**'
+      - 'infra/cloudflare/**'
+      - 'docs/CLOUDFLARE_EDGE_RUNWAY.md'
+      - 'docs/MULTI_LEDGER_ECOSYSTEM.md'
+      - 'docs/AGENT_TOKEN_ECONOMICS.md'
+      - 'docs/PRODUCT_SHOWCASE_GATE.md'
+      - 'scripts/validate-parallax-product.mjs'
+      - 'package.json'
+      - '.github/workflows/parallax-product.yml'
+
+jobs:
+  product-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate product manifests
+        run: node scripts/validate-parallax-product.mjs

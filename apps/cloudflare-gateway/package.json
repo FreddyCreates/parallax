@@ -1,0 +1,18 @@
+{
+  "name": "@parallax/cloudflare-gateway",
+  "version": "0.1.0-alpha.0",
+  "private": true,
+  "type": "module",
+  "description": "Cloudflare Worker edge gateway for PARALLAX multi-ledger AI-agent economy.",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "check": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "wrangler": "^4.0.0",
+    "@cloudflare/workers-types": "^4.20260709.0"
+  }
+}
