@@ -1,0 +1,30 @@
+{
+  "schema": "parallax.launch_asset_universe.v1",
+  "platform": "PARALLAX",
+  "version": "0.4.0-alpha.0",
+  "generated_at": "2026-07-11",
+  "posture": "catalog_and_paper_testnet_routes_first",
+  "routing_rules": [
+    "catalog_inclusion_does_not_mean_live_listing",
+    "mainnet_trading_requires_governance_compliance_security_liquidity_gate",
+    "synthetic_ai_tokens_start_as_internal_credit_or_testnet_assets",
+    "bridge_assets_require proof_of_reserve_or_chain_key_receipt_before_public_claim"
+  ],
+  "asset_families": [
+    { "id": "majors", "description": "Major crypto assets", "assets": ["BTC", "ETH", "SOL", "BNB", "XRP", "ADA", "DOGE", "TRX", "TON", "AVAX", "DOT", "LINK", "BCH", "LTC", "NEAR", "APT", "SUI", "ICP", "ATOM", "FIL", "ETC", "HBAR", "XLM", "INJ", "OP", "ARB", "MATIC", "POL", "BASE_ETH", "TIA", "SEI", "RNDR", "FET", "TAO"] },
+    { "id": "stablecoins", "description": "Stablecoin quote and settlement candidates", "assets": ["USDC", "USDT", "DAI", "PYUSD", "FDUSD", "USDE", "FRAX", "LUSD", "USDD", "GHO"] },
+    { "id": "evm_defi", "description": "EVM DeFi governance and utility tokens", "assets": ["UNI", "AAVE", "MKR", "SKY", "LDO", "CRV", "CVX", "SNX", "COMP", "BAL", "1INCH", "SUSHI", "RPL", "ENS", "PENDLE", "ENA", "ETHFI", "JUP", "W", "ZRO"] },
+    { "id": "solana_ecosystem", "description": "Solana ecosystem assets", "assets": ["SOL", "JUP", "JTO", "PYTH", "RAY", "ORCA", "BONK", "WIF", "RENDER", "HNT", "MOBILE"] },
+    { "id": "bitcoin_ecosystem", "description": "Bitcoin and Bitcoin-layer assets", "assets": ["BTC", "ORDI", "SATS", "RUNE", "STX", "MUBI"] },
+    { "id": "cosmos_ecosystem", "description": "Cosmos, Osmosis, Injective and IBC candidates", "assets": ["ATOM", "OSMO", "INJ", "TIA", "SEI", "KUJI", "AKT", "STRD", "DYDX"] },
+    { "id": "ai_market_public", "description": "Public AI/compute/infra tokens to evaluate for live routes", "assets": ["FET", "TAO", "RENDER", "AKT", "AR", "FIL", "GRT", "OCEAN", "NMR", "PHA", "GLM", "AIOZ", "RSS3"] },
+    { "id": "parallax_synthetic_ai", "description": "PARALLAX native synthetic AI credits and artifact symbols", "assets": ["AICPU", "AIMEM", "AIINF", "AITRAIN", "AIDATA", "AIGPU", "AITPU", "AIBW", "AIST", "AIFT", "AIEMB", "AIRAG", "AIAGENT", "AIORCH", "AICHAIN", "AIVIS", "AIAUD", "AICODE", "AITRANS", "AISENT", "AIANOM", "AIPRED", "AIOPT", "AISIM", "AIMVOTE", "AIDVOTE", "AISAFE", "AIRED", "AIBENCH", "AICERT", "AILABEL", "AIPROMPT", "AITOOL", "AIMON", "AIGUARD", "AICACHE", "AIRUNTIME", "AIMDL", "AIPROT", "AITUNE", "AIEVAL", "AITWIN"] }
+  ],
+  "quote_assets": ["USDC", "USDT", "ETH", "BTC", "SOL", "BNB", "ICP", "MTC"],
+  "launch_matrix": {
+    "paper_enabled": "all catalog assets",
+    "testnet_enabled": "EVM, Solana, ICP, Bitcoin sign-message/read-only routes",
+    "mainnet_enabled": "disabled until gates pass",
+    "agent_enabled": "paper and testnet only"
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "schema": "parallax.chain_registry.v1",
+  "platform": "PARALLAX",
+  "version": "0.4.0-alpha.0",
+  "posture": "external_wallet_non_custodial_paper_testnet_first",
+  "generated_at": "2026-07-10",
+  "execution_boundary": {
+    "custody_private_keys": false,
+    "live_broker_routing": false,
+    "live_money_movement_enabled": false,
+    "mainnet_execution_default": false,
+    "allowed_now": ["wallet_detection", "read_only_wallet_connect", "paper_trade", "testnet_simulation", "agent_policy_recommendation", "receipt_export"],
+    "requires_gate": ["mainnet_swap", "bridge_execution", "perpetuals", "real_settlement", "custody", "broker_or_centralized_exchange_routing"]
+  },
+  "chains": [
+    { "id": "ethereum", "name": "Ethereum", "caip2": "eip155:1", "ecosystem": "evm", "native_asset": "ETH", "status": "adapter_ready", "wallet_standards": ["EIP-1193", "EIP-6963", "WalletConnect"], "execution_modes": ["read", "paper", "testnet"] },
+    { "id": "base", "name": "Base", "caip2": "eip155:8453", "ecosystem": "evm", "native_asset": "ETH", "status": "adapter_ready", "wallet_standards": ["EIP-1193", "EIP-6963", "WalletConnect"], "execution_modes": ["read", "paper", "testnet"] },
+    { "id": "arbitrum", "name": "Arbitrum One", "caip2": "eip155:42161", "ecosystem": "evm", "native_asset": "ETH", "status": "adapter_ready", "wallet_standards": ["EIP-1193", "EIP-6963", "WalletConnect"], "execution_modes": ["read", "paper", "testnet"] },
+    { "id": "optimism", "name": "OP Mainnet", "caip2": "eip155:10", "ecosystem": "evm", "native_asset": "ETH", "status": "adapter_ready", "wallet_standards": ["EIP-1193", "EIP-6963", "WalletConnect"], "execution_modes": ["read", "paper", "testnet"] },
+    { "id": "polygon", "name": "Polygon PoS", "caip2": "eip155:137", "ecosystem": "evm", "native_asset": "POL", "status": "adapter_ready", "wallet_standards": ["EIP-1193", "EIP-6963", "WalletConnect"], "execution_modes": ["read", "paper", "testnet"] },
+    { "id": "bnb", "name": "BNB Smart Chain", "caip2": "eip155:56", "ecosystem": "evm", "native_asset": "BNB", "status": "adapter_ready", "wallet_standards": ["EIP-1193", "EIP-6963", "WalletConnect"], "execution_modes": ["read", "paper", "testnet"] },
+    { "id": "avalanche", "name": "Avalanche C-Chain", "caip2": "eip155:43114", "ecosystem": "evm", "native_asset": "AVAX", "status": "adapter_ready", "wallet_standards": ["EIP-1193", "EIP-6963", "WalletConnect"], "execution_modes": ["read", "paper", "testnet"] },
+    { "id": "linea", "name": "Linea", "caip2": "eip155:59144", "ecosystem": "evm", "native_asset": "ETH", "status": "adapter_ready", "wallet_standards": ["EIP-1193", "EIP-6963", "WalletConnect"], "execution_modes": ["read", "paper", "testnet"] },
+    { "id": "solana", "name": "Solana", "caip2": "solana:mainnet", "ecosystem": "solana", "native_asset": "SOL", "status": "adapter_ready", "wallet_standards": ["PhantomProvider", "Wallet Standard", "WalletConnect"], "execution_modes": ["read", "paper", "testnet"] },
+    { "id": "bitcoin", "name": "Bitcoin", "caip2": "bip122:000000000019d6689c085ae165831e93", "ecosystem": "bitcoin", "native_asset": "BTC", "status": "read_and_intent_ready", "wallet_standards": ["Xverse", "UniSat", "WalletConnect"], "execution_modes": ["read", "paper"] },
+    { "id": "cosmoshub", "name": "Cosmos Hub", "caip2": "cosmos:cosmoshub-4", "ecosystem": "cosmos", "native_asset": "ATOM", "status": "intent_ready", "wallet_standards": ["Keplr", "Leap", "WalletConnect"], "execution_modes": ["read", "paper", "testnet"] },
+    { "id": "osmosis", "name": "Osmosis", "caip2": "cosmos:osmosis-1", "ecosystem": "cosmos", "native_asset": "OSMO", "status": "intent_ready", "wallet_standards": ["Keplr", "Leap", "WalletConnect"], "execution_modes": ["read", "paper", "testnet"] },
+    { "id": "sui", "name": "Sui", "caip2": "sui:mainnet", "ecosystem": "sui", "native_asset": "SUI", "status": "intent_ready", "wallet_standards": ["Sui Wallet Standard"], "execution_modes": ["read", "paper", "testnet"] },
+    { "id": "aptos", "name": "Aptos", "caip2": "aptos:mainnet", "ecosystem": "aptos", "native_asset": "APT", "status": "intent_ready", "wallet_standards": ["Aptos Wallet Standard"], "execution_modes": ["read", "paper", "testnet"] },
+    { "id": "polkadot", "name": "Polkadot", "caip2": "polkadot:91b171bb158e2d3848fa23a9f1c25182", "ecosystem": "substrate", "native_asset": "DOT", "status": "intent_ready", "wallet_standards": ["Polkadot.js", "Talisman", "SubWallet"], "execution_modes": ["read", "paper"] },
+    { "id": "internet-computer", "name": "Internet Computer", "caip2": "icp:ic", "ecosystem": "icp", "native_asset": "ICP", "status": "canister_ready", "wallet_standards": ["Internet Identity", "Plug", "Stoic", "NFID"], "execution_modes": ["read", "paper", "testnet", "canister"] }
+  ]
+}

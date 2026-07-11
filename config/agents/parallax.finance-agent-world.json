@@ -1,0 +1,33 @@
+{
+  "schema": "parallax.finance_agent_world.v1",
+  "platform": "PARALLAX",
+  "version": "0.4.0-alpha.0",
+  "generated_at": "2026-07-11",
+  "posture": "agent_deployment_paper_testnet_first",
+  "agent_world": {
+    "entry_surface": "apps/universal-trading/index.html",
+    "deployment_planes": ["research", "signal", "risk", "market_making", "execution_review", "receipt_audit"],
+    "required_controls": [
+      "ai_wallet_policy_gate",
+      "operator_pause_halt",
+      "human_approval_above_threshold",
+      "receipt_ledger_emission",
+      "no_live_autonomous_execution"
+    ]
+  },
+  "agent_templates": [
+    { "id": "research-scout", "name": "Research Scout", "purpose": "Watch markets, news, liquidity, and token metadata; emits non-executing signals.", "allowed_modes": ["paper", "testnet"], "blocked": ["live_order_submission"] },
+    { "id": "risk-sentinel", "name": "Risk Sentinel", "purpose": "Checks pair gates, wallet gates, daily limits, exposure, volatility, and blocked jurisdictions before any order path.", "allowed_modes": ["paper", "testnet"], "blocked": ["self_approval"] },
+    { "id": "market-maker-paper", "name": "Paper Market Maker", "purpose": "Places policy-gated paper maker quotes and records spread/latency receipts.", "allowed_modes": ["paper"], "blocked": ["mainnet_routing"] },
+    { "id": "portfolio-router", "name": "Portfolio Router", "purpose": "Routes simulated intent across chains, wallets, and venues without custody.", "allowed_modes": ["paper", "testnet"], "blocked": ["private_key_custody"] },
+    { "id": "receipt-auditor", "name": "Receipt Auditor", "purpose": "Indexes orders, fills, wallet evaluations, and benchmark receipts into proof lanes.", "allowed_modes": ["paper", "testnet"], "blocked": ["trade_execution"] }
+  ],
+  "agent_launch_requirements": [
+    "wallet connected or operator test identity present",
+    "AI wallet exists",
+    "policy evaluation approved or human approval requested",
+    "target chain is supported by registry",
+    "target pair is paper/testnet enabled",
+    "receipt path configured"
+  ]
+}

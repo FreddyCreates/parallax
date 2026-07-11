@@ -1,0 +1,35 @@
+{
+  "schema": "parallax.wallet_registry.v1",
+  "platform": "PARALLAX",
+  "version": "0.4.0-alpha.0",
+  "generated_at": "2026-07-11",
+  "posture": "non_custodial_external_wallets_only",
+  "rules": [
+    "never_request_private_keys",
+    "never_store_seed_phrases",
+    "wallet_signing_happens_in_user_wallet",
+    "mainnet_execution_disabled_until_operator_governance_compliance_gate",
+    "agent_orders_require_policy_wallet_and_receipt"
+  ],
+  "wallets": [
+    { "id": "metamask", "name": "MetaMask", "ecosystems": ["evm", "solana"], "detection": ["eip6963", "eip1193", "metamask_connect"], "priority": 1, "enabled": true },
+    { "id": "walletconnect", "name": "WalletConnect / Reown AppKit", "ecosystems": ["evm", "solana", "bitcoin"], "detection": ["walletconnect_qr", "mobile_deeplink"], "priority": 2, "enabled": true },
+    { "id": "coinbase_wallet", "name": "Coinbase Wallet", "ecosystems": ["evm", "base"], "detection": ["eip6963", "eip1193", "sdk"], "priority": 3, "enabled": true },
+    { "id": "phantom", "name": "Phantom", "ecosystems": ["solana", "evm", "bitcoin", "sui"], "detection": ["window.phantom.solana", "window.solana"], "priority": 4, "enabled": true },
+    { "id": "rabby", "name": "Rabby", "ecosystems": ["evm"], "detection": ["eip6963", "eip1193"], "priority": 5, "enabled": true },
+    { "id": "rainbow", "name": "Rainbow", "ecosystems": ["evm"], "detection": ["eip6963", "walletconnect"], "priority": 6, "enabled": true },
+    { "id": "trust_wallet", "name": "Trust Wallet", "ecosystems": ["evm", "bitcoin", "solana", "cosmos"], "detection": ["eip6963", "walletconnect", "extension"], "priority": 7, "enabled": true },
+    { "id": "ledger", "name": "Ledger", "ecosystems": ["evm", "bitcoin", "solana", "cosmos"], "detection": ["walletconnect", "hardware_wallet"], "priority": 8, "enabled": true },
+    { "id": "okx_wallet", "name": "OKX Wallet", "ecosystems": ["evm", "bitcoin", "solana", "sui", "cosmos"], "detection": ["eip6963", "walletconnect", "extension"], "priority": 9, "enabled": true },
+    { "id": "binance_wallet", "name": "Binance Wallet", "ecosystems": ["evm", "bnb"], "detection": ["eip6963", "walletconnect", "extension"], "priority": 10, "enabled": true },
+    { "id": "backpack", "name": "Backpack", "ecosystems": ["solana", "evm"], "detection": ["solana_provider", "extension"], "priority": 11, "enabled": true },
+    { "id": "solflare", "name": "Solflare", "ecosystems": ["solana"], "detection": ["solana_provider", "wallet_adapter"], "priority": 12, "enabled": true },
+    { "id": "keplr", "name": "Keplr", "ecosystems": ["cosmos", "osmosis", "injective"], "detection": ["window.keplr"], "priority": 13, "enabled": true },
+    { "id": "leap", "name": "Leap", "ecosystems": ["cosmos", "osmosis", "injective"], "detection": ["window.leap"], "priority": 14, "enabled": true },
+    { "id": "xverse", "name": "Xverse", "ecosystems": ["bitcoin", "stacks"], "detection": ["bitcoin_provider", "walletconnect"], "priority": 15, "enabled": true },
+    { "id": "unisat", "name": "UniSat", "ecosystems": ["bitcoin"], "detection": ["window.unisat"], "priority": 16, "enabled": true },
+    { "id": "plug", "name": "Plug", "ecosystems": ["icp"], "detection": ["window.ic.plug"], "priority": 17, "enabled": true },
+    { "id": "stoic", "name": "Stoic", "ecosystems": ["icp"], "detection": ["icp_wallet_adapter"], "priority": 18, "enabled": true },
+    { "id": "nfid", "name": "NFID", "ecosystems": ["icp"], "detection": ["internet_identity", "nfid"], "priority": 19, "enabled": true }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "schema": "parallax.route_providers.v1",
+  "version": "0.5.0-alpha.0",
+  "posture": "quote_and_simulation_first",
+  "providers": [
+    {"id":"zero_x","name":"0x Swap API","ecosystems":["evm"],"capabilities":["quote","price","allowance_target","transaction_payload"],"execution":"gated","enabled":true},
+    {"id":"one_inch","name":"1inch Swap API","ecosystems":["evm"],"capabilities":["quote","swap_route","gas_estimate"],"execution":"gated","enabled":true},
+    {"id":"jupiter","name":"Jupiter","ecosystems":["solana"],"capabilities":["quote","route_plan","swap_transaction"],"execution":"gated","enabled":true},
+    {"id":"uniswap","name":"Uniswap routing","ecosystems":["evm"],"capabilities":["pool_discovery","route_simulation"],"execution":"adapter_required","enabled":true},
+    {"id":"curve","name":"Curve","ecosystems":["evm"],"capabilities":["stable_pool_discovery","route_simulation"],"execution":"adapter_required","enabled":true},
+    {"id":"pancakeswap","name":"PancakeSwap","ecosystems":["evm"],"capabilities":["pool_discovery","route_simulation"],"execution":"adapter_required","enabled":true},
+    {"id":"raydium","name":"Raydium","ecosystems":["solana"],"capabilities":["pool_discovery","route_simulation"],"execution":"adapter_required","enabled":true},
+    {"id":"orca","name":"Orca","ecosystems":["solana"],"capabilities":["pool_discovery","route_simulation"],"execution":"adapter_required","enabled":true},
+    {"id":"osmosis","name":"Osmosis","ecosystems":["cosmos"],"capabilities":["pool_discovery","ibc_route_simulation"],"execution":"adapter_required","enabled":true},
+    {"id":"icpswap","name":"ICPSwap","ecosystems":["icp"],"capabilities":["pool_discovery","route_simulation"],"execution":"adapter_required","enabled":true}
+  ],
+  "rules": [
+    "provider_response_must_be_normalized",
+    "quote_expiry_required",
+    "slippage_limit_required",
+    "simulation_receipt_required",
+    "user_wallet_signs_final_transaction",
+    "mainnet_execution_disabled_by_default"
+  ]
+}

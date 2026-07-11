@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PARALLAX Universal Trading World</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">PARALLAX · Universal Trading Launch Platform</p>
+          <h1>Multi-chain markets, external wallets, and policy-gated finance agents.</h1>
+          <p class="lead">A production-facing launch surface for EVM, Solana, Bitcoin, Cosmos, Sui, Aptos, Polkadot, TRON, and ICP routes. Mainnet execution stays disabled until security, compliance, liquidity, and governance gates pass.</p>
+          <div class="actions">
+            <button onclick="connectEvm()">Connect EVM</button>
+            <button onclick="connectSolana()">Connect Solana</button>
+            <button onclick="connectIcpPlug()">Connect ICP Plug</button>
+            <button class="secondary" onclick="queuePaperRoute()">Queue Paper Route</button>
+          </div>
+        </div>
+        <section class="boundary">
+          <strong>Launch boundary</strong>
+          <span>No custody/private keys</span>
+          <span>No broker routing</span>
+          <span>No live money movement</span>
+          <span>Agents are paper/testnet only</span>
+        </section>
+      </header>
+
+      <section id="status" class="status-grid"></section>
+
+      <section>
+        <h2>Connected wallets</h2>
+        <div id="connections" class="grid"></div>
+      </section>
+
+      <section>
+        <h2>Chain routes</h2>
+        <div id="chains" class="grid"></div>
+      </section>
+
+      <section>
+        <h2>Wallet registry</h2>
+        <div id="wallets" class="grid"></div>
+      </section>
+
+      <section>
+        <h2>Asset universe</h2>
+        <div id="assets" class="grid wide-grid"></div>
+      </section>
+
+      <section>
+        <h2>Agent finance world</h2>
+        <div id="agents" class="grid"></div>
+      </section>
+
+      <section>
+        <h2>Route preview</h2>
+        <pre id="routePreview">No route queued.</pre>
+      </section>
+    </main>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

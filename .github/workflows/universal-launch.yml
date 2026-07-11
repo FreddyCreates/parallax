@@ -1,0 +1,40 @@
+name: PARALLAX Universal Launch
+
+on:
+  pull_request:
+    paths:
+      - 'config/chains/**'
+      - 'config/wallets/**'
+      - 'config/assets/**'
+      - 'config/agents/**'
+      - 'apps/universal-trading/**'
+      - 'scripts/validate-universal-launch.mjs'
+      - 'docs/UNIVERSAL_TRADING_LAUNCH_PLATFORM.md'
+      - 'receipts/universal-trading-launch-0.4.0-alpha.0.json'
+      - '.github/workflows/universal-launch.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'config/chains/**'
+      - 'config/wallets/**'
+      - 'config/assets/**'
+      - 'config/agents/**'
+      - 'apps/universal-trading/**'
+      - 'scripts/validate-universal-launch.mjs'
+      - 'docs/UNIVERSAL_TRADING_LAUNCH_PLATFORM.md'
+      - 'receipts/universal-trading-launch-0.4.0-alpha.0.json'
+      - '.github/workflows/universal-launch.yml'
+
+jobs:
+  universal-launch-static-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate universal launch platform
+        run: node scripts/validate-universal-launch.mjs

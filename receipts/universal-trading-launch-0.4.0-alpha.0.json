@@ -1,0 +1,34 @@
+{
+  "schema": "parallax.release_receipt.v1",
+  "artifact": "universal-trading-launch-platform",
+  "version": "0.4.0-alpha.0",
+  "branch": "codex/universal-trading-launch-platform",
+  "generated_at": "2026-07-11",
+  "implemented": [
+    "multi-chain route registry",
+    "public wallet registry",
+    "broad asset universe registry",
+    "finance agent deployment registry",
+    "browser launch front-end",
+    "EVM injected wallet detection",
+    "EIP-6963 wallet discovery request path",
+    "Solana/Phantom provider detection",
+    "ICP Plug wallet detection",
+    "paper route preview",
+    "universal launch validation script"
+  ],
+  "blocked": [
+    "private key custody",
+    "seed phrase capture",
+    "live money movement",
+    "broker routing",
+    "autonomous live AI trading",
+    "mainnet execution without governance/compliance/security/liquidity gates"
+  ],
+  "validation": {
+    "connector_runtime_tests_executed": false,
+    "reason": "GitHub connector cannot run browser wallet tests or local app server.",
+    "static_command": "pnpm launch:validate"
+  },
+  "showcase_status": "surface_ready_after_static_validation; not_live_trading_ready"
+}
