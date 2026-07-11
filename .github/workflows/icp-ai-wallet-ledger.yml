@@ -1,0 +1,58 @@
+name: ICP AI Wallet Ledger
+
+on:
+  pull_request:
+    paths:
+      - 'canisters/ai-wallet-ledger/**'
+      - 'apps/control-tower/ai-wallets/**'
+      - 'dfx.json'
+      - 'package.json'
+      - '.github/workflows/icp-ai-wallet-ledger.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'canisters/ai-wallet-ledger/**'
+      - 'apps/control-tower/ai-wallets/**'
+      - 'dfx.json'
+      - 'package.json'
+      - '.github/workflows/icp-ai-wallet-ledger.yml'
+
+jobs:
+  static-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify Motoko source is present
+        run: |
+          test -f canisters/ai-wallet-ledger/src/Main.mo
+          test -f canisters/ai-wallet-ledger/src/Types.mo
+          test -f canisters/ai-wallet-ledger/src/Policy.mo
+          test -f canisters/ai-wallet-ledger/src/Receipts.mo
+          test -f canisters/ai-wallet-ledger/src/Bench.mo
+          test -f canisters/ai-wallet-ledger/tests/integration.sh
+          test -f canisters/ai-wallet-ledger/VERSION.json
+          test -f canisters/ai-wallet-ledger/benchmarks/policy-evaluation.baseline.json
+
+      - name: Verify blocked live capabilities are enforced in source
+        run: |
+          grep -R "live_money_movement_blocked" canisters/ai-wallet-ledger/src
+          grep -R "live_broker_routing_blocked" canisters/ai-wallet-ledger/src
+          grep -R "custodyPrivateKeysBlocked" canisters/ai-wallet-ledger/src
+          grep -R "autonomous_live_ai_trading_blocked" canisters/ai-wallet-ledger/src
+          grep -R "ai_self_approval_blocked" canisters/ai-wallet-ledger/src
+
+      - name: Verify Control Tower render surface has no TypeScript
+        run: |
+          test -f apps/control-tower/ai-wallets/index.html
+          ! find apps/control-tower/ai-wallets -name '*.ts' -o -name '*.tsx' | grep .
+
+      - name: Verify integration coverage names
+        run: |
+          grep -q "pause gate" canisters/ai-wallet-ledger/tests/integration.sh
+          grep -q "daily limit" canisters/ai-wallet-ledger/tests/integration.sh
+          grep -q "receipt pagination" canisters/ai-wallet-ledger/tests/integration.sh
+          grep -q "halt gate" canisters/ai-wallet-ledger/tests/integration.sh
+          grep -q "pipeAiSignalApprovalToPaperOrder" canisters/ai-wallet-ledger/tests/integration.sh

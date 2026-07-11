@@ -1,0 +1,49 @@
+{
+  "schema": "parallax.defi.markets.v1",
+  "platform": "PARALLAX",
+  "mode": "alpha",
+  "public_posture": "paper_testnet_first",
+  "generated_at": "2026-07-10",
+  "market_specifications": {
+    "tick_size_e8s": 10000,
+    "min_order_e8s": 100000,
+    "settlement_interval_ms": 873,
+    "max_open_orders_per_principal_per_pair": 100,
+    "maker_fee_bps": 0,
+    "taker_fee_bps": 5,
+    "order_priority": "price_time_fifo",
+    "netting": ["bilateral_alpha", "multilateral_alpha"],
+    "settlement_authority": "PARALLAX DeFi Exchange Canister",
+    "alpha_boundaries": [
+      "paper_or_testnet_only",
+      "no_live_money_movement",
+      "no_live_broker_routing",
+      "no_custody_private_keys",
+      "no_mainnet_bridge_claims_without_evidence"
+    ]
+  },
+  "categories": [
+    { "id": "sovereign", "name": "Sovereign", "quote_assets": ["ICP"], "description": "Protocol-native governance and utility tokens." },
+    { "id": "crypto", "name": "Crypto", "quote_assets": ["ICP"], "description": "Major cryptocurrencies represented through chain-key/testnet metadata." },
+    { "id": "ai_tokens", "name": "AI Tokens", "quote_assets": ["ICP", "MTC"], "description": "Tokenized AI compute, inference, training, memory, and execution resources." },
+    { "id": "ai_artifacts", "name": "AI Artifacts", "quote_assets": ["MTC"], "description": "Tokenized AI models, agents, datasets, protocols, and systems." },
+    { "id": "creator", "name": "Creator", "quote_assets": ["ICP", "MTC"], "description": "Personal tokens, fan tokens, and creator economy assets." }
+  ],
+  "supported_pairs": [
+    "GTK_ICP", "MTC_ICP", "MTH_ICP", "BTC_ICP", "ETH_ICP",
+    "AICPU_ICP", "AIMEM_ICP", "AIINF_ICP", "AITRAIN_ICP", "AIDATA_ICP",
+    "AIGPU_ICP", "AITPU_ICP", "AIBW_ICP", "AIST_ICP", "AIFT_ICP", "AIEMB_ICP", "AIRAG_ICP", "AIAGENT_ICP", "AIORCH_ICP", "AICHAIN_ICP",
+    "AIVIS_ICP", "AIAUD_ICP", "AICODE_ICP", "AITRANS_ICP", "AISENT_ICP", "AIANOM_ICP", "AIPRED_ICP", "AIOPT_ICP", "AISIM_ICP",
+    "AIMVOTE_ICP", "AIDVOTE_ICP", "AISAFE_ICP", "AIRED_ICP", "AIBENCH_ICP", "AICERT_ICP", "AILABEL_ICP", "AIPROMPT_ICP", "AITOOL_ICP", "AIMON_ICP", "AIGUARD_ICP", "AICACHE_ICP", "AIRUNTIME_ICP",
+    "AIMDL_MTC", "AIEMB_MTC", "AIPROT_MTC", "AIAGENT_MTC", "AIORCH_MTC", "AIRAG_MTC", "AIDATA_MTC", "AITUNE_MTC", "AIEVAL_MTC", "AITWIN_MTC",
+    "CREATOR_ICP", "CREATOR_MTC"
+  ],
+  "planned_pairs": ["SOL_ICP", "USDC_ICP", "USDT_ICP", "DOT_ICP", "ATOM_ICP"],
+  "asset_notes": {
+    "sovereign": { "GTK": "Governance Token", "MTC": "Materia Cogitans", "MTH": "Methane" },
+    "crypto": { "BTC": "ckBTC / chain-key metadata", "ETH": "ckETH / chain-key metadata" },
+    "ai_tokens_declared_count": 37,
+    "ai_tokens_status": "37 symbols represented, internal/testnet credit market only",
+    "ai_artifacts_status": "MTC-quoted artifact markets start with canonical families and expand through governance receipts"
+  }
+}

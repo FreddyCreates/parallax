@@ -1,0 +1,30 @@
+{
+  "schema": "parallax.ai_wallet_ledger.benchmark.v1",
+  "suite": "ai-wallet-ledger",
+  "version": "0.2.0-alpha.0",
+  "generated_at": "2026-07-10",
+  "benchmarks": [
+    {
+      "name": "policy-evaluation",
+      "iterations": 100,
+      "measurement": "synthetic integration receipt placeholder",
+      "expected_gate": "recordBenchmark stores average/max/min latency receipt",
+      "required_before_showcase": true
+    },
+    {
+      "name": "receipt-pagination",
+      "iterations": 50,
+      "measurement": "integration pagination path",
+      "expected_gate": "listAiWalletReceipts returns bounded page and nextCursor",
+      "required_before_showcase": true
+    },
+    {
+      "name": "daily-limit-evaluation",
+      "iterations": 25,
+      "measurement": "policy decision path",
+      "expected_gate": "daily_limit_exceeded reason code emitted",
+      "required_before_showcase": true
+    }
+  ],
+  "notes": "This baseline is versioned as the benchmark contract. Real latency numbers must be recorded by recordBenchmark after dfx/local or CI runs. Do not claim performance until measured."
+}

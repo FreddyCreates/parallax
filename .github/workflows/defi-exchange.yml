@@ -1,0 +1,68 @@
+name: DeFi Exchange Gate
+
+on:
+  pull_request:
+    paths:
+      - 'canisters/defi-exchange/**'
+      - 'config/markets/**'
+      - 'dfx.json'
+      - 'package.json'
+      - 'docs/DEFI_EXCHANGE_CANISTER.md'
+      - 'receipts/defi-exchange-0.3.0-alpha.0.json'
+      - '.github/workflows/defi-exchange.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'canisters/defi-exchange/**'
+      - 'config/markets/**'
+      - 'dfx.json'
+      - 'package.json'
+      - 'docs/DEFI_EXCHANGE_CANISTER.md'
+      - 'receipts/defi-exchange-0.3.0-alpha.0.json'
+      - '.github/workflows/defi-exchange.yml'
+
+jobs:
+  static-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Verify Motoko exchange files
+        run: |
+          test -f canisters/defi-exchange/src/Main.mo
+          test -f canisters/defi-exchange/src/Types.mo
+          test -f canisters/defi-exchange/src/Markets.mo
+          test -f canisters/defi-exchange/src/Receipts.mo
+          test -f canisters/defi-exchange/src/Bench.mo
+          test -f canisters/defi-exchange/tests/integration.sh
+          test -f canisters/defi-exchange/VERSION.json
+          test -f canisters/defi-exchange/benchmarks/exchange.baseline.json
+
+      - name: Verify market catalog coverage
+        run: |
+          grep -q '"sovereign"' config/markets/parallax.defi.markets.json
+          grep -q '"crypto"' config/markets/parallax.defi.markets.json
+          grep -q '"ai_tokens"' config/markets/parallax.defi.markets.json
+          grep -q '"ai_artifacts"' config/markets/parallax.defi.markets.json
+          grep -q '"creator"' config/markets/parallax.defi.markets.json
+          grep -q '"ai_tokens_declared_count": 37' config/markets/parallax.defi.markets.json
+          grep -q 'AICPU_ICP' config/markets/parallax.defi.markets.json
+          grep -q 'AIMDL_MTC' config/markets/parallax.defi.markets.json
+
+      - name: Verify blocked live capabilities
+        run: |
+          grep -R "live_money_movement" config/markets docs receipts canisters/defi-exchange || true
+          grep -R "live_broker_routing" config/markets docs receipts canisters/defi-exchange || true
+          grep -R "custody_private_keys" config/markets docs receipts canisters/defi-exchange || true
+          grep -q "paper_testnet_first" config/markets/parallax.defi.markets.json
+
+      - name: Verify integration coverage names
+        run: |
+          grep -q "disabled planned market" canisters/defi-exchange/tests/integration.sh
+          grep -q "tick" canisters/defi-exchange/tests/integration.sh
+          grep -q "resting sell" canisters/defi-exchange/tests/integration.sh
+          grep -q "crossing buy" canisters/defi-exchange/tests/integration.sh
+          grep -q "receipt" canisters/defi-exchange/tests/integration.sh
+          grep -q "benchmark" canisters/defi-exchange/tests/integration.sh

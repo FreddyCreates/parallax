@@ -1,0 +1,37 @@
+{
+  "schema": "parallax.defi_exchange.benchmark.v1",
+  "suite": "defi-exchange",
+  "version": "0.3.0-alpha.0",
+  "generated_at": "2026-07-10",
+  "benchmarks": [
+    {
+      "name": "market-catalog-query",
+      "iterations": 100,
+      "measurement": "synthetic integration receipt placeholder",
+      "expected_gate": "get_all_pairs and list_pairs return sovereign, crypto, AI token, artifact, and creator markets",
+      "required_before_showcase": true
+    },
+    {
+      "name": "place-order-match",
+      "iterations": 100,
+      "measurement": "synthetic integration receipt placeholder",
+      "expected_gate": "crossing order produces fill and receipt",
+      "required_before_showcase": true
+    },
+    {
+      "name": "order-book-query",
+      "iterations": 100,
+      "measurement": "synthetic integration receipt placeholder",
+      "expected_gate": "get_order_book returns aggregated levels",
+      "required_before_showcase": true
+    },
+    {
+      "name": "receipt-pagination",
+      "iterations": 100,
+      "measurement": "synthetic integration receipt placeholder",
+      "expected_gate": "list_receipts returns bounded pages with nextCursor",
+      "required_before_showcase": true
+    }
+  ],
+  "notes": "Baseline defines benchmark contracts only. Real latency numbers must be recorded by record_benchmark after dfx/local or CI runs. Do not claim performance until measured."
+}
