@@ -1,0 +1,36 @@
+{
+  "schema": "parallax.version_manifest.v1",
+  "artifact": "defi-exchange-canister",
+  "version": "0.3.0-alpha.0",
+  "release_lane": "alpha-production-code",
+  "language": "Motoko",
+  "typescript_added": false,
+  "generated_at": "2026-07-10",
+  "capabilities": [
+    "supported_market_catalog",
+    "sovereign_markets",
+    "crypto_markets",
+    "ai_token_markets",
+    "ai_artifact_markets",
+    "creator_markets",
+    "price_time_order_book",
+    "limit_market_post_only_ioc_fok_order_types",
+    "order_cancel",
+    "cancel_all_orders",
+    "recent_trades",
+    "ticker",
+    "receipt_ledger",
+    "benchmark_receipts"
+  ],
+  "blocked_capabilities": [
+    "live_money_movement",
+    "live_broker_routing",
+    "custody_private_keys",
+    "mainnet_bridge_claims_without_evidence",
+    "central_counterparty_live_guarantee_claims"
+  ],
+  "validation_commands": [
+    "dfx deploy defi_exchange",
+    "bash canisters/defi-exchange/tests/integration.sh"
+  ]
+}

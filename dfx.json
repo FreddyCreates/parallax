@@ -4,6 +4,10 @@
     "ai_wallet_ledger": {
       "type": "motoko",
       "main": "canisters/ai-wallet-ledger/src/Main.mo"
+    },
+    "defi_exchange": {
+      "type": "motoko",
+      "main": "canisters/defi-exchange/src/Main.mo"
     }
   },
   "networks": {

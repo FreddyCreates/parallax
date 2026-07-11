@@ -1,0 +1,51 @@
+{
+  "schema": "parallax.release_receipt.v1",
+  "artifact": "defi-exchange-canister",
+  "version": "0.3.0-alpha.0",
+  "branch": "codex/defi-market-exchange-canister-v2",
+  "generated_at": "2026-07-10",
+  "source_spec": "user-provided PARALLAX DeFi supported markets and developer guide",
+  "language_policy": {
+    "production_code_added": ["Motoko", "Shell", "JSON", "Markdown"],
+    "typescript_added": false
+  },
+  "implemented": [
+    "Supported market catalog",
+    "Sovereign markets",
+    "Crypto markets",
+    "37 AI token symbols",
+    "AI artifact markets",
+    "Creator markets",
+    "Disabled planned bridge markets",
+    "Fixed-point e8s order API",
+    "Limit/market/post-only/IOC/FOK order type model",
+    "Price-time order book structure",
+    "Order placement",
+    "Order cancellation",
+    "Cancel-all",
+    "Order book queries",
+    "Ticker queries",
+    "Recent trades",
+    "Exchange receipts",
+    "Benchmark receipts"
+  ],
+  "blocked": [
+    "live money movement",
+    "live broker routing",
+    "custody private keys",
+    "mainnet bridge claims without evidence",
+    "live central counterparty guarantee claims"
+  ],
+  "validation": {
+    "connector_runtime_tests_executed": false,
+    "reason": "GitHub connector cannot run local dfx/Motoko commands.",
+    "local_commands": [
+      "pnpm defi:deploy",
+      "pnpm defi:test",
+      "pnpm defi:version",
+      "pnpm defi:benchmarks",
+      "pnpm alpha:defi"
+    ]
+  },
+  "showcase_status": "not_ready_until_dfx_tests_pass_and_market_ui_reads_real_canister_state"
+}
